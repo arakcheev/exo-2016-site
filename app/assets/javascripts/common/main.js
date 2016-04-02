@@ -1,9 +1,11 @@
 define(['angular',
-        './directives/main'
+        './directives/main',
+        './services/Routes'
     ],
     function (angular) {
 
         return angular.module('common', [
-            "common.directives"
+            "common.directives",
+            'common.playRoutes'
         ]);
     });

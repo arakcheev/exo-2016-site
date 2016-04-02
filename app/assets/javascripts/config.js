@@ -22,7 +22,8 @@
             'angular-animate': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min',
             'angular-messages': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min',
             'underscore': '/assets/lib/underscorejs/underscore-min',
-            'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min'
+            'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min',
+            'jsRoutes': "/routes"
         }
     });
 
@@ -33,6 +34,7 @@
             "angular-messages",
             'ui-bootstrap',
             'underscore',
+            'jsRoutes',
             './app'],
         function (angular) {
             angular.element(document).ready(function () {

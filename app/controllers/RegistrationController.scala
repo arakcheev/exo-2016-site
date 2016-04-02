@@ -11,7 +11,6 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.{Future, ExecutionContext}
 
-
 @Singleton
 class RegistrationController @Inject()(participants: Participants, implicit val executionContext: ExecutionContext) extends Controller {
 

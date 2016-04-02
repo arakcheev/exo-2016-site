@@ -50,6 +50,32 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
     }
   }
 
+  /**
+    * Retrieves all routes via reflection.
+    * http://stackoverflow.com/questions/12012703/less-verbose-way-of-generating-play-2s-javascript-router
+    */
+  val routeCache = {
+    val jsRoutesClasses = Seq(classOf[routes.javascript])
+    jsRoutesClasses.flatMap { jsRoutesClass =>
+      val controllers = jsRoutesClass.getFields.map(_.get(null))
+      controllers.flatMap { controller =>
+        controller.getClass.getDeclaredMethods.filter(_.getName != "_defaultPrefix").map { action =>
+          action.invoke(controller).asInstanceOf[play.api.routing.JavaScriptReverseRoute]
+        }
+      }
+    }
+  }
+
+  /**
+    * Returns the JavaScript router that the client can use for "type-safe" routes.
+    * Uses browser caching; set duration (in seconds) according to your release cycle.
+    */
+  def jsRoutes = cached.status(_ => "jsRoutes", 200) {
+    Action { implicit request =>
+      Ok(play.api.routing.JavaScriptReverseRouter("jsRoutes")(routeCache: _*)).as(JAVASCRIPT)
+    }
+  }
+
 }
 
 private class DigestAssetLoader @Inject()(cache: CacheApi, environment: Environment) {
