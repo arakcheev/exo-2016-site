@@ -4,14 +4,16 @@ define(['angular',
         './IncludeReplace',
         './SideMenu',
         './Header',
-        './EmailAsyncValidator'],
+        './EmailAsyncValidator',
+        './PhoneAsyncValidator'],
     function (angular,
               OnEnter,
               OnEsc,
               IncludeReplace,
               SideMenu,
               Header,
-              EmailAsyncValidator) {
+              EmailAsyncValidator,
+              PhoneAsyncValidator) {
 
 
         return angular.module("common.directives", [])
@@ -20,5 +22,6 @@ define(['angular',
             .directive('includeReplace', IncludeReplace)
             .directive('sideMenu', SideMenu)
             .directive('mainHeader', Header)
-            .directive('emailValidate', EmailAsyncValidator);
+            .directive('emailValidate', EmailAsyncValidator)
+            .directive('phoneValidate', PhoneAsyncValidator);
     });

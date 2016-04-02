@@ -1,16 +1,16 @@
 define(function () {
 
-    function EmailAsyncValidator(Routes, $q) {
+    function PhoneAsyncValidator(Routes, $q) {
 
         return {
             require: 'ngModel',
             link: function (scope, elm, attrs, ctrl) {
 
-                ctrl.$asyncValidators.emailAvailable = function (modelValue, viewValue) {
+                ctrl.$asyncValidators.phoneAvailable = function (modelValue, viewValue) {
                     var value = modelValue || viewValue;
 
                     if (ctrl.$dirty) {
-                        return Routes.controllers.RegistrationController.emailAvailable().post({email: value});
+                        return Routes.controllers.RegistrationController.phoneAvailable().post({phone: value});
                     } else {
                         return $q(function (resolve, reject) {
                             resolve();
@@ -21,8 +21,8 @@ define(function () {
         };
     }
 
-    EmailAsyncValidator.$inject = ['Routes', '$q'];
+    PhoneAsyncValidator.$inject = ['Routes', '$q'];
 
-    return EmailAsyncValidator;
+    return PhoneAsyncValidator;
 
 });
