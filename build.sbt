@@ -37,7 +37,7 @@ val webJarDependesies = Seq(
 
 libraryDependencies ++= webJarDependesies
 
-pipelineStages := Seq(rjs, digest, gzip)
+pipelineStages := Seq(rjs, digest, htmlMinifier, gzip)
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 

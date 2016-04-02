@@ -16,3 +16,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
+
+addSbtPlugin("com.slidingautonomy.sbt" % "sbt-html-minifier" % "1.0.0")

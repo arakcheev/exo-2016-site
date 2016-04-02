@@ -36,7 +36,7 @@ define(['angular'], function (angular) {
 
                 scope.$go = function (url) {
                     $location.url(url);
-                    //angular.element('#bs-navbar').removeClass("in");
+                    $('.in').collapse('hide');
                 };
             }
         };

@@ -3,11 +3,7 @@
         generateSourceMaps: false,
         packages: ['common', 'modules'],
         shim: {
-            'jquery': {
-                exports: 'jquery'
-            },
             'angular': {
-                deps: ['jquery'],
                 exports: 'angular'
             },
             'angular-route': ['angular'],
@@ -19,15 +15,14 @@
             'ui-bootstrap-tpls': ['angular']
         },
         paths: {
-            'requirejs': ['../lib/requirejs/require'],
-            'jquery': ['../lib/jquery/jquery'],
-            'angular': ['../lib/angularjs/angular'],
-            'angular-route': ['../lib/angularjs/angular-route'],
-            'angular-cookies': ['../lib/angularjs/angular-cookies'],
-            'angular-animate': ['../lib/angularjs/angular-animate'],
-            'angular-messages': ['../lib/angularjs/angular-messages'],
-            'underscore': ['../lib/underscorejs/underscore'],
-            'ui-bootstrap': ['../lib/angular-ui-bootstrap/ui-bootstrap-tpls']
+            'requirejs': '/assets/lib/requirejs/require.min',
+            'angular': '/assets/lib/angularjs/angular.min',
+            'angular-route': '/assets/lib/angularjs/angular-route.min',
+            'angular-cookies': '/assets/lib/angularjs/angular-cookies.min',
+            'angular-animate': '/assets/lib/angularjs/angular-animate.min',
+            'angular-messages': '/assets/lib/angularjs/angular-messages.min',
+            'underscore': '/assets/lib/underscorejs/underscore-min',
+            'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min'
         }
     });
 
@@ -37,7 +32,6 @@
             "angular-animate",
             "angular-messages",
             'ui-bootstrap',
-            'jquery',
             'underscore',
             './app'],
         function (angular) {
