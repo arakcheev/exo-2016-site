@@ -16,14 +16,14 @@ class ParticipantsImpl @Inject()(driver: Driver, implicit val executionContext: 
 
   override def emailAvailable(email: String): Future[Boolean] = {
     val query = document("email" -> email)
-    collection.find(query).one[Participant].map(_.isDefined)
+    collection.find(query).one[Participant].map(_.isEmpty)
   }
 
   override def update(id: Id, participant: Participant): Future[Unit] = ???
 
   override def phoneAvailable(email: String): Future[Boolean] = {
     val query = document("phone" -> email)
-    collection.find(query).one[Participant].map(_.isDefined)
+    collection.find(query).one[Participant].map(_.isEmpty)
   }
 
   override def delete(id: Id): Future[Unit] = ???

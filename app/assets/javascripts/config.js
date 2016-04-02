@@ -12,7 +12,11 @@
             'angular-animate': ['angular'],
             'angular-messages': ['angular'],
             'ui-bootstrap': ['angular'],
-            'ui-bootstrap-tpls': ['angular']
+            'ui-bootstrap-tpls': ['angular'],
+
+            'jsRoutes': {
+                exports: 'jsRoutes'
+            }
         },
         paths: {
             'requirejs': '/assets/lib/requirejs/require.min',

@@ -18,7 +18,10 @@ class RegistrationController @Inject()(participants: Participants, implicit val 
     request.body.asJson.flatMap(_.\("email").validate(Reads.email).asOpt) match {
       case None => Future(BadRequest)
       case Some(email) =>
-        participants.emailAvailable(email).map(_.toString).map(Ok(_))
+        participants.emailAvailable(email).map {
+          case true => Ok
+          case false => BadRequest
+        }
     }
   }
 
@@ -26,7 +29,10 @@ class RegistrationController @Inject()(participants: Participants, implicit val 
     request.body.asJson.flatMap(_.\("phone").validate[String].asOpt) match {
       case None => Future(BadRequest)
       case Some(phone) =>
-        participants.phoneAvailable(phone).map(_.toString).map(Ok(_))
+        participants.phoneAvailable(phone).map {
+          case true => Ok
+          case false => BadRequest
+        }
     }
   }
 }
