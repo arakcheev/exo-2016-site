@@ -4,7 +4,11 @@
 
         <br>
 
-        <registration-form></registration-form>
+        <registration-form ng-if="!registration.state.ok"></registration-form>
+
+        <div ng-if="registration.state.ok">
+            <p>You complete registration. We will contact you soon.</p>
+        </div>
         <br>
     </div>
 </div>

@@ -13,6 +13,11 @@ import scala.concurrent.Future
 case class Participant(_id: Id, name: String, surname: String, email: String, phone: String)
 
 object Participant {
+
+  def apply(name: String, surname: String, email: String, phone: String): Participant = {
+    Participant(newId, name, surname, email, phone)
+  }
+
   implicit val jsonFormat = Json.format[Participant]
   implicit val handler = Macros.handler[Participant]
 }

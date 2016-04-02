@@ -5,7 +5,7 @@
         <input id="name" type="text" name="name"
                class="form-control"
                placeholder="Enter name"
-               ng-model="name"
+               ng-model="reg.name"
                required>
 
         <div ng-messages="form.name.$error" ng-if="form.name.$dirty" role="alert" ng-cloak="">
@@ -18,7 +18,7 @@
         <input id="surname" type="text" name="surname"
                class="form-control"
                placeholder="Enter Surname"
-               ng-model="surname"
+               ng-model="reg.surname"
                required>
 
         <div ng-messages="form.surname.$error" ng-if="form.surname.$dirty" role="alert" ng-cloak="">
@@ -31,7 +31,7 @@
         <input id="email" type="email" name="email"
                class="form-control"
                placeholder="Enter Email"
-               ng-model="email"
+               ng-model="reg.email"
                email-regex=""
                ng-model-options="{ debounce: 500 }"
                email-validate=""
@@ -49,7 +49,7 @@
         <input id="phone" type="tel" name="phone"
                class="form-control"
                placeholder="Enter Phone"
-               ng-model="phone"
+               ng-model="reg.phone"
                ng-model-options="{ debounce: 500 }"
                phone-regex=""
                phone-validate=""

@@ -7,6 +7,7 @@ GET     /count                      controllers.CountController.count
 GET     /message                    controllers.AsyncController.message
 POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()
 POST     /api/registration/phoneavailable controllers.RegistrationController.phoneAvailable()
+POST     /api/registration/register controllers.RegistrationController.register()
 GET     /templates.js               controllers.HomeController.templates
 GET     /routes.js               controllers.HomeController.jsRoutes
 # Map static resources from the /public folder to the /assets URL path

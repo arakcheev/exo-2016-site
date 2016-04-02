@@ -5,11 +5,20 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.Participants
-import play.api.libs.json.Reads
+import models.{Participant, Participants}
+import play.api.libs.json.{Json, JsError, JsSuccess, Reads}
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.{Future, ExecutionContext}
+
+case class RegistrationData(name: String, surname: String, email: String, phone: String) {
+
+  def asParticipant = Participant(name, surname, email, phone)
+}
+
+object RegistrationData {
+  implicit val format = Json.format[RegistrationData]
+}
 
 @Singleton
 class RegistrationController @Inject()(participants: Participants, implicit val executionContext: ExecutionContext) extends Controller {
@@ -33,6 +42,13 @@ class RegistrationController @Inject()(participants: Participants, implicit val 
           case true => Ok
           case false => BadRequest
         }
+    }
+  }
+
+  def register = Action.async(parse.json) { implicit request =>
+    request.body.validate[RegistrationData] match {
+      case JsSuccess(p, _) => participants.register(p.asParticipant).map(_ => Ok)
+      case JsError(errors) => Future(BadRequest(JsError.toJson(errors)))
     }
   }
 }
