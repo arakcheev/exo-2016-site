@@ -16,11 +16,11 @@
         },
         paths: {
             'requirejs': '/assets/lib/requirejs/require.min',
-            'angular': '/assets/lib/angularjs/angular.min',
-            'angular-route': '/assets/lib/angularjs/angular-route.min',
-            'angular-cookies': '/assets/lib/angularjs/angular-cookies.min',
-            'angular-animate': '/assets/lib/angularjs/angular-animate.min',
-            'angular-messages': '/assets/lib/angularjs/angular-messages.min',
+            'angular': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min',
+            'angular-route': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min',
+            'angular-cookies': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min',
+            'angular-animate': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min',
+            'angular-messages': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min',
             'underscore': '/assets/lib/underscorejs/underscore-min',
             'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min'
         }
