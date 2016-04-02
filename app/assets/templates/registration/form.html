@@ -33,6 +33,7 @@
                placeholder="Enter Email"
                ng-model="email"
                email-regex=""
+               ng-model-options="{ debounce: 500 }"
                email-validate=""
                required>
 
@@ -49,6 +50,7 @@
                class="form-control"
                placeholder="Enter Phone"
                ng-model="phone"
+               ng-model-options="{ debounce: 500 }"
                phone-regex=""
                phone-validate=""
                required>
