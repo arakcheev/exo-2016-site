@@ -1,5 +1,12 @@
-define(['angular', './Routes', './controllers/main'], function (angular, Routes) {
+define(['angular',
+        './Routes',
+        './controllers/main',
+        './directives/main'
+    ],
+    function (angular,
+              Routes) {
 
-    return angular.module("registration", ['registration.controllers'])
-        .config(Routes);
-});
+        return angular.module("registration", [
+                'registration.controllers', 'registration.directives'])
+            .config(Routes);
+    });
