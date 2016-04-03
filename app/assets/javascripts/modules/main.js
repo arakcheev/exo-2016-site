@@ -3,7 +3,8 @@ define(['angular',
     './committee/main',
     './contacts/main',
     './program/main',
-    './registration/main'], function (angular) {
+    './registration/main',
+    './login/main'], function (angular) {
 
-    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration']);
+    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration', 'login']);
 });
