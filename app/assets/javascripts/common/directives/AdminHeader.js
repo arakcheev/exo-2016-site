@@ -27,8 +27,8 @@ define(['angular'], function (angular) {
                 });
 
                 scope.menu = {
-                    "/participants": "Participants",
-                    "/lectures": "Lectures"
+                    "/admin/participants": "Participants",
+                    "/admin/lectures": "Lectures"
                 };
 
                 scope.$active = function (url) {

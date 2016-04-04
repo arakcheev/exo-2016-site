@@ -10,6 +10,7 @@ GET     /routes.js                  controllers.HomeController.jsRoutes
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 
+GET     /islogged                   controllers.AdminController.isLogged
 POST    /login                      controllers.AdminController.login
 POST    /logout                     controllers.AdminController.logout
 GET     /api/admin/participants     controllers.AdminController.listParticipants

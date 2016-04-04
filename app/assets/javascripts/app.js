@@ -6,6 +6,7 @@ define(['angular', 'templates', 'modules', 'common', 'admin'], function (angular
         "ngAnimate",
         "ngMessages",
         "ngRoute",
+        "textAngular",
         "common",
         "modules",
         "admin"

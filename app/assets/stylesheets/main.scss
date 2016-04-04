@@ -2,7 +2,7 @@ body {
   font-family: "Roboto", serif;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
@@ -18,12 +18,32 @@ body {
     margin-bottom: 25px;
   }
 
-  h1{
+  h1 {
     margin-bottom: 50px;
     margin-top: 0;
   }
 }
 
-.error-template {padding: 40px 15px;text-align: center;}
-.error-actions {margin-top:15px;margin-bottom:15px;}
-.error-actions .btn { margin-right:10px; }
+.error-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.error-actions {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.error-actions .btn {
+  margin-right: 10px;
+}
+
+.admin {
+  padding-top: 50px;
+}
+
+.lectures {
+  .add {
+    padding: 0 10px;
+  }
+}

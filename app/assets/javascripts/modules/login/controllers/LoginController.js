@@ -5,7 +5,6 @@
 define(function () {
 
     function LoginController(Routes, $log, $location) {
-
         var view = this;
 
         view.$submit = function () {

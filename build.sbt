@@ -32,8 +32,7 @@ val webJarDependesies = Seq(
   "org.webjars" % "jquery" % "1.11.3",
   "org.webjars" % "angularjs" % "1.4.9" exclude("org.webjars", "jquery"),
   "org.webjars" % "nervgh-angular-file-upload" % "2.1.1",
-  "org.webjars" % "angular-ui-bootstrap" % "0.14.3",
-  "org.webjars" % "ng-context-menu" % "1.0.1"
+  "org.webjars" % "angular-ui-bootstrap" % "0.14.3"
 )
 
 libraryDependencies ++= webJarDependesies

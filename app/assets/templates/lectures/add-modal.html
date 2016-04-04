@@ -1,0 +1,82 @@
+<form class="add-lecture-form" novalidate name="form" ng-submit="$submit()">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Add new lecture here</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group" ng-class="{'has-error': form.name.$invalid && form.name.$dirty}">
+                    <label class="sr-only" for="name">Speaker Name</label>
+                    <input id="name" type="text" name="name"
+                           class="form-control"
+                           placeholder="Enter Speaker full name"
+                           ng-model="speaker"
+                           required>
+
+                    <div ng-messages="form.name.$error" ng-if="form.name.$dirty" role="alert" ng-cloak="">
+                        <small class="help-block" ng-message="required">Please, enter speaker name</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group" ng-class="{'has-error': form.date.$invalid && form.date.$dirty}">
+                    <label class="sr-only" for="name">Lecture date</label>
+
+                    <input type="text"
+                           name="date"
+                           class="form-control"
+                           uib-datepicker-popup
+                           ng-model="date"
+                           is-open="opened"
+                           datepicker-options="dateOptions"
+                           ng-required="true"
+                           close-text="Close"/>
+
+                    <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="openDP()"><i
+                            class="glyphicon glyphicon-calendar"></i></button></span>
+
+                </div>
+                <div ng-messages="form.date.$error" ng-if="form.date.$dirty" role="alert" ng-cloak="">
+                    <small class="help-block" ng-message="required">Please, choose date</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group" ng-class="{'has-error': form.title.$invalid && form.title.$dirty}">
+                    <label class="sr-only" for="title">Title</label>
+                    <input id="title" type="text" name="title"
+                           class="form-control"
+                           placeholder="Enter lecture title"
+                           ng-model="title"
+                           required>
+
+                    <div ng-messages="form.title.$error" ng-if="form.title.$dirty" role="alert" ng-cloak="">
+                        <small class="help-block" ng-message="required">Please, enter title</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div text-angular ng-model="htmlContent" name="abstract" ta-text-editor-class="border-around"
+                     ta-html-editor-class="border-around"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="ok()" ng-disabled="form.$invalid || loading">Save
+        </button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+
+</form>

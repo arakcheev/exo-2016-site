@@ -21,6 +21,8 @@ class AdminController @Inject()(
                                  secured: Secured,
                                  participants: Participants)(implicit exec: ExecutionContext) extends Controller {
 
+  def isLogged = secured(Ok)
+
   def login = Action.async(parse.json[LoginData]) { request =>
     authentication.auth(request.body.login, request.body.password).map {
       case Some(user) => Ok.withSession(authentication.SESSION_NAME -> user._id.stringify)

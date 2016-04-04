@@ -3,7 +3,9 @@
  */
 
 define(['angular',
-    './participants/main'], function (angular) {
+    './participants/main',
+    './lectures/main'
+], function (angular) {
 
-    return angular.module("admin", ['participants']);
+    return angular.module("admin", ['participants', 'lectures']);
 });

@@ -19,7 +19,10 @@
             },
             'templates': {
                 exports: 'templates'
-            }
+            },
+            'textAngular-sanitize': ['angular'],
+            'textAngular-rangy': ['angular'],
+            'textAngular': ['angular', 'textAngular-sanitize', 'textAngular-rangy']
         },
         paths: {
             'requirejs': '/assets/lib/requirejs/require.min',
@@ -31,19 +34,25 @@
             'underscore': '/assets/lib/underscorejs/underscore-min',
             'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min',
             'jsRoutes': "/routes",
-            'templates': "/templates"
+            'templates': "/templates",
+            'textAngular-sanitize': ['/assets/javascripts/textAngular-sanitize.min'],
+            'textAngular-rangy': ['/assets/javascripts/textAngular-rangy.min'],
+            'textAngular': ['/assets/javascripts/textAngular.min']
         }
     });
 
     require(['angular',
             'angular-cookies',
             'angular-route',
-            "angular-animate",
+             "angular-animate",
             "angular-messages",
             'ui-bootstrap',
             'underscore',
             'jsRoutes',
             'templates',
+            'textAngular-rangy',
+            'textAngular-sanitize',
+            'textAngular',
             './app'],
         function (angular) {
             angular.element(document).ready(function () {
