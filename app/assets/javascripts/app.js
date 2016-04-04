@@ -1,4 +1,4 @@
-define(['angular', 'modules', 'common'], function (angular) {
+define(['angular', 'templates', 'modules', 'common', 'admin'], function (angular, templates) {
 
     var dependencies = [
         "ui.bootstrap",
@@ -7,7 +7,8 @@ define(['angular', 'modules', 'common'], function (angular) {
         "ngMessages",
         "ngRoute",
         "common",
-        "modules"
+        "modules",
+        "admin"
     ];
 
 
@@ -27,6 +28,32 @@ define(['angular', 'modules', 'common'], function (angular) {
         .config(['$logProvider', function ($logProvider) {
             $logProvider.debugEnabled(true);
         }]);
+
+
+    app.factory('authHttpResponseInterceptor', ['$q', '$location', function ($q, $location) {
+        return {
+            request: function (config) {
+
+                var url = config.url;
+
+                if (templates[url]) {
+                    config.url = templates[url];
+                }
+
+                return config;
+            },
+            responseError: function (rejection) {
+                if (rejection.status === 401) {
+                    $location.url('/login');
+                }
+                return $q.reject(rejection);
+            }
+        };
+    }]);
+
+    app.config(['$httpProvider', function ($httpProvider) {
+        $httpProvider.interceptors.push('authHttpResponseInterceptor');
+    }]);
 
     return app;
 

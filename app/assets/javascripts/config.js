@@ -1,7 +1,7 @@
 (function (requirejs) {
     requirejs.config({
         generateSourceMaps: false,
-        packages: ['common', 'modules'],
+        packages: ['common', 'modules', 'admin'],
         shim: {
             'angular': {
                 exports: 'angular'
@@ -16,6 +16,9 @@
 
             'jsRoutes': {
                 exports: 'jsRoutes'
+            },
+            'templates': {
+                exports: 'templates'
             }
         },
         paths: {
