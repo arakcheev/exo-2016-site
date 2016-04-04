@@ -6,6 +6,7 @@ import java.util.Date
 
 import org.joda.time.DateTime
 import play.api.libs.json._
+import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.bson._
 
 import scala.reflect.runtime.universe._
@@ -15,12 +16,16 @@ package object models {
 
   type Id = BSONObjectID
 
+  type Collection = BSONCollection
+
   def document(elements: Producer[BSONElement]*) = reactivemongo.bson.document(elements: _*)
 
   def array(values: reactivemongo.bson.Producer[reactivemongo.bson.BSONValue]*) =
     reactivemongo.bson.array(values: _*)
 
   def newId: Id = reactivemongo.bson.generateId
+
+  def parseId(id: String): Try[Id] = BSONObjectID.parse(id)
 
   implicit val bsonObjectIDFormat = Format[Id](
     Reads[Id] {

@@ -5,7 +5,8 @@ define(['angular',
         './SideMenu',
         './Header',
         './EmailAsyncValidator',
-        './PhoneAsyncValidator'],
+        './PhoneAsyncValidator',
+        './AdminHeader'],
     function (angular,
               OnEnter,
               OnEsc,
@@ -13,7 +14,8 @@ define(['angular',
               SideMenu,
               Header,
               EmailAsyncValidator,
-              PhoneAsyncValidator) {
+              PhoneAsyncValidator,
+              AdminHeader) {
 
 
         return angular.module("common.directives", [])
@@ -23,5 +25,6 @@ define(['angular',
             .directive('sideMenu', SideMenu)
             .directive('mainHeader', Header)
             .directive('emailValidate', EmailAsyncValidator)
-            .directive('phoneValidate', PhoneAsyncValidator);
+            .directive('phoneValidate', PhoneAsyncValidator)
+            .directive('adminHeader', AdminHeader);
     });

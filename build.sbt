@@ -19,6 +19,8 @@ libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo" % "0.11.10",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "com.amazonaws" % "aws-java-sdk" % "1.10.62",
+  "com.github.t3hnar" % "scala-bcrypt_2.11" % "2.5",
+
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test
 )
 

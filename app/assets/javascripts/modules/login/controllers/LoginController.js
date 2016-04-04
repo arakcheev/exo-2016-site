@@ -4,17 +4,20 @@
 
 define(function () {
 
-    function LoginController(Routes, $location) {
+    function LoginController(Routes, $log, $location) {
 
         var view = this;
 
-
         view.$submit = function () {
-            $location.url("/admin");
+            Routes.controllers.AdminController.login().post(view.cred).then(function () {
+                $location.url("/admin");
+            }, function (e) {
+                $log.error("Error login. ", e);
+            });
         };
     }
 
-    LoginController.$inject = ['Routes', '$location'];
+    LoginController.$inject = ['Routes', '$log', '$location'];
 
     return LoginController;
 });
