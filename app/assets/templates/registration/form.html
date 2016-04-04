@@ -26,6 +26,19 @@
         </div>
     </div>
 
+    <div class="form-group" ng-class="{'has-error': form.organization.$invalid && form.organization.$dirty}">
+        <label class="sr-only" for="organization">Your Organization</label>
+        <input id="organization" type="text" name="organization"
+               class="form-control"
+               placeholder="Enter Organization"
+               ng-model="reg.organization"
+               required>
+
+        <div ng-messages="form.organization.$error" ng-if="form.organization.$dirty" role="alert" ng-cloak="">
+            <small class="help-block" ng-message="required">Please, enter your organization</small>
+        </div>
+    </div>
+
     <div class="form-group" ng-class="{'has-error': form.email.$invalid && form.email.$dirty}">
         <label class="sr-only" for="email">Your Email</label>
         <input id="email" type="email" name="email"

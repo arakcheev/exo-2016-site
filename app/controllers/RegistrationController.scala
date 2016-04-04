@@ -11,12 +11,13 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.{Future, ExecutionContext}
 
-case class RegistrationData(name: String, surname: String, email: String, phone: String) {
+case class RegistrationData(name: String, surname: String, email: String, phone: String, organization: String) {
 
-  def asParticipant = Participant(name, surname, email, phone)
+  def asParticipant = Participant(name, surname, email, phone, organization)
 }
 
 object RegistrationData {
+  //todo: Validate field in custom reader
   implicit val format = Json.format[RegistrationData]
 }
 

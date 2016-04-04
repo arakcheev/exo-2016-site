@@ -1,17 +1,23 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
+
+#Return templates and routes as javascript
+GET     /templates.js               controllers.HomeController.templates
+GET     /routes.js                  controllers.HomeController.jsRoutes
+
+
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
-# An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+
+#Form registration controllers
 POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()
 POST     /api/registration/phoneavailable controllers.RegistrationController.phoneAvailable()
 POST     /api/registration/register controllers.RegistrationController.register()
-GET     /templates.js               controllers.HomeController.templates
-GET     /routes.js               controllers.HomeController.jsRoutes
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
 # A controller showing a index page with FE routing
 GET     /                               controllers.HomeController.index(url = "")
 GET     /*url                           controllers.HomeController.index(url)
