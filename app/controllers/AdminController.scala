@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject._
 
+import models.Participants
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
@@ -15,7 +16,10 @@ object LoginData {
 }
 
 @Singleton
-class AdminController @Inject()(authentication: Authentication, secured: Secured)(implicit exec: ExecutionContext) extends Controller {
+class AdminController @Inject()(
+                                 authentication: Authentication,
+                                 secured: Secured,
+                                 participants: Participants)(implicit exec: ExecutionContext) extends Controller {
 
   def login = Action.async(parse.json[LoginData]) { request =>
     authentication.auth(request.body.login, request.body.password).map {
@@ -24,8 +28,12 @@ class AdminController @Inject()(authentication: Authentication, secured: Secured
     }
   }
 
-  def listParticipants = secured{
-    Ok("Ok")
+  def logout = secured(Ok.withNewSession)
+
+  def listParticipants = secured.async {
+    participants.list().map { xs =>
+      Ok(Json.toJson(xs))
+    }
   }
 
 }

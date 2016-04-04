@@ -4,16 +4,22 @@
 
 package security.impl
 
-import com.google.inject.{Inject, Provider}
+import com.google.inject.{Singleton, Inject, Provider}
 import com.typesafe.scalalogging.LazyLogging
 import database.Driver
-import models.{Collection, Id, document}
+import models.{Collection, Id, document, newId}
 import play.api.Configuration
 import security.models.{User, UserRepository}
+import services.PasswordCrypto
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserRepositoryImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends UserRepository with LazyLogging {
+class UserRepositoryImpl(collection: Collection, passwordCrypto: PasswordCrypto)(implicit val executionContext: ExecutionContext) extends UserRepository with LazyLogging {
+
+
+//  val user = User(newId, "admin@inasan.ru", passwordCrypto.hash("123"))
+//  collection.insert(user).map(_ => println("saved"))
+
   /**
     * Get user by login
     *
@@ -37,9 +43,10 @@ class UserRepositoryImpl(collection: Collection)(implicit val executionContext: 
   }
 }
 
-class UserRepositoryImplProvider @Inject()(configuration: Configuration, driver: Driver, executionContext: ExecutionContext) extends Provider[UserRepository] {
+@Singleton
+class UserRepositoryImplProvider @Inject()(configuration: Configuration, driver: Driver, executionContext: ExecutionContext, passwordCrypto: PasswordCrypto) extends Provider[UserRepository] {
 
   val collection = driver.collection("users")
 
-  override def get(): UserRepository = new UserRepositoryImpl(collection)(executionContext)
+  override def get(): UserRepository = new UserRepositoryImpl(collection, passwordCrypto)(executionContext)
 }

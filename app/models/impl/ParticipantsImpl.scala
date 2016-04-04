@@ -32,5 +32,7 @@ class ParticipantsImpl @Inject()(driver: Driver, implicit val executionContext: 
     collection.insert(participant).map(_ => ())
   }
 
-  override def list(): Future[List[Participant]] = ???
+  override def list(): Future[List[Participant]] = {
+    collection.find(document()).cursor[Participant]().collect[List]()
+  }
 }

@@ -11,6 +11,7 @@ GET     /routes.js                  controllers.HomeController.jsRoutes
 GET     /count                      controllers.CountController.count
 
 POST    /login                      controllers.AdminController.login
+POST    /logout                     controllers.AdminController.logout
 GET     /api/admin/participants     controllers.AdminController.listParticipants
 
 #Form registration controllers
