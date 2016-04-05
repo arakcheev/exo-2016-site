@@ -42,6 +42,14 @@ class LecturesImpl(collection: Collection)(implicit val executionContext: Execut
     val query = document("_id" -> id)
     collection.remove(query).map(_ => ())
   }
+
+  override def update(id: Id, lecture: Lecture): Future[Lecture] = {
+    val query = document("_id" -> id)
+    val updater = document("$set" -> lecture.setId(id))
+    collection.findAndUpdate(query, updater, fetchNewObject = true).map { data =>
+      data.result[Lecture].getOrElse(throw new Exception(s"Invalid result in update lecture operation. Expected updater lecture, got ${data.value}"))
+    }
+  }
 }
 
 class LecturesImplProvider @Inject()(driver: Driver)(implicit val executionContext: ExecutionContext) extends Provider[Lectures] {

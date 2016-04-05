@@ -4,8 +4,10 @@
 
 define(['angular',
     './Routes',
-    './controllers/main'], function (angular, Routes) {
+    './controllers/main',
+    './directives/main',
+    './models/main'], function (angular, Routes) {
 
-    return angular.module('lectures', ['lectures.controllers'])
+    return angular.module('lectures', ['lectures.controllers', 'lectures.directives', 'lectures.models'])
         .config(Routes);
 });

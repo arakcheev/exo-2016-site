@@ -1,11 +1,12 @@
 <form class="add-lecture-form" novalidate name="form" ng-submit="ok()">
 
     <div class="modal-header">
-        <a ng-click="cancel()" class="pointer">
+        <a ng-click="modal.cancel()" class="pointer">
             <i class="fa fa-times pull-right"></i>
         </a>
 
-        <h3 class="modal-title">Add new lecture here</h3>
+        <h3 class="modal-title" ng-if="!modal.isEdit">Add new lecture here</h3>
+        <h3 class="modal-title" ng-if="modal.isEdit">Edit lecture</h3>
     </div>
 
     <div class="modal-body">
@@ -17,7 +18,7 @@
                     <input id="name" type="text" name="name"
                            class="form-control"
                            placeholder="Enter Speaker full name"
-                           ng-model="data.speaker"
+                           ng-model="modal.data.speaker"
                            required>
 
                     <div ng-messages="form.name.$error" ng-if="form.name.$dirty" role="alert" ng-cloak="">
@@ -27,28 +28,7 @@
             </div>
 
             <div class="col-md-4">
-                <div class="form-group">
-                    <label for="name">Date</label>
-                    <div class="input-group" ng-class="{'has-error': form.date.$invalid && form.date.$dirty}">
-
-                        <input type="text"
-                               name="date"
-                               class="form-control"
-                               uib-datepicker-popup
-                               ng-model="data.date"
-                               is-open="opened"
-                               datepicker-options="dateOptions"
-                               ng-required="true"
-                               close-text="Close"/>
-
-                    <span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="openDP()"><i
-                            class="glyphicon glyphicon-calendar"></i></button></span>
-
-                    </div>
-                    <div ng-messages="form.date.$error" ng-if="form.date.$dirty" role="alert" ng-cloak="">
-                        <small class="help-block" ng-message="required">Please, choose date</small>
-                    </div>
-                </div>
+                <lecture-date-field date="modal.data.date" form="form"></lecture-date-field>
             </div>
         </div>
 
@@ -60,7 +40,7 @@
                     <input id="organization" type="text" name="organization"
                            class="form-control"
                            placeholder="Enter organization"
-                           ng-model="data.organization"
+                           ng-model="modal.data.organization"
                            required>
 
                     <div ng-messages="form.organization.$error" ng-if="form.organization.$dirty" role="alert"
@@ -76,7 +56,7 @@
                     <input id="title" type="text" name="title"
                            class="form-control"
                            placeholder="Enter lecture title"
-                           ng-model="data.title"
+                           ng-model="modal.data.title"
                            required>
 
                     <div ng-messages="form.title.$error" ng-if="form.title.$dirty" role="alert" ng-cloak="">
@@ -88,7 +68,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div text-angular ng-model="data.abstract" name="abstract" ta-text-editor-class="border-around"
+                <div text-angular ng-model="modal.data.abstract" name="abstract" ta-text-editor-class="border-around"
                      ta-html-editor-class="border-around"></div>
             </div>
         </div>
@@ -97,9 +77,9 @@
 
 
     <div class="modal-footer">
-        <button class="btn btn-default" type="button" ng-click="ok()" ng-disabled="form.$invalid || loading">Save
+        <button class="btn btn-default" type="button" ng-click="modal.ok()" ng-disabled="form.$invalid || loading">Save
         </button>
-        <button class="btn btn-danger" type="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-danger" type="button" ng-click="modal.cancel()">Cancel</button>
     </div>
 
 </form>

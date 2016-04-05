@@ -1,44 +1,45 @@
-define(function () {
+define(['underscore'], function (_) {
 
-    function AddNewLectureController($scope, $instance, Routes) {
+    function ModalLectureController(mayBeLecture, $instance, Lectures) {
+        var view = this;
 
-        $scope.openDP = function () {
-            $scope.opened = true;
-        };
+        var isEdit = this.isEdit = !(_.isNull(mayBeLecture) || _.isUndefined(mayBeLecture)) && !_.isUndefined(mayBeLecture.getId());
 
-        $scope.format = 'dd-MMMM-yyyy';
+        if (isEdit) {
+            view.data = {
+                date: mayBeLecture.getDate(),
+                abstract: mayBeLecture.getAbstract(),
+                title: mayBeLecture.getTitle(),
+                organization: mayBeLecture.getOrganization(),
+                speaker: mayBeLecture.getSpeaker()
+            };
+        } else {
+            view.data = {
+                date: new Date(2016, 4, 30)
+            };
+        }
 
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
+        view.ok = function () {
+            var lecture = Lectures.$apply(view.data.abstract, view.data.date, view.data.speaker, view.data.organization, view.data.title);
 
-        $scope.data = {
-            date: new Date(2016, 4, 30)
-        };
-
-        $scope.ok = function () {
-            $scope.data.date = $scope.data.date.getTime();
-            $scope.data.abst = $scope.data.abstract;
-
-            Routes.controllers.AdminController.newLecture()
-                .post($scope.data)
-                .then(function (response) {
-                    var data = response.data;
-                    $instance.close(data);
-                })
-                .catch(function () {
-                    console.error("Not saved");
+            if (isEdit) {
+                Lectures.update(mayBeLecture.getId(), lecture).then(function (created) {
+                    $instance.close(created);
                 });
+            } else {
+                Lectures.create(lecture).then(function (created) {
+                    $instance.close(created);
+                });
+            }
         };
 
-        $scope.cancel = function () {
+        view.cancel = function () {
             $instance.dismiss("Close");
         };
 
     }
 
-    AddNewLectureController.$inject = ['$scope', '$uibModalInstance', 'Routes'];
+    ModalLectureController.$inject = ['mayBeLecture', '$uibModalInstance', 'Lectures'];
 
-    return AddNewLectureController;
+    return ModalLectureController;
 });

@@ -21,11 +21,11 @@
         <tbody>
         <tr ng-repeat="lecture in lectures.lectures">
             <td class="number hidden-xs">{{$index + 1}}</td>
-            <td class="speaker">{{lecture.speaker.fullname}}</td>
-            <td class="hidden-xs">{{lecture.title}}</td>
-            <td class="date">{{lecture.date | date:'dd MMM'}}</td>
+            <td class="speaker">{{lecture.getSpeaker()}}</td>
+            <td class="hidden-xs">{{lecture.getTitle()}}</td>
+            <td class="date">{{lecture.getDate() | date:'dd MMM'}}</td>
             <td class="buttons hidden-xs">
-                <a href="" ng-click="lectures.edit(lecture)"><i class="fa fa-pencil-square-o"></i></a>
+                <a href="" ng-click="lectures.$edit(lecture)"><i class="fa fa-pencil-square-o"></i></a>
                 <a href="" ng-click="lectures.$remove(lecture)"><i class="fa fa-trash-o"></i></a>
             </td>
         </tr>

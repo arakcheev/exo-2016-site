@@ -1,22 +1,37 @@
 define(['underscore', './AddNewLectureController'], function (_, AddNewLectureController) {
 
-    function LecturesController($modal, Routes) {
+    function LecturesController($modal, Lectures) {
         var view = this;
 
         view.lectures = [];
 
-        view.addNew = function () {
+        function LectureModal(mayBeLecture, callback) {
             $modal.open({
                 templateUrl: '/assets/templates/lectures/add-modal.html',
                 controller: AddNewLectureController,
+                controllerAs: 'modal',
+                resolve: {
+                    mayBeLecture: mayBeLecture
+                },
                 size: "lg"
             }).result.then(function (newLecture) {
-                view.lectures.push(newLecture);
+                callback.call(this, newLecture);
+            });
+        }
+
+        view.addNew = function () {
+            new LectureModal(null, function (lecture) {
+                view.lectures.push(lecture);
             });
         };
 
-        view.edit = function (lecture) {
-
+        view.$edit = function (lecture) {
+            new LectureModal(lecture, function (updatedLecture) {
+                var index = _.indexOf(view.lectures, lecture);
+                if (index > -1) {
+                    view.lectures[index] = updatedLecture;
+                }
+            });
         };
 
         view.$remove = function (lecture) {
@@ -32,21 +47,16 @@ define(['underscore', './AddNewLectureController'], function (_, AddNewLectureCo
                 });
         };
 
-        Routes.controllers.AdminController.listLectures().get()
-            .then(function (response) {
-                var data = response.data;
-                _.each(data, function (item) {
-                    view.lectures.push(item);
-                });
-            })
-            .catch(function () {
-                //error here
+        Lectures.fetch().then(function (lectures) {
+            _.each(lectures, function (item) {
+                view.lectures.push(item);
             });
+        });
 
 
     }
 
-    LecturesController.$inject = ['$uibModal', 'Routes'];
+    LecturesController.$inject = ['$uibModal', 'Lectures'];
 
     return LecturesController;
 });

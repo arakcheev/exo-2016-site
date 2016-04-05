@@ -34,7 +34,12 @@ object Speaker {
   * @param date lecture date
   * @param abstr lecture abstract
   */
-case class Lecture(_id: Id, speaker: Speaker, title: String, date: DateTime, abstr: String)
+case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime, abstr: String) {
+  def setId(newId: Id) = {
+    _id = newId
+    this
+  }
+}
 
 object Lecture {
   implicit val format = Json.format[Lecture]
@@ -66,4 +71,6 @@ trait Lectures {
     * Just Remove lecture.
     */
   def remove(id: Id): Future[Unit]
+
+  def update(id: Id, lecture: Lecture): Future[Lecture]
 }

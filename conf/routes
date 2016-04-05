@@ -19,6 +19,7 @@ GET     /api/admin/participants     controllers.AdminController.listParticipants
 POST    /api/lectures/save          controllers.AdminController.newLecture
 GET     /api/lectures               controllers.AdminController.listLectures
 DELETE  /api/lectures/:id           controllers.AdminController.removeLecture(id: models.Id)
+PUT     /api/lectures/:id           controllers.AdminController.updateLecture(id: models.Id)
 
 #Form registration controllers
 POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()
