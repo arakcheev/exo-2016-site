@@ -35,16 +35,12 @@ define(['underscore', './AddNewLectureController'], function (_, AddNewLectureCo
         };
 
         view.$remove = function (lecture) {
-            Routes.controllers.AdminController.removeLecture(lecture._id).delete()
-                .then(function (response) {
-                    var index = _.indexOf(view.lectures, lecture);
-                    if (index > -1) {
-                        view.lectures.splice(index, 1);
-                    }
-                })
-                .catch(function () {
-                    //error here
-                });
+            Lectures.remove(lecture).then(function () {
+                var index = _.indexOf(view.lectures, lecture);
+                if (index > -1) {
+                    view.lectures.splice(index, 1);
+                }
+            });
         };
 
         Lectures.fetch().then(function (lectures) {

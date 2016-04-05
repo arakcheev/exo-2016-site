@@ -43,7 +43,7 @@ define(function () {
 
     function LectureModel(Routes) {
 
-        function lectureToJson(lecture){
+        function lectureToJson(lecture) {
             return {
                 speaker: lecture.getSpeaker(),
                 date: lecture.getDate().getTime(),
@@ -78,7 +78,7 @@ define(function () {
                 });
         };
 
-        Lecture.update = function(id, lecture){
+        Lecture.update = function (id, lecture) {
             return Routes.controllers.AdminController.updateLecture(id)
                 .put(lectureToJson(lecture))
                 .then(function (response) {
@@ -88,6 +88,13 @@ define(function () {
                 .catch(function () {
                     console.error("Not saved lecture");
                     return null;
+                });
+        };
+
+        Lecture.remove = function (lecture) {
+            return Routes.controllers.AdminController.removeLecture(lecture.getId()).delete()
+                .then(function (response) {
+                    return response;
                 });
         };
 
