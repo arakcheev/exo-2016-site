@@ -8,19 +8,32 @@ define(function () {
 
         $scope.format = 'dd-MMMM-yyyy';
 
-        $scope.date = new Date(2016, 4, 30);
-
         $scope.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
         };
 
+        $scope.data = {
+            date: new Date(2016, 4, 30)
+        };
+
         $scope.ok = function () {
-            console.log("aololo");
+            $scope.data.date = $scope.data.date.getTime();
+            $scope.data.abst = $scope.data.abstract;
+
+            Routes.controllers.AdminController.newLecture()
+                .post($scope.data)
+                .then(function (response) {
+                    var data = response.data;
+                    $instance.close(data);
+                })
+                .catch(function () {
+                    console.error("Not saved");
+                });
         };
 
         $scope.cancel = function () {
-            $instance.close("");
+            $instance.$dismiss("Close");
         };
 
     }

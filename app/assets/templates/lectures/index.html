@@ -18,13 +18,11 @@
         </thead>
 
         <tbody>
-        <tr>
-            <td>1</td>
-            <td>Luca Fossati</td>
-            <td class="hidden-xs">A comprehensive overview of results obtained from multi-wavelength exoplanet transit
-                observations
-            </td>
-            <td>13-23-32</td>
+        <tr ng-repeat="lecture in lectures.lectures">
+            <td>{{$index + 1}}</td>
+            <td>{{lecture.speaker.fullname}}</td>
+            <td class="hidden-xs">{{lecture.title}}</td>
+            <td>{{lecture.date | date:'dd MMM'}}</td>
         </tr>
         </tbody>
     </table>

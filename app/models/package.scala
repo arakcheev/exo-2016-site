@@ -57,10 +57,10 @@ package object models {
     }
   }
 
-  implicit val dateTimeHandler = new BSONHandler[BSONLong, DateTime] {
-    override def write(t: DateTime): BSONLong = BSONLong(t.getMillis)
+  implicit val dateTimeHandler = new BSONHandler[BSONDateTime, DateTime] {
+    override def write(t: DateTime): BSONDateTime = BSONDateTime(t.getMillis)
 
-    override def read(bson: BSONLong): DateTime = new DateTime(bson.value)
+    override def read(bson: BSONDateTime): DateTime = new DateTime(bson.value)
   }
 
   //  def DBHandler[A: WeakTypeTag] = Macros.handler[A]

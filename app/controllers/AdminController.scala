@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject._
 
-import models.Participants
+import models.{Speaker, Lecture, Lectures, Participants}
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
@@ -15,11 +15,24 @@ object LoginData {
   implicit val reader = Json.reads[LoginData]
 }
 
+case class LectureData(speaker: String, date: Long, organization: String, title: String, abst: String) {
+
+  def toLecture: Lecture = {
+    val spkr = Speaker(speaker, organization)
+    Lecture(spkr, title, date, abst)
+  }
+}
+
+object LectureData {
+  implicit val reader = Json.reads[LectureData]
+}
+
 @Singleton
 class AdminController @Inject()(
                                  authentication: Authentication,
                                  secured: Secured,
-                                 participants: Participants)(implicit exec: ExecutionContext) extends Controller {
+                                 participants: Participants,
+                                 lectures: Lectures)(implicit exec: ExecutionContext) extends Controller {
 
   def isLogged = secured(Ok)
 
@@ -36,6 +49,14 @@ class AdminController @Inject()(
     participants.list().map { xs =>
       Ok(Json.toJson(xs))
     }
+  }
+
+  def newLecture = secured.async(parse.json[LectureData]) { implicit request =>
+    lectures.save(request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
+  }
+
+  def listLectures = Action.async {
+    lectures.list[List]().map(xs => Ok(Json.toJson(xs)))
   }
 
 }
