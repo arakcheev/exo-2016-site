@@ -1,4 +1,4 @@
-<form class="add-lecture-form" novalidate name="form" ng-submit="$submit()">
+<form class="add-lecture-form" novalidate name="form" ng-submit="ok()">
 
     <div class="modal-header">
         <h3 class="modal-title">Add new lecture here</h3>
@@ -65,7 +65,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div text-angular ng-model="htmlContent" name="abstract" ta-text-editor-class="border-around"
+                <div text-angular ng-model="abstract" name="abstract" ta-text-editor-class="border-around"
                      ta-html-editor-class="border-around"></div>
             </div>
         </div>

@@ -12,13 +12,11 @@ define(function () {
 
         $scope.dateOptions = {
             formatYear: 'yy',
-            //maxDate: new Date(2016, 5, 1),
-            //minDate: new Date(2016, 5, 30),
             startingDay: 1
         };
 
         $scope.ok = function () {
-
+            console.log("aololo");
         };
 
         $scope.cancel = function () {
