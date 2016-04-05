@@ -5,6 +5,10 @@ define(['underscore', './AddNewLectureController'], function (_, AddNewLectureCo
 
         view.lectures = [];
 
+        view.predicate = function (lecture) {
+            return lecture.getDate().getTime();
+        };
+
         function LectureModal(mayBeLecture, callback) {
             $modal.open({
                 templateUrl: '/assets/templates/lectures/add-modal.html',

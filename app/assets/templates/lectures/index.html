@@ -19,7 +19,7 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="lecture in lectures.lectures">
+        <tr ng-repeat="lecture in lectures.lectures | orderBy:lectures.predicate:lectures.reverse">
             <td class="number hidden-xs">{{$index + 1}}</td>
             <td class="speaker">{{lecture.getSpeaker()}}</td>
             <td class="hidden-xs">{{lecture.getTitle()}}</td>
