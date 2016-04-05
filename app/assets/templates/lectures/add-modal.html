@@ -13,18 +13,13 @@
 
         <div class="row">
             <div class="col-md-5">
-                <div class="form-group" ng-class="{'has-error': form.name.$invalid && form.name.$dirty}">
-                    <label for="name">Speaker Name</label>
-                    <input id="name" type="text" name="name"
-                           class="form-control"
-                           placeholder="Enter Speaker full name"
-                           ng-model="modal.data.speaker"
-                           required>
 
-                    <div ng-messages="form.name.$error" ng-if="form.name.$dirty" role="alert" ng-cloak="">
-                        <small class="help-block" ng-message="required">Please, enter speaker name</small>
-                    </div>
-                </div>
+                <lecture-form-field form="form"
+                                    name="name"
+                                    label="Speaker Name"
+                                    placeholder="Enter Speaker full name"
+                                    model="modal.data.speaker"
+                                    required-error="Please, enter speaker name"></lecture-form-field>
             </div>
 
             <div class="col-md-4">
@@ -34,41 +29,31 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group"
-                     ng-class="{'has-error': form.organization.$invalid && form.organization.$dirty}">
-                    <label for="organization">Organization</label>
-                    <input id="organization" type="text" name="organization"
-                           class="form-control"
-                           placeholder="Enter organization"
-                           ng-model="modal.data.organization"
-                           required>
-
-                    <div ng-messages="form.organization.$error" ng-if="form.organization.$dirty" role="alert"
-                         ng-cloak="">
-                        <small class="help-block" ng-message="required">Please, enter organization</small>
-                    </div>
-                </div>
+                <lecture-form-field form="form"
+                                    name="organization"
+                                    label="Organization"
+                                    placeholder="Enter organization"
+                                    model="modal.data.organization"
+                                    required-error="Please, enter organization"></lecture-form-field>
             </div>
 
             <div class="col-md-12">
-                <div class="form-group" ng-class="{'has-error': form.title.$invalid && form.title.$dirty}">
-                    <label for="title">Title</label>
-                    <input id="title" type="text" name="title"
-                           class="form-control"
-                           placeholder="Enter lecture title"
-                           ng-model="modal.data.title"
-                           required>
 
-                    <div ng-messages="form.title.$error" ng-if="form.title.$dirty" role="alert" ng-cloak="">
-                        <small class="help-block" ng-message="required">Please, enter title</small>
-                    </div>
-                </div>
+                <lecture-form-field form="form"
+                                    name="title"
+                                    label="Title"
+                                    placeholder="Enter lecture title"
+                                    model="modal.data.title"
+                                    required-error="Please, enter title"></lecture-form-field>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <div text-angular ng-model="modal.data.abstract" name="abstract" ta-text-editor-class="border-around"
+                <div text-angular
+                     ng-model="modal.data.abstract"
+                     name="abstract"
+                     ta-text-editor-class="border-around"
                      ta-html-editor-class="border-around"></div>
             </div>
         </div>

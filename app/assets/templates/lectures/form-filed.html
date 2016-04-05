@@ -1,0 +1,12 @@
+<div class="form-group" ng-class="{'has-error': form[name].$invalid && form[name].$dirty}">
+    <label for="name">{{label}}</label>
+    <input id="name" type="text" name="{{name}}"
+           class="form-control"
+           placeholder="{{placeholder}}"
+           ng-model="model"
+           required>
+
+    <div ng-messages="form[name].$error" ng-if="form[name].$dirty" role="alert" ng-cloak="">
+        <small class="help-block" ng-message="required">{{requiredError}}</small>
+    </div>
+</div>
