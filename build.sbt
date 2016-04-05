@@ -57,7 +57,14 @@ JsEngineKeys.parallelism := 4
 }
 
 RjsKeys.paths += ("jsRoutes" -> ("/jsroutes" -> "empty:"))
+RjsKeys.paths += ("templates" -> ("/templates" -> "empty:"))
+RjsKeys.paths += ("textAngular-sanitize" -> ("/assets/javascripts/textAngular-sanitize.min.js" -> "/assets/javascripts/textAngular-sanitize.min.js"))
+
+RjsKeys.paths += ("textAngular-rangy" -> ("/assets/javascripts/textAngular-rangy.min.js" -> "/assets/javascripts/textAngular-rangy.min.js"))
+
+RjsKeys.paths += ("textAngular" -> ("/assets/javascripts/textAngular.min.js" -> "/assets/javascripts/textAngular.min.js"))
+
 RjsKeys.mainModule := "app"
 RjsKeys.mainConfig := "config"
 RjsKeys.generateSourceMaps := false
-RjsKeys.webJarCdns := Map("org.webjars" -> "//webjars-file-service.herokuapp.com/files")
+//RjsKeys.webJarCdns := Map("org.webjars" -> "//webjars-file-service.herokuapp.com/files")
