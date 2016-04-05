@@ -1,4 +1,4 @@
-define(['underscore','./AddNewLectureController'], function (_, AddNewLectureController) {
+define(['underscore', './AddNewLectureController'], function (_, AddNewLectureController) {
 
     function LecturesController($modal, Routes) {
         var view = this;
@@ -15,10 +15,27 @@ define(['underscore','./AddNewLectureController'], function (_, AddNewLectureCon
             });
         };
 
+        view.edit = function (lecture) {
+
+        };
+
+        view.$remove = function (lecture) {
+            Routes.controllers.AdminController.removeLecture(lecture._id).delete()
+                .then(function (response) {
+                    var index = _.indexOf(view.lectures, lecture);
+                    if (index > -1) {
+                        view.lectures.splice(index, 1);
+                    }
+                })
+                .catch(function () {
+                    //error here
+                });
+        };
+
         Routes.controllers.AdminController.listLectures().get()
             .then(function (response) {
                 var data = response.data;
-                _.each(data, function(item){
+                _.each(data, function (item) {
                     view.lectures.push(item);
                 });
             })

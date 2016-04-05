@@ -61,4 +61,9 @@ trait Lectures {
     * @tparam M collection type to return (ex, List, Seq, Set)
     */
   def list[M[_]]()(implicit cbf: CanBuildFrom[M[_], Lecture, M[Lecture]]): Future[M[Lecture]]
+
+  /**
+    * Just Remove lecture.
+    */
+  def remove(id: Id): Future[Unit]
 }

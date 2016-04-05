@@ -15,8 +15,10 @@ POST    /login                      controllers.AdminController.login
 POST    /logout                     controllers.AdminController.logout
 GET     /api/admin/participants     controllers.AdminController.listParticipants
 
+# Admin lecture routes
 POST    /api/lectures/save          controllers.AdminController.newLecture
 GET     /api/lectures               controllers.AdminController.listLectures
+DELETE  /api/lectures/:id           controllers.AdminController.removeLecture(id: models.Id)
 
 #Form registration controllers
 POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()

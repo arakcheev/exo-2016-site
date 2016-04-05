@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject._
 
-import models.{Speaker, Lecture, Lectures, Participants}
+import models._
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
@@ -55,8 +55,8 @@ class AdminController @Inject()(
     lectures.save(request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
   }
 
-  def listLectures = Action.async {
-    lectures.list[List]().map(xs => Ok(Json.toJson(xs)))
-  }
+  def listLectures = Action.async(lectures.list[List]().map(xs => Ok(Json.toJson(xs))))
+
+  def removeLecture(id: Id) = secured.async(lectures.remove(id).map(_ => Ok))
 
 }

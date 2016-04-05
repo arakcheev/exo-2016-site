@@ -47,3 +47,22 @@ body {
     padding: 0 10px;
   }
 }
+
+.table-lectures {
+  .number {
+    width: 10px;
+  }
+  .speaker {
+    width: 250px;
+  }
+  .date{
+    width: 70px;
+  }
+  .buttons{
+    width: 90px;
+
+    a{
+      padding: 0 10px;
+    }
+  }
+}

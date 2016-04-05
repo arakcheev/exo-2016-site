@@ -34,6 +34,14 @@ class LecturesImpl(collection: Collection)(implicit val executionContext: Execut
     val query = document()
     collection.find(query).cursor[Lecture]().collect[M]()
   }
+
+  /**
+    * Just Remove lecture.
+    */
+  override def remove(id: Id): Future[Unit] = {
+    val query = document("_id" -> id)
+    collection.remove(query).map(_ => ())
+  }
 }
 
 class LecturesImplProvider @Inject()(driver: Driver)(implicit val executionContext: ExecutionContext) extends Provider[Lectures] {

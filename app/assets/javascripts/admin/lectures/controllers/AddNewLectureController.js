@@ -33,7 +33,7 @@ define(function () {
         };
 
         $scope.cancel = function () {
-            $instance.$dismiss("Close");
+            $instance.dismiss("Close");
         };
 
     }
