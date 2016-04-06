@@ -11,6 +11,7 @@ define(['underscore', './ModalItemsController'], function (_, ModalItemsControll
         view.items = [];
 
         view.predicate = function (item) {
+            console.log(item.getStartDate().getTime());
             return item.getStartDate().getTime();
         };
 

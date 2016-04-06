@@ -19,7 +19,7 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="item in workshop.items | orderBy:workshop.predicate:workshop.reverse">
+        <tr ng-repeat="item in workshop.items | orderBy:workshop.predicate:false">
             <td>{{item.getTitle()}}</td>
             <td class="date">{{item.getStartDate() | date:'dd MMM hh: mm'}}</td>
             <td class="date">{{item.getEndDate() | date:'dd MMM hh: mm'}}</td>

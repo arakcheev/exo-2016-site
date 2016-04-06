@@ -42,7 +42,7 @@ object WorkShopItemData {
 
 case class ProgramItem(item: WorkShopItem, sessions: List[Lecture])
 
-object ProgramItem{
+object ProgramItem {
   implicit val writer = Json.writes[ProgramItem]
 }
 
@@ -71,20 +71,21 @@ class AdminController @Inject()(
       sessions <- lectures.list[Seq]()
     } yield {
 
-      val grouped: Map[DateTime, Seq[WorkShopItem]] = items.groupBy(_.startDate)
+      val grouped: Map[String, Seq[WorkShopItem]] = items.groupBy(_.startDate.getDayOfMonth.toString)
 
       val program = grouped.mapValues { items =>
         items.map { item =>
-          val itemSessions = sessions.filter { s =>
-            s.date.getDayOfYear == item.startDate.getDayOfYear
+          val itemSessions = sessions.filter { s: Lecture =>
+            //include boundaries
+            s.date.isAfter(item.startDate.getMillis - 1) && s.date.isBefore(item.endDate.getMillis + 1)
           }.toList
           ProgramItem(item, itemSessions)
         }
-      }.map{case (dt, xs) =>
-        (dt.getDayOfMonth.toString, xs)
       }
 
-      Ok(Json.toJson(program))
+      val json = Json.toJson(program)
+
+      Ok(json).as(JSON)
     }
   }
 
