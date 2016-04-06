@@ -8,44 +8,7 @@
             <h3 class="panel-title">MONDAY, MARCH 30</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item"
-                ng-repeat="day in program.days[program.day1]">
-
-                <div class="pull-right">
-                    {{day.item.startDate | date:'HH:mm'}} – {{day.item.endDate | date:'HH:mm'}}
-                </div>
-                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
-
-                <a class="pointer"
-                   ng-init="day.sessionOpen = true"
-                   ng-if="day.sessions.length > 0"
-                   ng-click="day.sessionOpen = !day.sessionOpen">
-                    {{day.item.title}}
-                </a>
-                <div uib-collapse="day.sessionOpen"  ng-if="day.sessions.length > 0">
-                    <div class="well well-lg">
-
-                        <div ng-repeat="session in day.sessions">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <strong>{{session.speaker.fullname}}
-                                            <small> ({{session.speaker.organization}})
-                                            </small>
-                                        </strong>
-                                        <i>{{session.title}}</i>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p ng-bind-html="session.abstr"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
+            <program-list-item days="program.days[program.day1]"></program-list-item>
         </ul>
     </div>
 
@@ -54,44 +17,7 @@
             <h3 class="panel-title">TUESDAY, MARCH 31</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item"
-                ng-repeat="day in program.days[program.day2]">
-
-                <div class="pull-right">
-                    {{day.item.startDate | date:'hh:mm'}} – {{day.item.endDate | date:'hh:mm'}}
-                </div>
-                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
-
-                <a class="pointer"
-                   ng-init="day.sessionOpen = true"
-                   ng-if="day.sessions.length > 0 "
-                   ng-click="day.sessionOpen = !day.sessionOpen">
-                    {{day.item.title}}
-                </a>
-                <div uib-collapse="day.sessionOpen">
-                    <div class="well well-lg">
-
-                        <div ng-repeat="session in day.sessions">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <strong>{{session.speaker.fullname}}
-                                            <small> ({{session.speaker.organization}})
-                                            </small>
-                                        </strong>
-                                        <i>{{session.title}}</i>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p ng-bind-html="session.abstr"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
+            <program-list-item days="program.days[program.day2]"></program-list-item>
         </ul>
     </div>
 
@@ -100,44 +26,7 @@
             <h3 class="panel-title">WEDNESDAY, JUNE 1</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item"
-                ng-repeat="day in program.days[program.day3]">
-
-                <div class="pull-right">
-                    {{day.item.startDate | date:'hh:mm'}} – {{day.item.endDate | date:'hh:mm'}}
-                </div>
-                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
-
-                <a class="pointer"
-                   ng-init="day.sessionOpen = true"
-                   ng-if="day.sessions.length > 0 "
-                   ng-click="day.sessionOpen = !day.sessionOpen">
-                    {{day.item.title}}
-                </a>
-                <div uib-collapse="day.sessionOpen">
-                    <div class="well well-lg">
-
-                        <div ng-repeat="session in day.sessions">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>
-                                        <strong>{{session.speaker.fullname}}
-                                            <small> ({{session.speaker.organization}})
-                                            </small>
-                                        </strong>
-                                        <i>{{session.title}}</i>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p ng-bind-html="session.abstr"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
+            <program-list-item days="program.days[program.day3]"></program-list-item>
         </ul>
     </div>
 

@@ -1,5 +1,5 @@
-define(['angular', './Routes', './controllers/main'], function (angular, Routes) {
+define(['angular', './Routes', './controllers/main', './directives/main'], function (angular, Routes) {
 
-    return angular.module("program", ['program.controllers'])
+    return angular.module("program", ['program.controllers', 'program.directives'])
         .config(Routes);
 });

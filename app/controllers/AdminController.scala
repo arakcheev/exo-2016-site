@@ -85,7 +85,7 @@ class AdminController @Inject()(
             println(s" itemStartMillis ${new DateTime(itemStartMillis)}")
             println(s" itemEndMillis ${new DateTime(itemEndMillis)}")
             println(s" result ${lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis}")
-            println()*/Ыщьу
+            println()*/
             lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
           }.toList
           ProgramItem(item, itemSessions)
