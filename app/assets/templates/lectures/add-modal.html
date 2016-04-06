@@ -25,6 +25,10 @@
             <div class="col-md-4">
                 <lecture-date-field date="modal.data.date" form="form"></lecture-date-field>
             </div>
+
+            <div class="col-md-3">
+                    <uib-timepicker class="time" ng-model="modal.data.date" hour-step="1" minute-step="10" show-meridian="true"></uib-timepicker>
+            </div>
         </div>
 
         <div class="row">

@@ -1,4 +1,4 @@
-define(['underscore', './AddNewLectureController'], function (_, AddNewLectureController) {
+define(['underscore', './ModalLectureController'], function (_, ModalLectureController) {
 
     function LecturesController($modal, Lectures) {
         var view = this;
@@ -12,7 +12,7 @@ define(['underscore', './AddNewLectureController'], function (_, AddNewLectureCo
         function LectureModal(mayBeLecture, callback) {
             $modal.open({
                 templateUrl: '/assets/templates/lectures/add-modal.html',
-                controller: AddNewLectureController,
+                controller: ModalLectureController,
                 controllerAs: 'modal',
                 resolve: {
                     mayBeLecture: mayBeLecture
