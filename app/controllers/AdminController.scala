@@ -76,8 +76,17 @@ class AdminController @Inject()(
       val program = grouped.mapValues { items =>
         items.map { item =>
           val itemSessions = sessions.filter { s: Lecture =>
-            //include boundaries
-            s.date.isAfter(item.startDate.getMillis - 1) && s.date.isBefore(item.endDate.getMillis + 1)
+            val lectureStartMillis = s.date.getMillis + 1
+            val itemStartMillis = item.startDate.getMillis - 1
+            val itemEndMillis = item.endDate.getMillis
+            /*println(item.title)
+            println(s.speaker.fullname)
+            println(s" lectureStartMillis ${new DateTime(lectureStartMillis)}")
+            println(s" itemStartMillis ${new DateTime(itemStartMillis)}")
+            println(s" itemEndMillis ${new DateTime(itemEndMillis)}")
+            println(s" result ${lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis}")
+            println()*/Ыщьу
+            lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
           }.toList
           ProgramItem(item, itemSessions)
         }
