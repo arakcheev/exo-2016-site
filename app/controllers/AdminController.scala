@@ -40,7 +40,7 @@ object WorkShopItemData {
   implicit val reader = Json.reads[WorkShopItemData]
 }
 
-case class ProgramItem(item: WorkShopItem, sessions: List[Lecture])
+case class ProgramItem(item: WorkShopItem, sessions: Seq[Lecture])
 
 object ProgramItem {
   implicit val writer = Json.writes[ProgramItem]
@@ -87,7 +87,7 @@ class AdminController @Inject()(
             println(s" result ${lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis}")
             println()*/
             lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
-          }.toList
+          }.sortBy(_.date.getMillis)
           ProgramItem(item, itemSessions)
         }
       }
