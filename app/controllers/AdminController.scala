@@ -40,6 +40,12 @@ object WorkShopItemData {
   implicit val reader = Json.reads[WorkShopItemData]
 }
 
+case class ProgramItem(item: WorkShopItem, sessions: List[Lecture])
+
+object ProgramItem{
+  implicit val writer = Json.writes[ProgramItem]
+}
+
 @Singleton
 class AdminController @Inject()(
                                  authentication: Authentication,
@@ -58,6 +64,29 @@ class AdminController @Inject()(
   }
 
   def logout = secured(Ok.withNewSession)
+
+  def getProgram = Action.async {
+    for {
+      items <- workShop.list[Seq]()
+      sessions <- lectures.list[Seq]()
+    } yield {
+
+      val grouped: Map[DateTime, Seq[WorkShopItem]] = items.groupBy(_.startDate)
+
+      val program = grouped.mapValues { items =>
+        items.map { item =>
+          val itemSessions = sessions.filter { s =>
+            s.date.getDayOfYear == item.startDate.getDayOfYear
+          }.toList
+          ProgramItem(item, itemSessions)
+        }
+      }.map{case (dt, xs) =>
+        (dt.getDayOfMonth.toString, xs)
+      }
+
+      Ok(Json.toJson(program))
+    }
+  }
 
   def listParticipants = secured.async {
     participants.list().map { xs =>

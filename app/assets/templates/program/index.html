@@ -8,121 +8,39 @@
             <h3 class="panel-title">MONDAY, MARCH 30</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item">
-                <div class="pull-right">9:00 AM – 9:30 AM</div>
-                Registration
-            </li>
-            <li class="list-group-item">
-                <div class="pull-right">9:30 AM – 10:00 AM</div>
-                School opening
-            </li>
-            <li class="list-group-item" ng-init="session1=true">
-                <div class="pull-right">9:30 AM – 11:00 AM</div>
-                <a class="pointer" ng-click="session1 = !session1">Morning session</a>
-                <div uib-collapse="session1">
-                    <div class="well well-lg">
+            <li class="list-group-item"
+                ng-repeat="day in program.days[program.day1]">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                <strong>Luca Fossati <small> (Space Research Institute, Austrian Academy of Sciences, Austria )</small> </strong>
-                                <i>A comprehensive overview of results obtained from multi-wavelength exoplanet transit observations</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                The study of extra-solar planets (exoplanets) is arguably the most exciting and fastest-growing field in Astrophysics. We are only now beginning to see and understand the large variety of exoplanets, starting to classify them on the basis of their properties. Observations of transiting close-in planets at ultraviolet (UV) wavelengths revealed that such planets are subject to powerful mass-loss that shapes planetary structure, composition, and evolution. Optical and infrared transit observations revealed for example that clouds and hazes are common features of planetary atmospheres. I will review the past observations and advances in exoplanet science obtained on the basis of UV, optical, and infrared observations and discuss the prospects of further discoveries on the basis of the currently available and planned ground- and space-based telescopes.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Helmut Lammer<small> (Space Research Institute, Austrian Academy of Sciences, Austria)</small> </strong>
-                                    <i>Exoplanets and their systems: a general view</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    So far 2100 planets, 1343 planetary systems and 510 multiple planet systems have been discovered by ground- and space-based methods and in the near future observing facilities will become extremely powerful. After the pioneering discovery of the first transiting super-Earth
-                                    CoRoT-7b by the CoRoT space observatory in 2009, more exoplanets of that category have been discovered by ground-based projects and NASA's Kepler satellite. The first potentially habitable planets have already been discovered around M dwarf stars and recently around a K star. More potentially habitable exoplanets will be discovered in the near future. Because such discoveries will have significant impact on modern planetary science and society as a whole, this presentation will address the following points:
-                                    <ul>
-                                        <li>
-                                            statistic of exoplanets (i.e. radius-mass relationships, etc.);
-                                        </li>
-                                        <li>is there a typical architecture of planets and/or planetary systems?</li>
-                                        <li>what is driving planet formation and evolution?</li>
-                                        <li>how common may be Earth-like exoplanets.</li>
-                                    </ul>
-
-                                    By dealing within a multi-parameter space, the most relevant observables that can be described with a minimum of complexity to understand planetary evolution will be discussed.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="pull-right">
+                    {{day.item.startDate | date:'hh:mm'}} – {{day.item.endDate | date:'hh:mm'}}
                 </div>
-            </li>
-            <li class="list-group-item">
-                <div class="pull-right">13:10 AM – 14:40 AM</div>
-                Lunch Break
-            </li>
-            <li class="list-group-item" ng-init="session2=true">
-                <div class="pull-right">14:40 AM – 16:20 AM</div>
-                <a class="pointer" ng-click="session2 = !session2">Afternoon session</a>
-                <div uib-collapse="session2">
+                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
+
+                <a class="pointer"
+                   ng-init="day.sessionOpen = true"
+                   ng-if="day.sessions.length > 0 "
+                   ng-click="day.sessionOpen = !day.sessionOpen">
+                    {{day.item.title}}
+                </a>
+                <div uib-collapse="day.sessionOpen">
                     <div class="well well-lg">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Herbert Lichtenegger <small> (Space Research Institute, Austrian Academy of Sciences, Austria)</small> </strong>
-                                    <i>Non-thermal escape from planetary atmospheres</i>
-                                </p>
+                        <div ng-repeat="session in day.sessions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>
+                                        <strong>{{session.speaker.fullname}}
+                                            <small> ({{session.speaker.organization}})
+                                            </small>
+                                        </strong>
+                                        <i>{{session.title}}</i>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    Any atmosphere bound to a planetary body is subject to various loss processes: Depending on the temperature, some part of the atmospheric particles at the outermost boundary of the atmosphere, the exobase, where collisions become negligible, will have velocities exceeding the escape velocity and may thus leave the planet. Besides this thermal evaporation, supra-thermal particles can be generated by non-thermal collisional processes in the thermosphere which are triggered by solar radiation and magnetospheric plasma. These "hot" particles may either escape directly or move along elongated ballistic trajectories far above the exosphere, thereby forming a huge planetary corona. For planets lacking a magnetospheric obstacle, a substantial part of the corona will be exposed to the solar/stellar wind and could thus be picked up by the plasma flow. In the talk, various escape processes will be presented and possible consequences concerning the long-term stability of planetary atmospheres will be discussed.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Kristina Kislyakova<small> (Space Research Institute, Austrian Academy of Sciences, Austria)</small> </strong>
-                                    <i>Stellar wind interaction with exoplanets</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    We study the interactions between close-in exoplanets and their host stars. We investigate the interaction between stellar winds and the extended hydrogen-dominated upper atmospheres of planets using Direct Simulation Monte Carlo (DSMC) method. This method can be an effective tool for studying non-thermal escape from planetary atmospheres, modelling upper planetary atmospheres. Particle codes are an appropriate tool to study the upper atmospheres, because the collisions between the particles in these regions are rare, so that hydrodynamic solutions are not reliable anymore. Beyond the exobase, the particles are moving on ballistic trajectories following gravity. After the hydrogen corona is modelled, the corresponding absorption of the stellar Ly-alpha line can be calculated and compared with the observations.
-                                    In this talk, I will describe the available observations of exoplanetary atmospheres in the Ly-alpha line and present the modelling results obtained by our group.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Dmitry V. Bisikalo<small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>MHD-modeling of the flows in binaries and planets neighborhoods</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    The review of the modern numerical models of MHD flows in binaries and planets neighborhoods will be given. In the lecture, the transition from MHD models of the flows in binaries to models describing star and planetary envelope interaction will be discussed, as well as the results of numerical modeling of the flows in different types of binaries.
-                                </p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p ng-bind-html="session.abstr"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,88 +54,39 @@
             <h3 class="panel-title">TUESDAY, MARCH 31</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-init="session3=true">
-                <div class="pull-right">9:30 AM – 11:00 AM</div>
-                <a class="pointer" ng-click="session3 = !session3">Morning session</a>
-                <div uib-collapse="session3">
-                    <div class="well well-lg">
+            <li class="list-group-item"
+                ng-repeat="day in program.days[program.day2]">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Andrey G. Zhilkin<small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>Numerical simulation of close binary systems with magnetic field</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>Numerical simulation of MHD flows in close binary system is discussed. Numerical models and their solutions are considered.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Pavel V. Kaygorodov <small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>Shock waves in protoplanetary disks of binaries</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    The numerical model describing flow structure in protoplanetary disks around binaries will be reviewed.  Basing on the results of numerical modeling the affect of bow shocks, forming due to supersonic motion of binary star components, on the flow structure in protoplanerary disk will be discussed.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="pull-right">
+                    {{day.item.startDate | date:'hh:mm'}} – {{day.item.endDate | date:'hh:mm'}}
                 </div>
-            </li>
-            <li class="list-group-item">
-                <div class="pull-right">12:40 AM – 14:00 AM</div>
-                Lunch Break
-            </li>
-            <li class="list-group-item" ng-init="session4=true">
-                <div class="pull-right">14:40 AM – 16:20 AM</div>
-                <a class="pointer" ng-click="session4 = !session4">Afternoon session</a>
-                <div uib-collapse="session4">
+                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
+
+                <a class="pointer"
+                   ng-init="day.sessionOpen = true"
+                   ng-if="day.sessions.length > 0 "
+                   ng-click="day.sessionOpen = !day.sessionOpen">
+                    {{day.item.title}}
+                </a>
+                <div uib-collapse="day.sessionOpen">
                     <div class="well well-lg">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Eugeny P. Kurbatov <small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>Turbulence in accretion flows</i>
-                                </p>
+                        <div ng-repeat="session in day.sessions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>
+                                        <strong>{{session.speaker.fullname}}
+                                            <small> ({{session.speaker.organization}})
+                                            </small>
+                                        </strong>
+                                        <i>{{session.title}}</i>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    Types and characteristics of turbulence. Observational appearances and
-                                    the problem of their interpretation. Generation of turbulence. Some
-                                    aspects of modelling turbulent flows.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Alexander A. Cherenkov <small> (Institute of Astronomy, Russian Academy of Sciences, Moscow, Russia)</small> </strong>
-                                    <i>The Influence of Coronal Mass Ejections on the Gas Dynamics of the
-                                        Exoplanet Atmosphere
-                                    </i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    We present the results of 3D numerical gas-dynamic simulations of the interaction between a hot Jupiter atmosphere and a coronal mass ejection of its host star. When simulating, we assume that the parameters of stellar wind and CME correspond to those of the Sun. We consider specific flow-patterns that form in two cases of a quasi-closed and closed (but distorted by the planet’s gravity) gaseous envelope of the planet. We show that a typical CME can sweep out the outer regions (located beyond the planet’s Roche lobe) of the asymmetric envelope, which results in a significant increase of the mass-loss rate of the planet’s atmosphere when it passes through the propagating CME. In our simulations, the mass-loss rate of the closed envelope grows by 11 times, and that of the quasi-closed grows by 14 times, when the planet interacts with the CME. We also discuss possible consequences of this enhanced loss of material.
-                                </p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p ng-bind-html="session.abstr"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,86 +100,39 @@
             <h3 class="panel-title">WEDNESDAY, JUNE 1</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-init="session5=true">
-                <div class="pull-right">9:30 AM – 11:00 AM</div>
-                <a class="pointer" ng-click="session5 = !session5">Morning session</a>
-                <div uib-collapse="session5">
-                    <div class="well well-lg">
+            <li class="list-group-item"
+                ng-repeat="day in program.days[program.day3]">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Valery I. Shematovich <small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>Dissipation of the planetary atmospheres in the Solar and extrasolar planetary systems</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>The escape (or dissipation) from a planetary atmosphere of molecules with thermal energies greater than the gravitational binding energy is referred to as thermal escape. Since the prediction of the escape rates by the thermal and non-thermal processes determines the long-term evolution of planetary atmospheres, it has long been a subject of interest in the aeronomy of planetary objects in our Solar system and more recently of interest in understanding the evolution of extrasolar planets. The particular feature that limits the modeling effort is that escape occurs in a rarefied region of an atmosphere, usually referred to as exosphere, where the gas flow is essentially non-equilibrium. In this region, continuum models break down so that molecular kinetic simulations are required to accurately predict the atmospheric flow structure and the escape rates. A detailed description of the kinetic Monte Carlo method used to study thermal (at high temperature) and non-thermal processes determining the rate of dissipation of planetary atmospheres will be presented.
-                                </p>
-                                <p>On all terrestrial planets, the dissipation timescales of primordial atmospheres are short. Although we cannot travel back in time to observe escape from early solar system terrestrial planets, observations and modeling of exoplanetary atmospheres under strong stellar radiation provide excellent opportunities to verify our theoretical understandings on this key process influencing planet evolution.</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Ildar F. Shaikislamov <small> (Institute of Laser Physics SB RAS, Novosibirsk, Russia)</small> </strong>
-                                    <i>MHD simulation of plasma environment of Hot Jupiter HD 209458b</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    HD 209458b is probably the best studied Hot Jupiter. It is the first transiting exoplanet for which atmospheric absorption was observed in the resonance lines. The Doppler-shifted absorption in Lyαline and in lines of heavier species gave first indication that HD 209458b has an extended exosphere in a state of continues blow-off and is losing mass by hydrodynamic flow. Such observations stimulated development of theoretical and numerical models. Despite some quantitative differences the general consensus is that HD 209458b upper atmosphere sustains a super-sonic hydrodynamic escape, or a planetary wind, with temperature of about 104 K and velocity of order of 10 km/s, which carries mass-loss of the order of ~1010–1011 g s-1. The analysis revealed that there are many factors involved in the problem such as heating by stellar ionizing radiation, cooling by expansion and radiation, tidal force, radiation pressure, ionization and recombination, hydrogen chemistry, presence of metals in the outflow, boundary conditions at the planet surface and others. The next level of the problem is the planetary magnetic field. It appears that probable in gas giants values of dipole field can significantly alter the structure and suppress the intensity of the planetary wind. The last but not the least factor of the Hot Jupiters plasma environment is a stellar wind. Interacting with the planetary magnetic field and planetary wind it creates a new type of magnetosphere with unique features. Understanding such magnetosphere and its implications for observations remains an actual task of the modern astrophysics and space plasma physics.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="pull-right">
+                    {{day.item.startDate | date:'hh:mm'}} – {{day.item.endDate | date:'hh:mm'}}
                 </div>
-            </li>
-            <li class="list-group-item">
-                <div class="pull-right">12:40 AM – 14:00 AM</div>
-                Lunch Break
-            </li>
-            <li class="list-group-item" ng-init="session6=true">
-                <div class="pull-right">14:40 AM – 16:20 AM</div>
-                <a class="pointer" ng-click="session6 = !session6">Afternoon session</a>
-                <div uib-collapse="session6">
+                <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
+
+                <a class="pointer"
+                   ng-init="day.sessionOpen = true"
+                   ng-if="day.sessions.length > 0 "
+                   ng-click="day.sessionOpen = !day.sessionOpen">
+                    {{day.item.title}}
+                </a>
+                <div uib-collapse="day.sessionOpen">
                     <div class="well well-lg">
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Igor I. Alexeev,  Elena S. Belenkaya  <small> (Skobeltsyn Institute of Nuclear Physics, Lomonosov Moscow State University)</small> </strong>
-                                    <i>Role of the equatorial magnetodisc in the exoplanet magnetosphere dynamics</i>
-                                </p>
+                        <div ng-repeat="session in day.sessions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>
+                                        <strong>{{session.speaker.fullname}}
+                                            <small> ({{session.speaker.organization}})
+                                            </small>
+                                        </strong>
+                                        <i>{{session.title}}</i>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    Мы рассматриваем условия формирования экваториальных магнитодисков в магнитосферах быстро вращающихся экзопланет. Как видно из анализа имеющихся данных о структуре магнитосферы Юпитера, такие диски могут существенно (почти вдвое) увеличивать размер магнитосферы и эффективный дипольный момент планеты. Помимо этого, наличие диска меняет (тоже почти вдвое) площадь пучка открытых силовых линий и, соответственно, этот эффект может быть существенен для эволюции атмосферы экзопланеты.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Yaroslav N. Pavluchenkov <small> (Institute of Astronomy, Russian Academy of Sciences, Moscow)</small> </strong>
-                                    <i>Protoplanetary disks: observations and basic models</i>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>
-                                    We discuss the state of the art observations and basic theoretical models of protoplanetary disks - gas and dust accretion disks around young stars. The examples of interferometric observations are given. We briefly outline the disk models to describe their dynamical evolution and chemo-physical structure. The special attention is given to visualistions of theoretical models in terms
-                                    of dust and line emission.
-                                </p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p ng-bind-html="session.abstr"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
