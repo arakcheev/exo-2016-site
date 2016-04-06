@@ -3,6 +3,7 @@ package controllers
 import javax.inject._
 
 import models._
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
@@ -27,12 +28,25 @@ object LectureData {
   implicit val reader = Json.reads[LectureData]
 }
 
+case class WorkShopItemData(startDate: Long, endDate: Long, title: String) {
+  def toWorkShop = {
+    val sd = new DateTime(startDate)
+    val ed = new DateTime(endDate)
+    WorkShopItem(sd, ed, title)
+  }
+}
+
+object WorkShopItemData {
+  implicit val reader = Json.reads[WorkShopItemData]
+}
+
 @Singleton
 class AdminController @Inject()(
                                  authentication: Authentication,
                                  secured: Secured,
                                  participants: Participants,
-                                 lectures: Lectures)(implicit exec: ExecutionContext) extends Controller {
+                                 lectures: Lectures,
+                                 workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
 
   def isLogged = secured(Ok)
 
@@ -62,5 +76,23 @@ class AdminController @Inject()(
   def updateLecture(id: Id) = secured.async(parse.json[LectureData]) { implicit request =>
     lectures.update(id, request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
   }
+
+  //WorkShop methods
+
+  def listWorkShopItems = Action.async {
+    workShop.list[List]().map(xs => Ok(Json.toJson(xs)))
+  }
+
+  def newWorkShopItem = secured.async(parse.json[WorkShopItemData]) { request =>
+    val item = request.body.toWorkShop
+    workShop.save(item).map(saved => Ok(Json.toJson(saved)))
+  }
+
+  def updateWorkShopItem(id: Id) = secured.async(parse.json[WorkShopItemData]) { request =>
+    val item = request.body.toWorkShop
+    workShop.update(id, item).map(item => Ok(Json.toJson(item)))
+  }
+
+  def removeWorkShopItem(id: Id) = secured.async(workShop.remove(id).map(_ => Ok))
 
 }

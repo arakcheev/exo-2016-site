@@ -4,8 +4,9 @@
 
 define(['angular',
     './participants/main',
-    './lectures/main'
+    './lectures/main',
+    './workshop/main'
 ], function (angular) {
 
-    return angular.module("admin", ['participants', 'lectures']);
+    return angular.module("admin", ['participants', 'lectures', 'workshop']);
 });

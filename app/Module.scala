@@ -2,8 +2,8 @@ import com.google.inject.AbstractModule
 import java.time.Clock
 
 import database.{DefaultDriverImpl, Driver}
-import models.{Lectures, Participants}
-import models.impl.{LecturesImplProvider, ParticipantsImpl}
+import models.{WorkShop, Lectures, Participants}
+import models.impl.{WorkShopProvider, LecturesImplProvider, ParticipantsImpl}
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -32,6 +32,7 @@ class Module extends AbstractModule {
     bind(classOf[Driver]).to(classOf[DefaultDriverImpl]).asEagerSingleton()
 
     bind(classOf[Lectures]).toProvider(classOf[LecturesImplProvider])
+    bind(classOf[WorkShop]).toProvider(classOf[WorkShopProvider])
   }
 
 }

@@ -21,6 +21,12 @@ GET     /api/lectures               controllers.AdminController.listLectures
 DELETE  /api/lectures/:id           controllers.AdminController.removeLecture(id: models.Id)
 PUT     /api/lectures/:id           controllers.AdminController.updateLecture(id: models.Id)
 
+# Admin workshop routes
+POST    /api/workshop/save          controllers.AdminController.newWorkShopItem
+GET     /api/workshop               controllers.AdminController.listWorkShopItems
+DELETE  /api/workshop/:id           controllers.AdminController.removeWorkShopItem(id: models.Id)
+PUT     /api/workshop/:id           controllers.AdminController.updateWorkShopItem(id: models.Id)
+
 #Form registration controllers
 POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()
 POST     /api/registration/phoneavailable controllers.RegistrationController.phoneAvailable()

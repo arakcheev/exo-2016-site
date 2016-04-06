@@ -28,7 +28,8 @@ define(['angular'], function (angular) {
 
                 scope.menu = {
                     "/admin/participants": "Participants",
-                    "/admin/lectures": "Lectures"
+                    "/admin/lectures": "Lectures",
+                    "/admin/workshop": "Workshop"
                 };
 
                 scope.$active = function (url) {

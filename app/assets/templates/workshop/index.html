@@ -1,0 +1,32 @@
+<admin-header></admin-header>
+
+<div class="container admin workshop">
+    <table class="table table-striped">
+        <caption>
+            <a class="pull-right pointer add" ng-click="workshop.addNew()">
+                <i class="fa fa-plus"></i>
+            </a>
+            Conference workshop.
+        </caption>
+
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Start</th>
+            <th>End</th>
+            <th class="hidden-xs"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="item in workshop.items | orderBy:workshop.predicate:workshop.reverse">
+            <td>{{item.getTitle()}}</td>
+            <td class="date">{{item.getStart() | date:'dd MMM hh: mm'}}</td>
+            <td class="buttons hidden-xs">
+                <a href="" ng-click="workshop.$edit(item)"><i class="fa fa-pencil-square-o"></i></a>
+                <a href="" ng-click="workshop.$remove(item)"><i class="fa fa-trash-o"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
