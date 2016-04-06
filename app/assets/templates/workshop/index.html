@@ -21,7 +21,8 @@
         <tbody>
         <tr ng-repeat="item in workshop.items | orderBy:workshop.predicate:workshop.reverse">
             <td>{{item.getTitle()}}</td>
-            <td class="date">{{item.getStart() | date:'dd MMM hh: mm'}}</td>
+            <td class="date">{{item.getStartDate() | date:'dd MMM hh: mm'}}</td>
+            <td class="date">{{item.getEndDate() | date:'dd MMM hh: mm'}}</td>
             <td class="buttons hidden-xs">
                 <a href="" ng-click="workshop.$edit(item)"><i class="fa fa-pencil-square-o"></i></a>
                 <a href="" ng-click="workshop.$remove(item)"><i class="fa fa-trash-o"></i></a>

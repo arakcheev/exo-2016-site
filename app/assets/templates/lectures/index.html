@@ -4,7 +4,7 @@
     <table class="table table-striped table-lectures">
         <caption>
             List of lectures.
-            <a class="pull-right pointer add" ng-click="items.addNew()">
+            <a class="pull-right pointer add" ng-click="lectures.addNew()">
                 <i class="fa fa-plus"></i>
             </a>
         </caption>
@@ -19,14 +19,14 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="lecture in items.items | orderBy:items.predicate:items.reverse">
+        <tr ng-repeat="lecture in lectures.lectures | orderBy:lectures.predicate:lectures.reverse">
             <td class="number hidden-xs">{{$index + 1}}</td>
             <td class="speaker">{{lecture.getSpeaker()}}</td>
             <td class="hidden-xs">{{lecture.getTitle()}}</td>
             <td class="date">{{lecture.getDate() | date:'dd MMM'}}</td>
             <td class="buttons hidden-xs">
-                <a href="" ng-click="items.$edit(lecture)"><i class="fa fa-pencil-square-o"></i></a>
-                <a href="" ng-click="items.$remove(lecture)"><i class="fa fa-trash-o"></i></a>
+                <a href="" ng-click="lectures.$edit(lecture)"><i class="fa fa-pencil-square-o"></i></a>
+                <a href="" ng-click="lectures.$remove(lecture)"><i class="fa fa-trash-o"></i></a>
             </td>
         </tr>
         </tbody>

@@ -21,16 +21,15 @@ define(['underscore', './ModalItemsController'], function (_, ModalItemsControll
                 controllerAs: 'modal',
                 resolve: {
                     mayBeItem: mayBeItem
-                },
-                size: "lg"
+                }
             }).result.then(function (item) {
                 callback.call(this, item);
             });
         }
 
         view.addNew = function () {
-            new ItemModal(null, function (lecture) {
-                view.items.push(lecture);
+            new ItemModal(null, function (item) {
+                view.items.push(item);
             });
         };
 

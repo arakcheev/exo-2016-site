@@ -1,13 +1,13 @@
 <div class="form-group">
-    <label for="date">Date</label>
-    <div class="input-group" ng-class="{'has-error': form.date.$invalid && form.date.$dirty}">
+    <label for="date">{{label}}</label>
+    <div class="input-group" ng-class="{'has-error': form[name].$invalid && form[name].$dirty}">
 
         <input id="date"
                type="text"
-               name="date"
+               name="{{name}}"
                class="form-control"
                uib-datepicker-popup
-               ng-model="date"
+               ng-model="model"
                is-open="opened"
                datepicker-options="dateOptions"
                ng-required="true"
@@ -20,7 +20,7 @@
                     </span>
 
     </div>
-    <div ng-messages="form.date.$error" ng-if="form.date.$dirty" role="alert">
+    <div ng-messages="form[name].$error" ng-if="form[name].$dirty" role="alert">
         <small class="help-block" ng-message="required">Please, choose date</small>
     </div>
 </div>

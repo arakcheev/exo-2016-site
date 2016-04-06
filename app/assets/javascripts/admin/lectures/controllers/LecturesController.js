@@ -3,7 +3,7 @@ define(['underscore', './ModalLectureController'], function (_, ModalLectureCont
     function LecturesController($modal, Lectures) {
         var view = this;
 
-        view.items = [];
+        view.lectures = [];
 
         view.predicate = function (lecture) {
             return lecture.getDate().getTime();
@@ -25,31 +25,31 @@ define(['underscore', './ModalLectureController'], function (_, ModalLectureCont
 
         view.addNew = function () {
             new LectureModal(null, function (lecture) {
-                view.items.push(lecture);
+                view.lectures.push(lecture);
             });
         };
 
         view.$edit = function (lecture) {
             new LectureModal(lecture, function (updatedLecture) {
-                var index = _.indexOf(view.items, lecture);
+                var index = _.indexOf(view.lectures, lecture);
                 if (index > -1) {
-                    view.items[index] = updatedLecture;
+                    view.lectures[index] = updatedLecture;
                 }
             });
         };
 
         view.$remove = function (lecture) {
             Lectures.remove(lecture).then(function () {
-                var index = _.indexOf(view.items, lecture);
+                var index = _.indexOf(view.lectures, lecture);
                 if (index > -1) {
-                    view.items.splice(index, 1);
+                    view.lectures.splice(index, 1);
                 }
             });
         };
 
         Lectures.fetch().then(function (lectures) {
-            _.each(items, function (item) {
-                view.items.push(item);
+            _.each(lectures, function (lecture) {
+                view.lectures.push(lecture);
             });
         });
 

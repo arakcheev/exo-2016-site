@@ -1,0 +1,57 @@
+<form class="add-lecture-form" novalidate name="form" ng-submit="ok()">
+
+    <div class="modal-header">
+        <a ng-click="modal.cancel()" class="pointer">
+            <i class="fa fa-times pull-right"></i>
+        </a>
+
+        <h3 class="modal-title" ng-if="!modal.isEdit">Add new workshop item</h3>
+        <h3 class="modal-title" ng-if="modal.isEdit">Edit workshop item</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <lecture-form-field form="form"
+                                    name="name"
+                                    label="Item title"
+                                    placeholder="Enter workshop item title"
+                                    model="modal.data.title"
+                                    required-error="Please, enter title"></lecture-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <lecture-date-field form="form" name="startDate" label="Start date" model="modal.data.startDate"></lecture-date-field>
+            </div>
+
+            <div class="col-md-6">
+                <uib-timepicker class="time" ng-model="modal.data.startDate" hour-step="1" minute-step="10"
+                                show-meridian="true"></uib-timepicker>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <lecture-date-field form="form" name="endDate" label="End date" model="modal.data.endDate"></lecture-date-field>
+            </div>
+
+            <div class="col-md-6">
+                <uib-timepicker class="time" ng-model="modal.data.endDate" hour-step="1" minute-step="10"
+                                show-meridian="true"></uib-timepicker>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="modal.ok()" ng-disabled="form.$invalid || loading">Save
+        </button>
+        <button class="btn btn-danger" type="button" ng-click="modal.cancel()">Cancel</button>
+    </div>
+
+</form>

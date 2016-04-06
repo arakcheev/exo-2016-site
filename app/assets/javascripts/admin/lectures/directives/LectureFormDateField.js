@@ -12,8 +12,10 @@ define(function () {
             replace: true,
             templateUrl: "/assets/templates/lectures/date-form-field.html",
             scope: {
-                date: "=",
-                form: "="
+                form: "=",
+                name: "@",
+                label: "@",
+                model: "="
             },
             link: function (scope, element) {
 
