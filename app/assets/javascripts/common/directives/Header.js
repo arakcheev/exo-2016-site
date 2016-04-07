@@ -9,11 +9,11 @@ define(['angular'], function (angular) {
             link: function (scope, elem) {
 
                 scope.menu = {
-                    "/announcement": "Announcement",
                     "/program": "Program",
                     "/committee": "Committee",
                     "/registration": "Registration",
-                    "/contacts": "Contacts"
+                    "/contacts": "Contacts",
+                    "/map": "Map"
                 };
 
                 try {

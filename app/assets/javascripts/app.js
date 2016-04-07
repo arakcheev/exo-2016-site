@@ -7,6 +7,9 @@ define(['angular', 'templates', 'modules', 'common', 'admin'], function (angular
         "ngMessages",
         "ngRoute",
         "textAngular",
+
+        'uiGmapgoogle-maps',
+
         "common",
         "modules",
         "admin"

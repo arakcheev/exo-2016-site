@@ -4,7 +4,8 @@ define(['angular',
     './contacts/main',
     './program/main',
     './registration/main',
-    './login/main'], function (angular) {
+    './login/main',
+    './map/main'], function (angular) {
 
-    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration', 'login']);
+    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration', 'login', 'map']);
 });

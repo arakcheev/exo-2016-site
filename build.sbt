@@ -66,6 +66,8 @@ RjsKeys.paths += ("textAngular-rangy" -> ("/assets/javascripts/textAngular-rangy
 
 RjsKeys.paths += ("textAngular" -> ("/assets/javascripts/textAngular.min.js" -> "/assets/javascripts/textAngular.min.js"))
 
+RjsKeys.paths += ("angular-simple-logger" -> ("/assets/javascripts/textAngular.min.js" -> "/assets/javascripts/textAngular.min.js"))
+
 RjsKeys.mainModule := "app"
 RjsKeys.mainConfig := "config"
 RjsKeys.generateSourceMaps := false

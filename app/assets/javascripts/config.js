@@ -1,4 +1,12 @@
 (function (requirejs) {
+
+    var isProd = false;
+
+    function ext() {
+        if (isProd) return ".min";
+        else return "";
+    }
+
     requirejs.config({
         generateSourceMaps: false,
         packages: ['common', 'modules', 'admin'],
@@ -22,29 +30,36 @@
             },
             'textAngular-sanitize': ['angular'],
             'textAngular-rangy': ['angular'],
-            'textAngular': ['angular', 'textAngular-sanitize', 'textAngular-rangy']
+            'textAngular': ['angular', 'textAngular-sanitize', 'textAngular-rangy'],
+            'angular-simple-logger': ['angular', 'lodash'],
+            'angular-google-map': ['angular', 'google-map', 'lodash']
         },
         paths: {
-            'requirejs': '/assets/lib/requirejs/require.min',
-            'angular': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min',
-            'angular-route': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min',
-            'angular-cookies': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min',
-            'angular-animate': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min',
-            'angular-messages': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min',
+            'requirejs': '/assets/lib/requirejs/require'+ext(),
+            'angular': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular'+ext(),
+            'angular-route': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route'+ext(),
+            'angular-cookies': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies'+ext(),
+            'angular-animate': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate'+ext(),
+            'angular-messages': '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages'+ext(),
             'underscore': '/assets/lib/underscorejs/underscore-min',
-            'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls.min',
+            'ui-bootstrap': '/assets/lib/angular-ui-bootstrap/ui-bootstrap-tpls'+ext(),
             'jsRoutes': "/routes",
             'templates': "/templates",
             'textAngular-sanitize': ['/assets/javascripts/textAngular-sanitize.min'],
             'textAngular-rangy': ['/assets/javascripts/textAngular-rangy.min'],
-            'textAngular': ['/assets/javascripts/textAngular.min']
+            'textAngular': ['/assets/javascripts/textAngular.min'],
+            'lodash': '//cdn.jsdelivr.net/lodash/4.8.2/lodash'+ext(),
+            'angular-simple-logger': '/assets/javascripts/angular-simple-logger',
+            'angular-google-map': '/assets/javascripts/angular-google-map',
+            'google-map': 'https://maps.googleapis.com/maps/api/js?sensor=false'
+
         }
     });
 
     require(['angular',
             'angular-cookies',
             'angular-route',
-             "angular-animate",
+            "angular-animate",
             "angular-messages",
             'ui-bootstrap',
             'underscore',
@@ -53,6 +68,10 @@
             'textAngular-rangy',
             'textAngular-sanitize',
             'textAngular',
+            'lodash',
+            'angular-simple-logger',
+            'google-map',
+            'angular-google-map',
             './app'],
         function (angular) {
             angular.element(document).ready(function () {
