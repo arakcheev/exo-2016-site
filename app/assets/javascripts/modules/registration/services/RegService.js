@@ -18,7 +18,6 @@ define(function () {
             },
 
             register: function (data) {
-                console.log(Routes);
                 return Routes.controllers.RegistrationController.register().post(data)
                     .then(function () {
                         state.ok = true;

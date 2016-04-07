@@ -57,22 +57,13 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': form.phone.$invalid && form.phone.$dirty}">
-        <label class="sr-only" for="phone">Your Phone</label>
-        <input id="phone" type="tel" name="phone"
-               class="form-control"
-               placeholder="Enter Phone"
-               ng-model="reg.phone"
-               ng-model-options="{ debounce: 500 }"
-               phone-regex=""
-               phone-validate=""
-               required>
+    <div class="form-group" ng-class="{'has-error': form.status.$invalid && form.status.$dirty}">
+        <label class="sr-only" for="status">Your status</label>
 
-        <div ng-messages="form.phone.$error" ng-if="form.phone.$dirty" role="alert" ng-cloak="">
-            <small class="help-block" ng-message="required">Please, enter your phone</small>
-            <small class="help-block" ng-message="phone">Invalid phone address</small>
-            <small class="help-block" ng-message="phoneAvailable">This phone already taken</small>
-        </div>
+        <select class="form-control" name="status" id="status" ng-model="reg.status" ng-init="reg.status ='Undergraduate Student'">
+            <option>Undergraduate Student</option>
+            <option>Graduate student</option>
+        </select>
     </div>
 
     <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="form.$invalid || loading">Sign up</button>
