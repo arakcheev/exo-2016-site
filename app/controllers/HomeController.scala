@@ -34,8 +34,7 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
     * but in production mode this variable contains md5-digests assets templates file (and may be gzipped).
     *
     */
-  def templates = cached.status(_ => "jsTemplates", 200) {
-    Action { implicit req =>
+  def templates = Action { implicit req =>
       val templatesJson = digestAssetLoader.cacheTemplates.foldLeft(Json.obj()) { case (js, template) =>
         js ++ Json.obj(
           s"/assets/$template" -> routes.Assets.versioned(template).url
@@ -49,7 +48,6 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
 
       Ok(result).as(JAVASCRIPT)
     }
-  }
 
   /**
     * Retrieves all routes via reflection.
@@ -71,11 +69,9 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
     * Returns the JavaScript router that the client can use for "type-safe" routes.
     * Uses browser caching; set duration (in seconds) according to your release cycle.
     */
-  def jsRoutes = cached.status(_ => "jsRoutes", 200) {
-    Action { implicit request =>
+  def jsRoutes = Action { implicit request =>
       Ok(play.api.routing.JavaScriptReverseRouter("jsRoutes")(routeCache: _*)).as(JAVASCRIPT)
     }
-  }
 
 }
 
