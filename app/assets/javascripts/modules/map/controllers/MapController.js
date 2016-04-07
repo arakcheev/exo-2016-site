@@ -14,6 +14,11 @@ define(function () {
                 zoom: 17
             };
 
+            this.marker = {
+                latitude: 55.736002,
+                longitude: 37.627309
+            };
+
         }
 
     };
