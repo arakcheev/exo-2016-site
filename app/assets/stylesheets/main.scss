@@ -5,6 +5,11 @@ body {
   text-decoration:none
 }
 
+//fix for ubuntu chrome scroll
+body{
+  overflow: scroll;
+}
+
 @media (max-width: 768px) {
   .navbar-collapse.in{
     border-bottom: 1px solid #e5e5e5;
