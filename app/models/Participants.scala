@@ -11,12 +11,13 @@ import reactivemongo.bson.Macros
 import scala.concurrent.Future
 
 case class Participant(_id: Id, name: String, surname: String,
-                       email: String, status: String, organization: String, age: String)
+                       email: String, status: String, organization: String, age: String,
+                       position: String, lastname: Option[String])
 
 object Participant {
 
-  def apply(name: String, surname: String, email: String, status: String, organization: String, age: String): Participant = {
-    Participant(newId, name, surname, email, status, organization, age)
+  def apply(name: String, surname: String, email: String, status: String, organization: String, age: String, position: String, lastname: Option[String]): Participant = {
+    Participant(newId, name, surname, email, status, organization, age, position, lastname)
   }
 
   implicit val jsonFormat = Json.format[Participant]

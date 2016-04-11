@@ -12,9 +12,9 @@ import play.api.mvc.{Action, Controller}
 import scala.concurrent.{Future, ExecutionContext}
 
 case class RegistrationData(name: String, surname: String, email: String, status: String,
-                            organization: String, age: String) {
+                            organization: String, age: String, position: String, lastname: Option[String]) {
 
-  def asParticipant = Participant(name, surname, email, status, organization, age)
+  def asParticipant = Participant(name, surname, email, status, organization, age, position, lastname)
 }
 
 object RegistrationData {

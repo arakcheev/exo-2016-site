@@ -11,6 +11,9 @@ define(function () {
                     scope.loading = true;
                     RegService.register(scope.reg);
                 };
+
+
+                scope.statuses = ["Student", "Ph.D. Student", "Ph.D.", "Other"];
             }
         };
     }
