@@ -1,25 +1,42 @@
 <main-header></main-header>
 
 <div class="container committee">
-    <h1>Contacts</h1>
+    <h1>Contact Information</h1>
 
-    <p>
-        For all questions connected with science program please contact:
-    <address>
-        <strong>Valery Shematovich</strong><br>
-        <a href="mailto:shematov@inasan.ru">shematov@inasan.ru</a>
-    </address>
-    </p>
+    <div class="row">
 
-    <h3>Service Agency</h3>
-    <p>
-    <address>
-        <strong>Fateeva Anna</strong><br>
-        <a href="mailto:fateeva@inasan.ru">fateeva@inasan.ru</a>
-    </address>
-    <address>
-        <strong>Artem Arakcheev</strong><br>
-        <a href="mailto:arakcheev@inasan.ru">arakcheev@inasan.ru</a>
-    </address>
-    </p>
+        <div class="col-md-6">
+            <ui-gmap-google-map center='contacts.map.center' zoom='contacts.map.zoom'>
+                <ui-gmap-marker idKey='1' coords='contacts.marker'></ui-gmap-marker>
+            </ui-gmap-google-map>
+        </div>
+
+        <div class="col-md-6">
+            <address>
+                Institute of Astronomy of the
+                Russian Academy of Sciences<br>
+                48c2 Pyatnitskaya St., 119017<br>
+                Moscow, Russia<br>
+                <abbr title="Phone">P:</abbr> +7 (495) 951-54-61
+            </address>
+
+            <p>
+            <address>
+                <strong>Valery Shematovich</strong><br>
+                <a href="mailto:shematov@inasan.ru">shematov@inasan.ru</a>
+            </address>
+            </p>
+
+            <h3>Service Agency</h3>
+            <address>
+                <strong>Fateeva Anna</strong><br>
+                <a href="mailto:fateeva@inasan.ru">fateeva@inasan.ru</a>
+            </address>
+            <address>
+                <strong>Arakcheev Artem</strong><br>
+                <a href="mailto:arakcheev@inasan.ru">arakcheev@inasan.ru</a>
+            </address>
+        </div>
+
+    </div>
 </div>

@@ -51,7 +51,7 @@
             'lodash': '//cdn.jsdelivr.net/lodash/4.8.2/lodash.min',
             'angular-simple-logger': '/assets/javascripts/angular-simple-logger',
             'angular-google-map': '/assets/javascripts/angular-google-map',
-            'google-map': 'https://maps.googleapis.com/maps/api/js?sensor=false'
+            'google-map': 'https://maps.googleapis.com/maps/api/js?sensor=false&lang=en-US'
 
         }
     });

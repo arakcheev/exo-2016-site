@@ -9,12 +9,7 @@ define(function () {
         module.config(Routes);
 
         function Routes($routeProvider) {
-            $routeProvider
-                .when('/map', {
-                    templateUrl: '/assets/templates/map/index.html',
-                    controller: "MapController",
-                    controllerAs: "mapctrl"
-                });
+
         }
 
         Routes.$inject = ['$routeProvider'];
