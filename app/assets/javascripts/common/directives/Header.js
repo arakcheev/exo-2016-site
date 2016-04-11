@@ -34,6 +34,7 @@ define(['angular'], function (angular) {
                 scope.$go = function (url) {
                     $location.url(url);
                     $('.in').collapse('hide');
+                    $('body').scrollTop(0);
                 };
             }
         };

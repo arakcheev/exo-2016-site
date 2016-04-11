@@ -29,6 +29,7 @@
                     <li ng-repeat="(url, name) in menu" ng-class="{'active': $active(url)}">
                         <a ng-bind="name" ng-click="$go(url)" class="pointer"></a>
                     </li>
+                    <li role="separator" class="divider"></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
