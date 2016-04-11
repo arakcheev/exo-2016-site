@@ -18,6 +18,7 @@ define(function () {
             },
 
             register: function (data) {
+                data.age = data.age.toString();
                 return Routes.controllers.RegistrationController.register().post(data)
                     .then(function () {
                         state.ok = true;

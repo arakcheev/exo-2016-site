@@ -1,6 +1,6 @@
 <form class="registration-form" novalidate name="form" ng-submit="$submit()">
 
-    <div class="form-group" ng-class="{'has-error': form.name.$invalid && form.name.$dirty}">
+    <div class="form-group col-md-12" ng-class="{'has-error': form.name.$invalid && form.name.$dirty}">
         <label class="sr-only" for="name">Your Name</label>
         <input id="name" type="text" name="name"
                class="form-control"
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': form.surname.$invalid && form.surname.$dirty}">
+    <div class="form-group  col-md-12" ng-class="{'has-error': form.surname.$invalid && form.surname.$dirty}">
         <label class="sr-only" for="surname">Your Surname</label>
         <input id="surname" type="text" name="surname"
                class="form-control"
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': form.organization.$invalid && form.organization.$dirty}">
+    <div class="form-group  col-md-12" ng-class="{'has-error': form.organization.$invalid && form.organization.$dirty}">
         <label class="sr-only" for="organization">Your Organization</label>
         <input id="organization" type="text" name="organization"
                class="form-control"
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': form.email.$invalid && form.email.$dirty}">
+    <div class="form-group  col-md-12" ng-class="{'has-error': form.email.$invalid && form.email.$dirty}">
         <label class="sr-only" for="email">Your Email</label>
         <input id="email" type="email" name="email"
                class="form-control"
@@ -57,15 +57,35 @@
         </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': form.status.$invalid && form.status.$dirty}">
+    <div class="form-group col-md-6" ng-class="{'has-error': form.status.$invalid && form.status.$dirty}">
         <label class="sr-only" for="status">Your status</label>
 
-        <select class="form-control" name="status" id="status" ng-model="reg.status" ng-init="reg.status ='Undergraduate Student'">
-            <option>Undergraduate Student</option>
-            <option>Graduate student</option>
+        <select class="form-control" name="status" id="status" ng-model="reg.status" ng-init="reg.status ='Student'">
+            <option>Student</option>
+            <option>Ph.D student</option>
+            <option>Ph.D</option>
+            <option>Other</option>
         </select>
     </div>
 
-    <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="form.$invalid || loading">Sign up</button>
+    <div class="form-group col-md-6" ng-class="{'has-error': form.age.$invalid && form.age.$dirty}">
+        <label class="sr-only" for="age">Your Age</label>
+        <input id="age" type="number" name="age"
+               class="form-control"
+               placeholder="Enter Age"
+               ng-model="reg.age"
+               min="18"
+               required>
+
+        <div ng-messages="form.age.$error" ng-if="form.age.$dirty" role="alert" ng-cloak="">
+            <small class="help-block" ng-message="required">Please, enter your age</small>
+            <small class="help-block" ng-message="min">You age must be grater then 18</small>
+            <small class="help-block" ng-message="number">You age must be number</small>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-md-offset-4">
+        <button type="submit" class="btn btn-block btn-cta-primary" ng-disabled="form.$invalid || loading">Sign up</button>
+    </div>
 
 </form>
