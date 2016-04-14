@@ -4,9 +4,9 @@ import java.io.File
 import java.net.URLDecoder
 import java.util.jar.JarFile
 import javax.inject._
-import com.google.inject.name
+
 import play.api._
-import play.api.cache.{Cached, CacheApi}
+import play.api.cache.{CacheApi, Cached}
 import play.api.libs.json.Json
 import play.api.mvc._
 

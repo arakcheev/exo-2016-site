@@ -7,6 +7,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
+import services.PdfBuilder
 
 import scala.concurrent.ExecutionContext
 
@@ -40,6 +41,7 @@ object WorkShopItemData {
   implicit val reader = Json.reads[WorkShopItemData]
 }
 
+//TODO:  Move from controller
 case class ProgramItem(item: WorkShopItem, sessions: Seq[Lecture])
 
 object ProgramItem {
@@ -53,6 +55,8 @@ class AdminController @Inject()(
                                  participants: Participants,
                                  lectures: Lectures,
                                  workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
+
+  val pdf = new PdfBuilder()
 
   def isLogged = secured(Ok)
 
@@ -71,7 +75,7 @@ class AdminController @Inject()(
       sessions <- lectures.list[Seq]()
     } yield {
 
-      val grouped: Map[String, Seq[WorkShopItem]] = items.groupBy(_.startDate.getDayOfMonth.toString)
+      val grouped: Map[DateTime, Seq[WorkShopItem]] = items.groupBy(_.startDate)
 
       val program = grouped.mapValues { items =>
         items.map { item =>
@@ -79,20 +83,24 @@ class AdminController @Inject()(
             val lectureStartMillis = s.date.getMillis + 1
             val itemStartMillis = item.startDate.getMillis - 1
             val itemEndMillis = item.endDate.getMillis
-            /*println(item.title)
-            println(s.speaker.fullname)
-            println(s" lectureStartMillis ${new DateTime(lectureStartMillis)}")
-            println(s" itemStartMillis ${new DateTime(itemStartMillis)}")
-            println(s" itemEndMillis ${new DateTime(itemEndMillis)}")
-            println(s" result ${lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis}")
-            println()*/
             lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
           }.sortBy(_.date.getMillis)
           ProgramItem(item, itemSessions)
         }
       }
 
-      val json = Json.toJson(program)
+      pdf.build(program)
+
+      val ss = program.foldLeft(Map.empty[String, Seq[ProgramItem]]) {
+        case (map, (date, xs)) =>
+          val day = date.getDayOfMonth.toString
+          map.get(day) match {
+            case None => map ++ Map(day -> xs)
+            case Some(ys) => map ++ Map(day -> xs.++:(ys).sortBy(_.item.startDate.getMillis))
+          }
+      }
+
+      val json = Json.toJson(ss)
 
       Ok(json).as(JSON)
     }
