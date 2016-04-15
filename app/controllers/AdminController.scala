@@ -7,8 +7,7 @@ import models.impl.ProgramAPIImpl
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
-import security.{Secured, Authentication}
-import services.ProgramPdfBuilder
+import security.{Authentication, Secured}
 
 import scala.concurrent.ExecutionContext
 
@@ -59,6 +58,10 @@ class AdminController @Inject()(
                                  programPdf: ProgramPdf)(implicit exec: ExecutionContext) extends Controller {
 
   lectures.callback { lecture =>
+    programPdf.update()
+  }
+
+  workShop.callback { item =>
     programPdf.update()
   }
 
