@@ -5,106 +5,57 @@
 package services
 
 import java.io.File
-import java.util
 import java.util.Locale
 
+import com.typesafe.scalalogging.LazyLogging
 import controllers.ProgramItem
 import models.{Lecture, WorkShopItem}
-import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage, PDPageContentStream}
-import org.joda.time.{DateTimeZone, DateTime}
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Try
+import scala.util.control.NonFatal
 
-case class Page(top: Float, left: Float, right: Float, bottom: Float, height: Float)
+class Cursor(document: PDDocument) extends LazyLogging {
 
-object Page {
-  def default: Page = {
-    Page(10, 10, 10, 10, 100)
-  }
-}
+  private var x: Float = _
+  private var y: Float = _
 
-class PageBuilder(document: PDDocument, page: PDPage) {
+  private var page: PDPage = null
 
-  def writeDate(dateTime: DateTime, yPosition: Float, xPosition: Float = 93) = {
-    val content = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)
-    content.setNonStrokingColor(0, 0, 0)
-    content.beginText()
-    content.setFont(PDType1Font.HELVETICA_BOLD, 14)
-    content.newLineAtOffset(xPosition, yPosition)
-    content.showText(dateTime.toString(PdfBuilder.DATE_FORMATTER, Locale.US))
-    content.endText()
-    content.close()
-  }
+  private val bottom: Float = 20
+  private val left: Float = 93
+  private val right: Float = 30
+  private val top: Float = 90
 
-  def writeWorkShopItem(workShopItem: WorkShopItem, yPosition: Float, xPosition: Float = 93) = {
-    val text = s"${workShopItem.title} ${workShopItem.startDate.toString(PdfBuilder.WORKSHOP_DATE_FORMATTER, Locale.US)} - ${workShopItem.endDate.toString(PdfBuilder.WORKSHOP_DATE_FORMATTER, Locale.US)}"
+  def this(document: PDDocument, x: Float, y: Float) {
+    this(document)
+    if (document.getPages.getCount == 0) {
+      page = new PDPage()
+      document.addPage(page)
+    } else {
+      page = document.getPage(0)
+    }
 
-    val content = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)
-    content.setNonStrokingColor(0, 0, 0)
-    content.beginText()
-    content.setFont(PDType1Font.HELVETICA_BOLD, 13)
-    content.newLineAtOffset(0, -1)
-    content.showText(text)
-    content.endText()
-    content.close()
-  }
+    this.x = x
+    this.y = y
 
-  def writeSession(lecture: Lecture) = {
-
-    val date = s"${lecture.date.toString(PdfBuilder.WORKSHOP_DATE_FORMATTER, Locale.US)}"
-
-    val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization}) - ${lecture.title}"
-
-    val content = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)
-    content.setNonStrokingColor(0, 0, 0)
-    content.beginText()
-    content.setFont(PDType1Font.HELVETICA_BOLD, 12)
-    content.newLineAtOffset(0, -1)
-    content.showText(date)
-    content.newLine()
-
-    PdfBuilder.writeLongText(content, PDType1Font.HELVETICA, 12, -1, page.getMediaBox, text)
-
-    content.endText()
-    content.close()
-  }
-}
-
-object PdfBuilder {
-
-  val DATE_FORMATTER = "EEEEE, d MMMMM"
-
-  val WORKSHOP_DATE_FORMATTER = "HH : mm"
-
-  def getFontHeight(font: PDType1Font, size: Float): Float = {
-    PDType1Font.HELVETICA_BOLD.getFontDescriptor.getFontBoundingBox.getHeight / 1000 * size
+    logger.debug(s" Create new cursor with positions ($x, $y)")
   }
 
   /**
+    * Split text into lines according to page width
     *
-    * @see http://stackoverflow.com/a/19683618
+    * @return list of lines
     */
-  def writeLongText(contentStream: PDPageContentStream,
-                    font: PDType1Font,
-                    fontSize: Float,
-                    yMargin: Float,
-                    box: PDRectangle,
-                    txt: String) = {
-
-    val leading = 1.2f * fontSize
+  private def textToLines(txt: String, font: PDType1Font, fontSize: Float): List[String] = {
     var text = txt
+    var lines = new ArrayBuffer[String]()
 
-    val leftMargin = 93
-    val rightMargin = 30
-
-    val width = box.getWidth - leftMargin - rightMargin
-    //    val startX = box.getLowerLeftX + leftMargin
-    //    val startY = box.getUpperRightY - yMargin
-
-    val lines = new ArrayBuffer[String]()
+    val width = page.getMediaBox.getWidth - left - right
     var lastSpace = -1
 
     while (text.length > 0) {
@@ -128,41 +79,124 @@ object PdfBuilder {
       }
     }
 
-    contentStream.setFont(font, fontSize)
-    //    contentStream.newLineAtOffset(startX, startY)
-    for (line <- lines) {
-      contentStream.showText(line)
-      contentStream.newLineAtOffset(0, -leading)
+    lines = lines.filter(_.length > 0)
+
+    logger.debug(s" Text to write is '$txt'. Total lines ${lines.length}.")
+
+    lines.toList
+  }
+
+  private def getTextHeight(lines: List[String], font: PDType1Font, size: Float): Float = {
+    lines.length * font.getFontDescriptor.getFontBoundingBox.getHeight / 1000 * size
+  }
+
+  def withStream(block: PDPageContentStream => Unit): Unit = {
+    var stream: PDPageContentStream = null
+    try {
+      stream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)
+      stream.setNonStrokingColor(0, 0, 0)
+      stream.beginText()
+      stream.newLineAtOffset(x, y)
+
+      block(stream)
+
+      stream.endText()
+    } finally {
+      stream.close()
     }
+  }
+
+  private def writeLines(lines: List[String], font: PDType1Font, size: Float): Unit = {
+    withStream { stream =>
+      stream.setFont(font, size)
+      for (line <- lines) {
+        logger.debug(s" Started write lines at position ($x, $y)")
+        stream.showText(line)
+
+        // Update the y position of the cursor after the text was written into a stream
+        y -= getTextHeight(List(line), font, size) + 1.2f * size
+        logger.debug(s" Update position after write new line ($x, $y)")
+        stream.newLine()
+        stream.newLineAtOffset(0, -1.5f * size)
+      }
+    }
+  }
+
+  def write(text: String, font: PDType1Font, size: Float): Unit = {
+    val lines = textToLines(text, font, size)
+
+    var height = 0.0f
+    val (linesOnCurrentPage, linesOnNextPage) = lines.partition { line =>
+      height = height + getTextHeight(List(line), font, size) + 1.2f * size
+      y - height > bottom
+    }
+
+    // Write current lines
+    writeLines(linesOnCurrentPage, font, size)
+
+    // Add new page when current lines was written
+    if (linesOnNextPage.nonEmpty) {
+      page = new PDPage(page.getMediaBox)
+      document.addPage(page)
+      x = left
+      y = page.getMediaBox.getUpperRightY - top
+      writeLines(linesOnNextPage, font, size)
+    }
+  }
+
+}
+
+class ProgramCursor(document: PDDocument, x: Float, y: Float) extends Cursor(document, x, y) {
+
+  val DATE_FORMATTER = "EEEEE, d MMMMM"
+
+  val WORKSHOP_DATE_FORMATTER = "HH : mm"
+
+  def writeDate(dateTime: DateTime): Unit = {
+    val text = dateTime.toString(DATE_FORMATTER, Locale.US)
+    write(text, PDType1Font.HELVETICA_BOLD, 14)
+  }
+
+  def writeWorkShopItem(item: WorkShopItem): Unit = {
+    val text = s"${item.title} ${item.startDate.toString(WORKSHOP_DATE_FORMATTER, Locale.US)}" +
+      s" ${item.endDate.toString(WORKSHOP_DATE_FORMATTER, Locale.US)}"
+    write(text, PDType1Font.HELVETICA_BOLD, 13)
+  }
+
+  def writeLecture(lecture: Lecture): Unit = {
+    val date = s"${lecture.date.toString(WORKSHOP_DATE_FORMATTER, Locale.US)}"
+
+    val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization}) ${lecture.title}"
+
+    write(date, PDType1Font.HELVETICA_BOLD, 12)
+    write(text, PDType1Font.HELVETICA, 12)
   }
 }
 
 class PdfBuilder {
 
-
-  def build(program: Map[DateTime, Seq[ProgramItem]]): Unit = {
+  def build(program: Map[String, Seq[ProgramItem]]): Unit = {
     Try {
       val document = PDDocument.load(new File("pdf-template.pdf"))
 
-      val page = new PDPage()
-
-      document.addPage(page)
-
-      val b = new PageBuilder(document, page)
+      val cursor = new ProgramCursor(document, 90, 400)
 
       program.foreach { case (date, xs) =>
-        b.writeDate(date, page.getMediaBox.getUpperRightY - 50)
-//        xs.foreach { item =>
-//          b.writeWorkShopItem(item.item, 100)
-//          item.sessions.foreach { lecture =>
-//            b.writeSession(lecture)
-//          }
-//        }
+        val formatter = DateTimeFormat.forPattern("dd MM yyyy")
+        cursor.writeDate(formatter.parseDateTime(date))
+        xs.foreach { item =>
+          cursor.writeWorkShopItem(item.item)
+          item.sessions.foreach { lecture =>
+            cursor.writeLecture(lecture)
+          }
+        }
       }
-
 
       document.save("tmp.pdf")
       document.close()
+    }.recover {
+      case NonFatal(e) =>
+        e.printStackTrace()
     }
   }
 }

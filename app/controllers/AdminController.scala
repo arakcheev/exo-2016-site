@@ -75,7 +75,7 @@ class AdminController @Inject()(
       sessions <- lectures.list[Seq]()
     } yield {
 
-      val grouped: Map[DateTime, Seq[WorkShopItem]] = items.groupBy(_.startDate)
+      val grouped: Map[String, Seq[WorkShopItem]] = items.groupBy(_.startDate.toString("dd MM YYYY"))
 
       val program = grouped.mapValues { items =>
         items.map { item =>
@@ -90,17 +90,17 @@ class AdminController @Inject()(
       }
 
       pdf.build(program)
+//
+//      val ss = program.foldLeft(Map.empty[String, Seq[ProgramItem]]) {
+//        case (map, (date, xs)) =>
+//          val day = date.getDayOfMonth.toString
+//          map.get(day) match {
+//            case None => map ++ Map(day -> xs)
+//            case Some(ys) => map ++ Map(day -> xs.++:(ys).sortBy(_.item.startDate.getMillis))
+//          }
+//      }
 
-      val ss = program.foldLeft(Map.empty[String, Seq[ProgramItem]]) {
-        case (map, (date, xs)) =>
-          val day = date.getDayOfMonth.toString
-          map.get(day) match {
-            case None => map ++ Map(day -> xs)
-            case Some(ys) => map ++ Map(day -> xs.++:(ys).sortBy(_.item.startDate.getMillis))
-          }
-      }
-
-      val json = Json.toJson(ss)
+      val json = Json.toJson(program)
 
       Ok(json).as(JSON)
     }
