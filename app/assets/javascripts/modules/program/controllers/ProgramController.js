@@ -12,7 +12,14 @@ define(['underscore'], function (_) {
         view.days = {};
 
         Routes.controllers.AdminController.getProgram().get().then(function (response) {
-            view.days = response.data;
+            view.days = {};
+            for (var dateStr in response.data) {
+                var dateParts = dateStr.split(' ');
+                var date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+                var day = date.getDate();
+                view.days[day] = response.data[dateStr];
+            }
+            console.log(view.days);
         });
 
     }
