@@ -12,7 +12,7 @@ import services.ProgramPdfBuilder
 import scala.async.Async._
 import scala.concurrent.{ExecutionContext, Future}
 
-class ProgramPdfImpl @Inject()(programPdfBuilder: ProgramPdfBuilder, cacheApi: CacheApi)(implicit val executionContext: ExecutionContext, programApi: ProgramAPI) extends ProgramPdf {
+class ProgramPdfImpl @Inject()(programPdfBuilder: ProgramPdfBuilder, cacheApi: CacheApi, programApi: ProgramAPI)(implicit val executionContext: ExecutionContext) extends ProgramPdf {
 
   val cacheKey = "programpdf"
 

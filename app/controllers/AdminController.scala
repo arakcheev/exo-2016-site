@@ -55,7 +55,12 @@ class AdminController @Inject()(
                                  secured: Secured,
                                  participants: Participants,
                                  lectures: Lectures,
-                                 workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
+                                 workShop: WorkShop,
+                                 programPdf: ProgramPdf)(implicit exec: ExecutionContext) extends Controller {
+
+  lectures.callback { lecture =>
+    programPdf.update()
+  }
 
   private val programAPi = new ProgramAPIImpl(workShop, lectures)
 

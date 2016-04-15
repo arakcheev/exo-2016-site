@@ -25,7 +25,7 @@ object WorkShopItem {
   }
 }
 
-trait WorkShop {
+trait WorkShop extends Callbacks[WorkShopItem]{
 
   /**
     * Save new workshop

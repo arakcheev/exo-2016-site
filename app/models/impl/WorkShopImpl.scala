@@ -7,7 +7,7 @@ package models.impl
 import com.google.inject.{Inject, Provider}
 import com.typesafe.scalalogging.LazyLogging
 import database.Driver
-import models.{document, Id, WorkShopItem, WorkShop, Collection}
+import models._
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.{Future, ExecutionContext}
@@ -23,6 +23,7 @@ class WorkShopImpl(collection: Collection)(implicit val executionContext: Execut
   override def save(item: WorkShopItem): Future[WorkShopItem] = {
     collection.insert(item).map { result =>
       if (result.n != 1) throw new Exception(s"Error save new workshop item to database. Return number of inserted documents is ${result.n} but must be 1")
+      &(item)
       item
     }
   }
@@ -32,7 +33,9 @@ class WorkShopImpl(collection: Collection)(implicit val executionContext: Execut
     item._id = id //update item id due to $set operator will try update id field of document
     val updater = document("$set" -> item)
     collection.findAndUpdate(query, updater, fetchNewObject = true).map { data =>
-      data.result[WorkShopItem].getOrElse(throw new Exception(s"Invalid result in update workshop item operation. Expected updater workshop, got ${data.value}"))
+      val item = data.result[WorkShopItem].getOrElse(throw new Exception(s"Invalid result in update workshop item operation. Expected updater workshop, got ${data.value}"))
+      &(item)
+      item
     }
   }
 
@@ -41,7 +44,10 @@ class WorkShopImpl(collection: Collection)(implicit val executionContext: Execut
     */
   override def remove(id: Id): Future[Unit] = {
     val query = document("_id" -> id)
-    collection.remove(query).map(_ => ())
+    collection.find(query).one[WorkShopItem].flatMap {
+      case Some(item) => collection.remove(query).map(_ => &(item))
+      case None => Future((): Unit)
+    }
   }
 
   /**
