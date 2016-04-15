@@ -13,7 +13,7 @@ import scala.concurrent.Future
   */
 trait ProgramPdf {
 
-  def get(): Future[InputStream]
+  def get(): Future[Array[Byte]]
 
-  def update(): Future[Unit]
+  def update(): Unit
 }

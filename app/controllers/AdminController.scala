@@ -3,6 +3,7 @@ package controllers
 import javax.inject._
 
 import models._
+import models.impl.ProgramAPIImpl
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -56,6 +57,8 @@ class AdminController @Inject()(
                                  lectures: Lectures,
                                  workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
 
+  private val programAPi = new ProgramAPIImpl(workShop, lectures)
+
   def isLogged = secured(Ok)
 
   def login = Action.async(parse.json[LoginData]) { request =>
@@ -68,30 +71,8 @@ class AdminController @Inject()(
   def logout = secured(Ok.withNewSession)
 
   def getProgram = Action.async {
-    for {
-      items <- workShop.list[Seq]()
-      sessions <- lectures.list[Seq]()
-    } yield {
-
-      val grouped: Map[String, Seq[WorkShopItem]] = items.sortBy(_.startDate.getMillis).groupBy(_.startDate.toString("dd MM YYYY"))
-
-      val program = grouped.mapValues { items =>
-        items.map { item =>
-          val itemSessions = sessions.filter { s: Lecture =>
-            val lectureStartMillis = s.date.getMillis + 1
-            val itemStartMillis = item.startDate.getMillis - 1
-            val itemEndMillis = item.endDate.getMillis
-            lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
-          }.sortBy(_.date.getMillis)
-          ProgramItem(item, itemSessions)
-        }
-      }
-
-      //      pdf.build(program)
-
-      val json = Json.toJson(program)
-
-      Ok(json).as(JSON)
+    programAPi.get().map { program =>
+      Ok(program.toJson).as(JSON)
     }
   }
 

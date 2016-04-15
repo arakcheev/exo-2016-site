@@ -6,6 +6,7 @@ import java.util.jar.JarFile
 import javax.inject._
 
 import akka.stream.scaladsl.StreamConverters
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
 import models.ProgramPdf
 import play.api._
 import play.api.cache.{CacheApi, Cached}
@@ -79,7 +80,8 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
 
 
   def downloadProgram(name: String = "exo-school-program.pdf") = Action.async {
-    programPdf.get().map { in =>
+    programPdf.get().map { bytes =>
+      val in = new ByteInputStream(bytes, bytes.length)
       val source = StreamConverters.fromInputStream(() => in)
       Result(
         ResponseHeader(200,
@@ -92,7 +94,7 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
         ),
         HttpEntity.Streamed(
           source,
-          None,
+          Some(bytes.length),
           play.api.libs.MimeTypes.forFileName(name).orElse(Some(play.api.http.ContentTypes.BINARY))
         )
       )

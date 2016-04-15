@@ -28,7 +28,7 @@ trait PdfBuilder
   */
 class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Environment) extends PdfBuilder {
 
-  def build(program: Program): InputStream = {
+  def build(program: Program): Array[Byte] = {
     var document: PDDocument = null
     try {
 
@@ -48,7 +48,7 @@ class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Env
 
       val out = new ByteOutputStream()
       document.save(out)
-      new ByteInputStream(out.getBytes, out.getCount)
+      out.getBytes
     } finally {
       document.close()
     }
@@ -196,7 +196,7 @@ class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCurs
 
   val DATE_FORMATTER = "EEEEE, d MMMMM"
 
-  val WORKSHOP_DATE_FORMATTER = "HH : mm"
+  val WORKSHOP_DATE_FORMATTER = "HH:mm"
 
   def writeDate(dateTime: DateTime): Unit = {
     val text = dateTime.toString(DATE_FORMATTER, Locale.US)

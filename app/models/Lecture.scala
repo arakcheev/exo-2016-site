@@ -34,11 +34,12 @@ object Speaker {
   * @param date lecture date
   * @param abstr lecture abstract
   */
-case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime, abstr: String) {
+case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime, abstr: String) extends Item{
   def setId(newId: Id) = {
     _id = newId
     this
   }
+
 }
 
 object Lecture {
