@@ -12,3 +12,12 @@ val bar = new Bar
 bar.print
 val foo: Foo = bar
 foo.print
+def asd: Unit = {
+  try {
+    throw new Exception("ololo")
+  } finally {
+    println("Elele")
+  }
+}
+
+asd

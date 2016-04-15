@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
 import security.{Secured, Authentication}
-import services.PdfBuilder
+import services.ProgramPdfBuilder
 
 import scala.concurrent.ExecutionContext
 
@@ -56,8 +56,6 @@ class AdminController @Inject()(
                                  lectures: Lectures,
                                  workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
 
-  val pdf = new PdfBuilder()
-
   def isLogged = secured(Ok)
 
   def login = Action.async(parse.json[LoginData]) { request =>
@@ -75,7 +73,7 @@ class AdminController @Inject()(
       sessions <- lectures.list[Seq]()
     } yield {
 
-      val grouped: Map[String, Seq[WorkShopItem]] = items.groupBy(_.startDate.toString("dd MM YYYY"))
+      val grouped: Map[String, Seq[WorkShopItem]] = items.sortBy(_.startDate.getMillis).groupBy(_.startDate.toString("dd MM YYYY"))
 
       val program = grouped.mapValues { items =>
         items.map { item =>
@@ -89,16 +87,7 @@ class AdminController @Inject()(
         }
       }
 
-      pdf.build(program)
-//
-//      val ss = program.foldLeft(Map.empty[String, Seq[ProgramItem]]) {
-//        case (map, (date, xs)) =>
-//          val day = date.getDayOfMonth.toString
-//          map.get(day) match {
-//            case None => map ++ Map(day -> xs)
-//            case Some(ys) => map ++ Map(day -> xs.++:(ys).sortBy(_.item.startDate.getMillis))
-//          }
-//      }
+      //      pdf.build(program)
 
       val json = Json.toJson(program)
 

@@ -4,28 +4,74 @@
 
 package services
 
-import java.io.File
+import java.io.InputStream
 import java.util.Locale
 
+import com.google.inject.Inject
+import com.sun.xml.internal.messaging.saaj.util.{ByteInputStream, ByteOutputStream}
 import com.typesafe.scalalogging.LazyLogging
-import controllers.ProgramItem
-import models.{Lecture, WorkShopItem}
+import models.{Lecture, Program, WorkShopItem}
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage, PDPageContentStream}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import play.api.{Configuration, Environment}
 
 import scala.collection.mutable.ArrayBuffer
-import scala.util.Try
-import scala.util.control.NonFatal
 
-class Cursor(document: PDDocument) extends LazyLogging {
+/**
+  * Common trait for pdf builders.
+  */
+trait PdfBuilder
 
+/**
+  * Implementation of pdf builder for school program
+  */
+class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Environment) extends PdfBuilder {
+
+  def build(program: Program): InputStream = {
+    var document: PDDocument = null
+    try {
+
+      document = PDDocument.load(environment.resourceAsStream("pdf-template.pdf").getOrElse(sys.error("Missing pdf template.")))
+      val cursor = new ProgramPdfCursor(document, 90, 400)
+
+      program.foreach {
+        case (date, xs) =>
+          cursor.writeDate(date)
+          xs.foreach { item =>
+            cursor.writeWorkShopItem(item.item)
+            item.sessions.foreach { lecture =>
+              cursor.writeLecture(lecture)
+            }
+          }
+      }
+
+      val out = new ByteOutputStream()
+      document.save(out)
+      new ByteInputStream(out.getBytes, out.getCount)
+    } finally {
+      document.close()
+    }
+  }
+}
+
+/**
+  * This class implements pdf cursor. Pdf cursor is the current position in pdf file and methods for a text writing.
+  *
+  * NOTE: This class is mutable
+  */
+class PdfCursor(document: PDDocument) extends LazyLogging {
+
+  /**
+    * Current position in pdf
+    */
   private var x: Float = _
   private var y: Float = _
 
+  /** Current page */
   private var page: PDPage = null
 
+  /** Padding */
   private val bottom: Float = 20
   private val left: Float = 93
   private val right: Float = 30
@@ -146,7 +192,7 @@ class Cursor(document: PDDocument) extends LazyLogging {
 
 }
 
-class ProgramCursor(document: PDDocument, x: Float, y: Float) extends Cursor(document, x, y) {
+class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCursor(document, x, y) {
 
   val DATE_FORMATTER = "EEEEE, d MMMMM"
 
@@ -170,33 +216,5 @@ class ProgramCursor(document: PDDocument, x: Float, y: Float) extends Cursor(doc
 
     write(date, PDType1Font.HELVETICA_BOLD, 12)
     write(text, PDType1Font.HELVETICA, 12)
-  }
-}
-
-class PdfBuilder {
-
-  def build(program: Map[String, Seq[ProgramItem]]): Unit = {
-    Try {
-      val document = PDDocument.load(new File("pdf-template.pdf"))
-
-      val cursor = new ProgramCursor(document, 90, 400)
-
-      program.foreach { case (date, xs) =>
-        val formatter = DateTimeFormat.forPattern("dd MM yyyy")
-        cursor.writeDate(formatter.parseDateTime(date))
-        xs.foreach { item =>
-          cursor.writeWorkShopItem(item.item)
-          item.sessions.foreach { lecture =>
-            cursor.writeLecture(lecture)
-          }
-        }
-      }
-
-      document.save("tmp.pdf")
-      document.close()
-    }.recover {
-      case NonFatal(e) =>
-        e.printStackTrace()
-    }
   }
 }

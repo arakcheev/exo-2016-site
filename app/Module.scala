@@ -1,9 +1,9 @@
-import com.google.inject.AbstractModule
+import com.google.inject.{Singleton, AbstractModule}
 import java.time.Clock
 
 import database.{DefaultDriverImpl, Driver}
-import models.{WorkShop, Lectures, Participants}
-import models.impl.{WorkShopProvider, LecturesImplProvider, ParticipantsImpl}
+import models.{ProgramPdf, WorkShop, Lectures, Participants}
+import models.impl.{ProgramPdfImpl, WorkShopProvider, LecturesImplProvider, ParticipantsImpl}
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
 /**
@@ -33,6 +33,8 @@ class Module extends AbstractModule {
 
     bind(classOf[Lectures]).toProvider(classOf[LecturesImplProvider])
     bind(classOf[WorkShop]).toProvider(classOf[WorkShopProvider])
+
+    bind(classOf[ProgramPdf]).to(classOf[ProgramPdfImpl]).in(classOf[Singleton])
   }
 
 }
