@@ -1,6 +1,6 @@
 <admin-header></admin-header>
 
-<div class="container admin">
+<div class="container admin participant">
     <table class="table table-hover">
         <caption>List of all registered participants.</caption>
         <thead>
@@ -12,18 +12,23 @@
             <th>Position</th>
             <th>Status</th>
             <th>Age</th>
+            <th class="hidden-xs"></th>
         </tr>
         </thead>
 
         <tbody>
         <tr ng-repeat="part in participants.participants">
             <td>{{$index +1}}</td>
-            <td>{{part.name}}</td>
-            <td>{{part.surname}}</td>
-            <td>{{part.organization}}</td>
-            <td>{{part.position}}</td>
-            <td>{{part.status}}</td>
-            <td>{{part.age}}</td>
+            <td>{{part.getName()}}</td>
+            <td>{{part.getSurname()}}</td>
+            <td>{{part.getOrganization()}}</td>
+            <td>{{part.getPosition()}}</td>
+            <td>{{part.getStatus()}}</td>
+            <td>{{part.getAge()}}</td>
+            <td class="buttons hidden-xs">
+                <!--<a href="" ng-click="participants.$edit(part)"><i class="fa fa-pencil-square-o"></i></a>-->
+                <a href="" ng-click="participants.$remove(part)"><i class="fa fa-trash-o"></i></a>
+            </td>
         </tr>
         </tbody>
     </table>

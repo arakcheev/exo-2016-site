@@ -1,6 +1,6 @@
 define(['underscore', './ModalLectureController'], function (_, ModalLectureController) {
 
-    function LecturesController($modal, Lectures) {
+    function LecturesController($modal, Lectures, RemoveModal) {
         var view = this;
 
         view.lectures = [];
@@ -39,12 +39,16 @@ define(['underscore', './ModalLectureController'], function (_, ModalLectureCont
         };
 
         view.$remove = function (lecture) {
-            Lectures.remove(lecture).then(function () {
-                var index = _.indexOf(view.lectures, lecture);
-                if (index > -1) {
-                    view.lectures.splice(index, 1);
-                }
-            });
+            var name = lecture.getTitle();
+            var callback = function () {
+                Lectures.remove(lecture).then(function () {
+                    var index = _.indexOf(view.lectures, lecture);
+                    if (index > -1) {
+                        view.lectures.splice(index, 1);
+                    }
+                });
+            };
+            RemoveModal(name, callback);
         };
 
         Lectures.fetch().then(function (lectures) {
@@ -56,7 +60,7 @@ define(['underscore', './ModalLectureController'], function (_, ModalLectureCont
 
     }
 
-    LecturesController.$inject = ['$uibModal', 'Lectures'];
+    LecturesController.$inject = ['$uibModal', 'Lectures', 'RemoveModal'];
 
     return LecturesController;
 });
