@@ -16,7 +16,7 @@ define(['underscore'], function (_) {
             return origin + Routes.controllers.HomeController.downloadProgram("exo2016-program.pdf").url;
         })();
 
-        view.download = function(){
+        view.download = function () {
             window.location.href = downloadUrl;
         };
 

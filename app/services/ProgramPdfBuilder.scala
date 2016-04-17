@@ -30,9 +30,12 @@ class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Env
 
   def build(program: Program): Array[Byte] = {
     var document: PDDocument = null
+    var stream: InputStream = null
     try {
 
-      document = PDDocument.load(environment.resourceAsStream("pdf-template.pdf").getOrElse(sys.error("Missing pdf template.")))
+      stream = environment.resourceAsStream("pdf-template.pdf").getOrElse(sys.error("Missing pdf template."))
+
+      document = PDDocument.load(stream)
       val cursor = new ProgramPdfCursor(document, 90, 400)
 
       program.foreach {
@@ -51,6 +54,7 @@ class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Env
       out.getBytes
     } finally {
       document.close()
+      stream.close()
     }
   }
 }
