@@ -13,7 +13,11 @@ GET     /count                      controllers.CountController.count
 GET     /islogged                   controllers.AdminController.isLogged
 POST    /login                      controllers.AdminController.login
 POST    /logout                     controllers.AdminController.logout
-GET     /api/admin/participants     controllers.AdminController.listParticipants
+
+
+GET     /api/participants           controllers.AdminController.listParticipants
+DELETE  /api/participants/:id       controllers.AdminController.removeParticipant(id: models.Id)
+
 
 GET     /api/getProgram             controllers.AdminController.getProgram
 

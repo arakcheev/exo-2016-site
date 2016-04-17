@@ -26,7 +26,9 @@ class ParticipantsImpl @Inject()(driver: Driver, implicit val executionContext: 
     collection.find(query).one[Participant].map(_.isEmpty)
   }
 
-  override def delete(id: Id): Future[Unit] = ???
+  override def delete(id: Id): Future[Unit] = {
+    collection.remove(document("_id" -> id)).map(_ => ())
+  }
 
   override def register(participant: Participant): Future[Unit] = {
     collection.insert(participant).map(_ => ())

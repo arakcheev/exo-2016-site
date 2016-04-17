@@ -1,7 +1,9 @@
 define(['angular',
     './Routes',
-    './controllers/main'], function (angular, Routes) {
+    './Participant',
+    './controllers/main'
+], function (angular, Routes, ParticipantModel) {
 
     return angular.module('participants', ['participants.controllers'])
-        .config(Routes);
+        .config(Routes).factory('ParticipantModel', ParticipantModel);
 });

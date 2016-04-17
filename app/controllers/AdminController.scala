@@ -134,4 +134,5 @@ class AdminController @Inject()(
 
   def removeWorkShopItem(id: Id) = secured.async(workShop.remove(id).map(_ => Ok))
 
+  def removeParticipant(id: Id) = secured.async(participants.delete(id).map(_ => Ok))
 }
