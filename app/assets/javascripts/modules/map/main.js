@@ -13,8 +13,6 @@ define([
 
         var components = _.rest(arguments, 2);
 
-        console.log(components);
-
         _.each(components, function (component) {
             if (_.isFunction(component)) {
                 component.call(this, module);

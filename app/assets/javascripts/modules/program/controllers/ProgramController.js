@@ -28,7 +28,6 @@ define(['underscore'], function (_) {
                 var day = date.getDate();
                 view.days[day] = response.data[dateStr];
             }
-            console.log(view.days);
         });
 
     }
