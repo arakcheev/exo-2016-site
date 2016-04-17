@@ -41,13 +41,6 @@ object WorkShopItemData {
   implicit val reader = Json.reads[WorkShopItemData]
 }
 
-//TODO:  Move from controller
-case class ProgramItem(item: WorkShopItem, sessions: Seq[Lecture])
-
-object ProgramItem {
-  implicit val writer = Json.writes[ProgramItem]
-}
-
 @Singleton
 class AdminController @Inject()(
                                  authentication: Authentication,

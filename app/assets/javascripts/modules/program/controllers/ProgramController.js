@@ -1,6 +1,6 @@
 define(['underscore'], function (_) {
 
-    function ProgramController(Routes) {
+    function ProgramController(Routes, $location) {
 
         var view = this;
 
@@ -10,6 +10,15 @@ define(['underscore'], function (_) {
         view.day3 = 1;
 
         view.days = {};
+
+        var downloadUrl = (function () {
+            var origin = location.protocol + "//" + location.host;
+            return origin + Routes.controllers.HomeController.downloadProgram("exo2016-program.pdf").url;
+        })();
+
+        view.download = function(){
+            window.location.href = downloadUrl;
+        };
 
         Routes.controllers.AdminController.getProgram().get().then(function (response) {
             view.days = {};
@@ -24,7 +33,7 @@ define(['underscore'], function (_) {
 
     }
 
-    ProgramController.$inject = ['Routes'];
+    ProgramController.$inject = ['Routes', '$location'];
 
     return ProgramController;
 });
