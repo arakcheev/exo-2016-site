@@ -4,14 +4,13 @@
 
 define(['underscore', './ModalItemsController'], function (_, ModalItemsController) {
 
-    function WorkShopController(Items, $modal) {
+    function WorkShopController(Items, $modal, RemoveModal) {
 
         var view = this;
 
         view.items = [];
 
         view.predicate = function (item) {
-            console.log(item.getStartDate().getTime());
             return item.getStartDate().getTime();
         };
 
@@ -44,12 +43,16 @@ define(['underscore', './ModalItemsController'], function (_, ModalItemsControll
         };
 
         view.$remove = function (item) {
-            Items.remove(item).then(function () {
-                var index = _.indexOf(view.items, item);
-                if (index > -1) {
-                    view.items.splice(index, 1);
-                }
-            });
+            var name = item.getTitle();
+            var callback = function () {
+                Items.remove(item).then(function () {
+                    var index = _.indexOf(view.items, item);
+                    if (index > -1) {
+                        view.items.splice(index, 1);
+                    }
+                });
+            };
+            RemoveModal(name, callback);
         };
 
         Items.fetch().then(function (items) {
@@ -60,7 +63,7 @@ define(['underscore', './ModalItemsController'], function (_, ModalItemsControll
 
     }
 
-    WorkShopController.$inject = ['Items', '$modal'];
+    WorkShopController.$inject = ['Items', '$uibModal', 'RemoveModal'];
 
     return WorkShopController;
 });
