@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Arakcheev Artem (artem.arakcheev@phystech.edu). All rights reserved.
  */
 
-define(['underscore'], function (_) {
+define(['underscore', './EditParticipantModal'], function (_, EditParticipantModal) {
 
     function ParticipantsController(ParticipantModel, $modal, RemoveModal) {
 
@@ -15,7 +15,7 @@ define(['underscore'], function (_) {
         function ParticipantModal(participant, callback) {
             $modal.open({
                 templateUrl: '/assets/templates/participants/edit-modal.html',
-                controller: ModalLectureController,
+                controller: EditParticipantModal,
                 controllerAs: 'modal',
                 resolve: {
                     participant: participant
@@ -27,11 +27,11 @@ define(['underscore'], function (_) {
         }
 
 
-        view.$edit = function (lecture) {
-            new ParticipantModal(lecture, function (updatedLecture) {
-                var index = _.indexOf(view.lectures, lecture);
+        view.$edit = function (participant) {
+            new ParticipantModal(participant, function (updatedParticipant) {
+                var index = _.indexOf(view.participants, participant);
                 if (index > -1) {
-                    view.lectures[index] = updatedLecture;
+                    view.participants[index] = updatedParticipant;
                 }
             });
         };
