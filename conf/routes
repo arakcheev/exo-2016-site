@@ -5,6 +5,7 @@
 #Return templates and routes as javascript
 GET     /templates.js               controllers.HomeController.templates
 GET     /routes.js                  controllers.HomeController.jsRoutes
+GET     /api/downloadprogram/*name  controllers.HomeController.downloadProgram(name: String)
 
 
 # An example controller showing how to use dependency injection

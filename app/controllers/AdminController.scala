@@ -3,10 +3,11 @@ package controllers
 import javax.inject._
 
 import models._
+import models.impl.ProgramAPIImpl
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.mvc._
-import security.{Secured, Authentication}
+import security.{Authentication, Secured}
 
 import scala.concurrent.ExecutionContext
 
@@ -40,19 +41,24 @@ object WorkShopItemData {
   implicit val reader = Json.reads[WorkShopItemData]
 }
 
-case class ProgramItem(item: WorkShopItem, sessions: Seq[Lecture])
-
-object ProgramItem {
-  implicit val writer = Json.writes[ProgramItem]
-}
-
 @Singleton
 class AdminController @Inject()(
                                  authentication: Authentication,
                                  secured: Secured,
                                  participants: Participants,
                                  lectures: Lectures,
-                                 workShop: WorkShop)(implicit exec: ExecutionContext) extends Controller {
+                                 workShop: WorkShop,
+                                 programPdf: ProgramPdf)(implicit exec: ExecutionContext) extends Controller {
+
+  lectures.callback { lecture =>
+    programPdf.update()
+  }
+
+  workShop.callback { item =>
+    programPdf.update()
+  }
+
+  private val programAPi = new ProgramAPIImpl(workShop, lectures)
 
   def isLogged = secured(Ok)
 
@@ -66,35 +72,8 @@ class AdminController @Inject()(
   def logout = secured(Ok.withNewSession)
 
   def getProgram = Action.async {
-    for {
-      items <- workShop.list[Seq]()
-      sessions <- lectures.list[Seq]()
-    } yield {
-
-      val grouped: Map[String, Seq[WorkShopItem]] = items.groupBy(_.startDate.getDayOfMonth.toString)
-
-      val program = grouped.mapValues { items =>
-        items.map { item =>
-          val itemSessions = sessions.filter { s: Lecture =>
-            val lectureStartMillis = s.date.getMillis + 1
-            val itemStartMillis = item.startDate.getMillis - 1
-            val itemEndMillis = item.endDate.getMillis
-            /*println(item.title)
-            println(s.speaker.fullname)
-            println(s" lectureStartMillis ${new DateTime(lectureStartMillis)}")
-            println(s" itemStartMillis ${new DateTime(itemStartMillis)}")
-            println(s" itemEndMillis ${new DateTime(itemEndMillis)}")
-            println(s" result ${lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis}")
-            println()*/
-            lectureStartMillis >= itemStartMillis && lectureStartMillis <= itemEndMillis
-          }.sortBy(_.date.getMillis)
-          ProgramItem(item, itemSessions)
-        }
-      }
-
-      val json = Json.toJson(program)
-
-      Ok(json).as(JSON)
+    programAPi.get().map { program =>
+      Ok(program.toJson).as(JSON)
     }
   }
 

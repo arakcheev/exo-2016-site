@@ -4,12 +4,17 @@ import java.io.File
 import java.net.URLDecoder
 import java.util.jar.JarFile
 import javax.inject._
-import com.google.inject.name
+
+import akka.stream.scaladsl.StreamConverters
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream
+import models.ProgramPdf
 import play.api._
-import play.api.cache.{Cached, CacheApi}
+import play.api.cache.{CacheApi, Cached}
+import play.api.http.HttpEntity
 import play.api.libs.json.Json
 import play.api.mvc._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.matching.Regex
 
 /**
@@ -17,7 +22,7 @@ import scala.util.matching.Regex
   * application's home page.
   */
 @Singleton
-class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cached) extends Controller {
+class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cached, programPdf: ProgramPdf) extends Controller {
 
   /**
     * Create an Action to render an HTML page with a welcome message.
@@ -35,19 +40,19 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
     *
     */
   def templates = Action { implicit req =>
-      val templatesJson = digestAssetLoader.cacheTemplates.foldLeft(Json.obj()) { case (js, template) =>
-        js ++ Json.obj(
-          s"/assets/$template" -> routes.Assets.versioned(template).url
-        )
-      }
+    val templatesJson = digestAssetLoader.cacheTemplates.foldLeft(Json.obj()) { case (js, template) =>
+      js ++ Json.obj(
+        s"/assets/$template" -> routes.Assets.versioned(template).url
+      )
+    }
 
-      val result =
-        s"""
-           |var templates = $templatesJson
+    val result =
+      s"""
+         |var templates = $templatesJson
         """.stripMargin
 
-      Ok(result).as(JAVASCRIPT)
-    }
+    Ok(result).as(JAVASCRIPT)
+  }
 
   /**
     * Retrieves all routes via reflection.
@@ -70,9 +75,31 @@ class HomeController @Inject()(digestAssetLoader: DigestAssetLoader, cached: Cac
     * Uses browser caching; set duration (in seconds) according to your release cycle.
     */
   def jsRoutes = Action { implicit request =>
-      Ok(play.api.routing.JavaScriptReverseRouter("jsRoutes")(routeCache: _*)).as(JAVASCRIPT)
-    }
+    Ok(play.api.routing.JavaScriptReverseRouter("jsRoutes")(routeCache: _*)).as(JAVASCRIPT)
+  }
 
+
+  def downloadProgram(name: String = "exo-school-program.pdf") = Action.async {
+    programPdf.get().map { bytes =>
+      val in = new ByteInputStream(bytes, bytes.length)
+      val source = StreamConverters.fromInputStream(() => in)
+      Result(
+        ResponseHeader(200,
+          Map(
+            CONTENT_DISPOSITION -> {
+              val dispositionType = "attachment"
+              dispositionType + "; filename=\"" + name + "\""
+            }
+          )
+        ),
+        HttpEntity.Streamed(
+          source,
+          Some(bytes.length),
+          play.api.libs.MimeTypes.forFileName(name).orElse(Some(play.api.http.ContentTypes.BINARY))
+        )
+      )
+    }
+  }
 }
 
 private class DigestAssetLoader @Inject()(cache: CacheApi, environment: Environment) {

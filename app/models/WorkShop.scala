@@ -12,7 +12,9 @@ import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scala.language.higherKinds
 
-case class WorkShopItem(var _id: Id, startDate: DateTime, endDate: DateTime, title: String)
+case class WorkShopItem(var _id: Id, startDate: DateTime, endDate: DateTime, title: String) extends Item {
+  override val date: DateTime = startDate.minusSeconds(1)
+}
 
 object WorkShopItem {
   implicit val format = Json.format[WorkShopItem]
@@ -23,7 +25,7 @@ object WorkShopItem {
   }
 }
 
-trait WorkShop {
+trait WorkShop extends Callbacks[WorkShopItem]{
 
   /**
     * Save new workshop

@@ -25,7 +25,7 @@ sealed trait Driver {
 
   def connection: MongoConnection
 
-  def db: DefaultDB
+  val db: DefaultDB
 
   val gfs: GridFS[BSONSerializationPack.type]
 
@@ -38,6 +38,8 @@ final class DefaultDriverImpl @Inject()(
                                          configuration: Configuration,
                                          applicationLifecycle: ApplicationLifecycle) extends Driver with LazyLogging {
 
+  logger.debug("One more instance created")
+
   private lazy val parsedUri = DefaultReactiveMongoApi.parseConf(configuration)
 
   override val driver: MongoDriver = new MongoDriver(Some(configuration.underlying))
@@ -49,7 +51,7 @@ final class DefaultDriverImpl @Inject()(
   }
 
 
-  override def db: DefaultDB = {
+  override val db: DefaultDB = {
     import scala.concurrent.ExecutionContext.Implicits.global
     logger.info("ReactiveMongoApi starting...")
     connection(dbName)
