@@ -5,7 +5,7 @@ import com.typesafe.sbt.web.js.JS
 
 name := """exo-conference-site"""
 
-version := "0.5"
+version := "0.7"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
 
