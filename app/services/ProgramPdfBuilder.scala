@@ -14,7 +14,7 @@ import com.typesafe.scalalogging.LazyLogging
 import models.{Lecture, Program, WorkShopItem}
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage, PDPageContentStream}
-import org.joda.time.DateTime
+import org.joda.time.{DateTimeZone, DateTime}
 import play.api.{Configuration, Environment}
 
 import scala.collection.mutable.ArrayBuffer
@@ -203,22 +203,24 @@ class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCurs
 
   val WORKSHOP_DATE_FORMATTER = "HH:mm"
 
-  val locale = new Locale("us","RU")
+  val locale = new Locale("us", "RU")
+
+  val timeZone = DateTimeZone.forOffsetHours(3)
 
   def writeDate(dateTime: DateTime): Unit = {
-    val text = dateTime.toString(DATE_FORMATTER, locale)
+    val text = dateTime.withZone(timeZone).toString(DATE_FORMATTER, locale)
     write(text, PDType1Font.HELVETICA_BOLD, 14)
   }
 
   def writeWorkShopItem(item: WorkShopItem): Unit = {
-    val text = s"${item.title} ${item.startDate.toString(WORKSHOP_DATE_FORMATTER, locale)}" +
-      s" - ${item.endDate.toString(WORKSHOP_DATE_FORMATTER, locale)}"
+    val text = s"${item.title} ${item.startDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}" +
+      s" - ${item.endDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
     println(text)
     write(text, PDType1Font.HELVETICA_BOLD, 13)
   }
 
   def writeLecture(lecture: Lecture): Unit = {
-    val date = s"${lecture.date.toString(WORKSHOP_DATE_FORMATTER, locale)}"
+    val date = s"${lecture.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
 
     val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization}) ${lecture.title}"
 
