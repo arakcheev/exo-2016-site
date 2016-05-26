@@ -6,7 +6,9 @@
 
         <br>
 
-        <registration-form ng-if="!registration.state.ok"></registration-form>
+        <p>Registration is closed. You can see the list of participants <a href="/participants">here</a>. </p>
+
+        <!--<registration-form ng-if="!registration.state.ok"></registration-form>-->
 
         <div ng-if="registration.state.ok">
             <p>You have completed registration. We will contact you soon.</p>
