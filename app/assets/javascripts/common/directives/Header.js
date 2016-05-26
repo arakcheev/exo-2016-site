@@ -12,6 +12,7 @@ define(['angular'], function (angular) {
                     "/program": "Program",
                     "/committee": "Committee",
                     "/registration": "Registration",
+                    "/participants": "Participants",
                     "/contacts": "Contacts"
                 };
 

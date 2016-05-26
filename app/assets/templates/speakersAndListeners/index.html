@@ -1,0 +1,25 @@
+<main-header></main-header>
+
+<div class="container all-participants">
+
+    <h1>Speakers</h1>
+
+    <ul class="list-group">
+        <li class="list-group-item" ng-repeat="speaker in SaL.speakers">
+            <div class="pull-right col-md-7 hidden-sm hidden-xs">
+                {{speaker.getOrganization()}}
+            </div>
+            {{$index + 1}}. &nbsp;
+            {{speaker.getName()}}
+        </li>
+    </ul>
+
+    <h1>Listeners</h1>
+    <ul class="list-group">
+        <li class="list-group-item" ng-repeat="listener in SaL.listeners">
+            <div class="pull-right col-md-7 hidden-sm hidden-xs">{{listener.getOrganization()}}</div>
+            {{$index + 1}}. &nbsp;
+            {{listener.getName()}}
+        </li>
+    </ul>
+</div>

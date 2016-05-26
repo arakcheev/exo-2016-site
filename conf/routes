@@ -3,45 +3,48 @@
 # ~~~~
 
 #Return templates and routes as javascript
-GET     /templates.js               controllers.HomeController.templates
-GET     /routes.js                  controllers.HomeController.jsRoutes
-GET     /api/downloadprogram/*name  controllers.HomeController.downloadProgram(name: String)
+GET           /templates.js                           controllers.HomeController.templates
+GET           /routes.js                              controllers.HomeController.jsRoutes
+GET           /api/downloadprogram/*name              controllers.HomeController.downloadProgram(name: String)
 
 
 # An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
+GET           /count                                  controllers.CountController.count
 
-GET     /islogged                   controllers.AdminController.isLogged
-POST    /login                      controllers.AdminController.login
-POST    /logout                     controllers.AdminController.logout
-
-
-GET     /api/participants           controllers.AdminController.listParticipants
-DELETE  /api/participants/:id       controllers.AdminController.removeParticipant(id: models.Id)
+GET           /islogged                               controllers.AdminController.isLogged
+POST          /login                                  controllers.AdminController.login
+POST          /logout                                 controllers.AdminController.logout
 
 
-GET     /api/getProgram             controllers.AdminController.getProgram
+GET           /api/participants                       controllers.AdminController.listParticipants
+DELETE        /api/participants/:id                   controllers.AdminController.removeParticipant(id: models.Id)
+
+
+GET           /api/getProgram                         controllers.AdminController.getProgram
 
 # Admin lecture routes
-POST    /api/lectures/save          controllers.AdminController.newLecture
-GET     /api/lectures               controllers.AdminController.listLectures
-DELETE  /api/lectures/:id           controllers.AdminController.removeLecture(id: models.Id)
-PUT     /api/lectures/:id           controllers.AdminController.updateLecture(id: models.Id)
+POST          /api/lectures/save                      controllers.AdminController.newLecture
+GET           /api/lectures                           controllers.AdminController.listLectures
+DELETE        /api/lectures/:id                       controllers.AdminController.removeLecture(id: models.Id)
+PUT           /api/lectures/:id                       controllers.AdminController.updateLecture(id: models.Id)
 
 # Admin workshop routes
-POST    /api/workshop/save          controllers.AdminController.newWorkShopItem
-GET     /api/workshop               controllers.AdminController.listWorkShopItems
-DELETE  /api/workshop/:id           controllers.AdminController.removeWorkShopItem(id: models.Id)
-PUT     /api/workshop/:id           controllers.AdminController.updateWorkShopItem(id: models.Id)
+POST          /api/workshop/save                      controllers.AdminController.newWorkShopItem
+GET           /api/workshop                           controllers.AdminController.listWorkShopItems
+DELETE        /api/workshop/:id                       controllers.AdminController.removeWorkShopItem(id: models.Id)
+PUT           /api/workshop/:id                       controllers.AdminController.updateWorkShopItem(id: models.Id)
 
 #Form registration controllers
-POST     /api/registration/emailavailable controllers.RegistrationController.emailAvailable()
-POST     /api/registration/phoneavailable controllers.RegistrationController.phoneAvailable()
-POST     /api/registration/register controllers.RegistrationController.register()
+POST          /api/registration/emailavailable        controllers.RegistrationController.emailAvailable()
+POST          /api/registration/phoneavailable        controllers.RegistrationController.phoneAvailable()
+POST          /api/registration/register              controllers.RegistrationController.register()
+
+GET           /api/allparticipants/speakers           controllers.SpeakersAndListenersController.speakers
+GET           /api/allparticipants/listeners          controllers.SpeakersAndListenersController.listeners
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET           /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
 
 # A controller showing a index page with FE routing
-GET     /                               controllers.HomeController.index(url = "")
-GET     /*url                           controllers.HomeController.index(url)
+GET           /                                       controllers.HomeController.index(url = "")
+GET           /*url                                   controllers.HomeController.index(url)

@@ -5,7 +5,8 @@ define(['angular',
     './program/main',
     './registration/main',
     './login/main',
-    './map/main'], function (angular) {
+    './map/main',
+    './speakersAndListeners/main'], function (angular) {
 
-    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration', 'login', 'map']);
+    return angular.module("modules", ['index', 'committee', 'contacts', 'program', 'registration', 'login', 'map', 'speakersAndListeners']);
 });
