@@ -19,7 +19,21 @@ class ParticipantsImpl @Inject()(driver: Driver, implicit val executionContext: 
     collection.find(query).one[Participant].map(_.isEmpty)
   }
 
-  override def update(id: Id, participant: Participant): Future[Unit] = ???
+  override def update(id: Id, name: String, surname: String, middleName: String,
+                      organization: String, age: String, position: String): Future[Participant] = {
+    val query = document("_id" -> id)
+    val updater = document("$set" -> document(
+      "name" -> name,
+      "surname" -> surname,
+      "lastname" -> middleName,
+      "organization" -> organization,
+      "age" -> age,
+      "position" -> position
+    ))
+    collection.findAndUpdate(query, updater, fetchNewObject = true).map { result =>
+      result.result[Participant].getOrElse(throw new RuntimeException("Error update participant."))
+    }
+  }
 
   override def phoneAvailable(email: String): Future[Boolean] = {
     val query = document("phone" -> email)

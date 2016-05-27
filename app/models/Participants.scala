@@ -36,5 +36,6 @@ trait Participants {
 
   def delete(id: Id): Future[Unit]
 
-  def update(id: Id, participant: Participant): Future[Unit]
+  def update(id: Id, name: String, surname: String, middleName: String,
+             organization: String, age: String, position: String): Future[Participant]
 }

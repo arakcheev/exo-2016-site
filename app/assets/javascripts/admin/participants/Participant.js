@@ -57,7 +57,7 @@ define(['underscore'], function (_) {
             return {
                 name: participant.getName(),
                 surname: participant.getSurname(),
-                lastname: participant.getPatronymic(),
+                middleName: participant.getPatronymic(),
                 status: participant.getStatus(),
                 organization: participant.getOrganization(),
                 age: participant.getAge(),
@@ -95,6 +95,11 @@ define(['underscore'], function (_) {
                 .then(function (response) {
                     return response;
                 });
+        };
+
+        Participant.$apply = function (id, name, surname, middleName, organization, age, position) {
+
+            return new Participant(id, name, surname, middleName, 0, organization, age, position);
         };
 
         return Participant;

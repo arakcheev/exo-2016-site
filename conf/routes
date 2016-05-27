@@ -18,7 +18,7 @@ POST          /logout                                 controllers.AdminControlle
 
 GET           /api/participants                       controllers.AdminController.listParticipants
 DELETE        /api/participants/:id                   controllers.AdminController.removeParticipant(id: models.Id)
-
+PUT          /api/participants/update/:id            controllers.AdminController.updateParticipant(id: models.Id)
 
 GET           /api/getProgram                         controllers.AdminController.getProgram
 

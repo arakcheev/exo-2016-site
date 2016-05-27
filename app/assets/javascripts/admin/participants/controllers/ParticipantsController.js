@@ -21,8 +21,8 @@ define(['underscore', './EditParticipantModal'], function (_, EditParticipantMod
                     participant: participant
                 },
                 size: "lg"
-            }).result.then(function (participant) {
-                callback.call(this, participant);
+            }).result.then(function (newParticipant) {
+                callback.call(this, newParticipant);
             });
         }
 

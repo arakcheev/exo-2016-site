@@ -29,6 +29,12 @@ object LectureData {
   implicit val reader = Json.reads[LectureData]
 }
 
+case class ParticipantData(name: String, surname: String, middleName: String, organization: String, age: String, position: String)
+
+object ParticipantData {
+  implicit val reader = Json.reads[ParticipantData]
+}
+
 case class WorkShopItemData(startDate: Long, endDate: Long, title: String) {
   def toWorkShop = {
     val sd = new DateTime(startDate)
@@ -93,6 +99,10 @@ class AdminController @Inject()(
 
   def updateLecture(id: Id) = secured.async(parse.json[LectureData]) { implicit request =>
     lectures.update(id, request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
+  }
+
+  def updateParticipant(id: Id) = secured.async(parse.json[ParticipantData]) { implicit request =>
+    participants.update(id, request.body.name, request.body.surname, request.body.middleName, request.body.organization, request.body.age, request.body.position).map(part => Ok(Json.toJson(part)))
   }
 
   //WorkShop methods

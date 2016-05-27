@@ -10,10 +10,49 @@
 
     <div class="modal-body">
 
-        <registration-form></registration-form>
+        <div class="row">
+
+            <div class="col-md-5">
+
+                <lecture-form-field form="form"
+                                    name="name"
+                                    label="Name"
+                                    placeholder="Enter name"
+                                    model="modal.data.name"
+                                    required-error="Please, enter name"></lecture-form-field>
+
+                <lecture-form-field form="form"
+                                    name="surname"
+                                    label="Surname"
+                                    placeholder="Enter surname"
+                                    model="modal.data.surname"
+                                    required-error="Please, enter surname"></lecture-form-field>
+
+                <lecture-form-field form="form"
+                                    name="middleName"
+                                    label="Middle name"
+                                    placeholder="Enter Middle name"
+                                    model="modal.data.middleName"
+                                    required-error="Please, enter middle name"></lecture-form-field>
+
+                <lecture-form-field form="form"
+                                    name="organization"
+                                    label="organization"
+                                    placeholder="Enter Organization"
+                                    model="modal.data.organization"
+                                    required-error="Please, enter organization"></lecture-form-field>
+
+                <lecture-form-field form="form"
+                                    name="position"
+                                    label="position"
+                                    placeholder="Enter Position"
+                                    model="modal.data.position"
+                                    required-error="Please, enter position"></lecture-form-field>
+
+            </div>
+        </div>
 
     </div>
-
 
     <div class="modal-footer">
         <button class="btn btn-default" type="button" ng-click="modal.ok()" ng-disabled="form.$invalid || loading">Save
