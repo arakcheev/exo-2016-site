@@ -44,8 +44,8 @@ package object models {
     new BSONDocumentReader[Map[String, String]] {
       def read(doc: BSONDocument): Map[String, String] = {
         doc.elements.collect {
-          case (key, value) => value.seeAsOpt[String](reader) map {
-            ov => (key, ov)
+          case elem =>elem.value.seeAsOpt[String](reader) map {
+            ov => (elem.name, ov)
           }
         }.flatten.toMap
       }

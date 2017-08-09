@@ -9,34 +9,13 @@ version := "0.12"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
 
-scalaVersion := "2.11.7"
-
-libraryDependencies ++= Seq(
-  jdbc,
-  cache,
-  ws,
-  "org.scala-lang.modules" % "scala-async_2.11" % "0.9.6-RC2",
-  "org.reactivemongo" %% "reactivemongo" % "0.11.10",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
-  "com.amazonaws" % "aws-java-sdk" % "1.10.62",
-  "com.github.t3hnar" % "scala-bcrypt_2.11" % "2.5",
-  "org.apache.pdfbox" % "pdfbox" % "2.0.0",
-
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test
-)
+scalaVersion := "2.11.8"
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-val webJarDependesies = Seq(
-  "org.webjars" % "requirejs" % "2.1.22",
-  "org.webjars" % "underscorejs" % "1.8.3",
-  "org.webjars" % "jquery" % "1.11.3",
-  "org.webjars" % "angularjs" % "1.4.9" exclude("org.webjars", "jquery"),
-  "org.webjars" % "nervgh-angular-file-upload" % "2.1.1",
-  "org.webjars" % "angular-ui-bootstrap" % "0.14.3"
-)
+libraryDependencies ++= Dependencies.project
 
-libraryDependencies ++= webJarDependesies
+libraryDependencies ++= WebjarDependencies.webJarDependesies
 
 routesImport += "binders._"
 

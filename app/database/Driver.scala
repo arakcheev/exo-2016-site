@@ -5,12 +5,10 @@
 package database
 
 import com.google.inject.{Inject, Singleton}
-import com.typesafe.scalalogging.LazyLogging
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 import play.api.inject.ApplicationLifecycle
 import reactivemongo.api._
 import reactivemongo.api.collections.bson.BSONCollection
-
 import reactivemongo.api.commands.WriteConcern
 import reactivemongo.api.gridfs.GridFS
 import reactivemongo.core.nodeset.Authenticate
@@ -36,7 +34,8 @@ sealed trait Driver {
 @Singleton
 final class DefaultDriverImpl @Inject()(
                                          configuration: Configuration,
-                                         applicationLifecycle: ApplicationLifecycle) extends Driver with LazyLogging {
+                                         applicationLifecycle: ApplicationLifecycle) extends Driver {
+  private val logger = Logger(getClass)
 
   logger.debug("One more instance created")
 

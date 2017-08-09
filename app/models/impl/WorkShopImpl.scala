@@ -5,15 +5,17 @@
 package models.impl
 
 import com.google.inject.{Inject, Provider}
-import com.typesafe.scalalogging.LazyLogging
 import database.Driver
 import models._
+import play.api.Logger
 
 import scala.collection.generic.CanBuildFrom
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
-class WorkShopImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends WorkShop with LazyLogging {
+class WorkShopImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends WorkShop{
+
+  private val logger = Logger(getClass)
 
   /**
     * Save new workshop

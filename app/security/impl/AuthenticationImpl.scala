@@ -5,11 +5,10 @@
 package security.impl
 
 import com.google.inject.Inject
-import com.typesafe.scalalogging.LazyLogging
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 import play.api.mvc.RequestHeader
 import security.Authentication
-import security.models.{UserRepository, User}
+import security.models.{User, UserRepository}
 import services.PasswordCrypto
 import models.parseId
 
@@ -18,7 +17,8 @@ import scala.util.{Failure, Success}
 
 class AuthenticationImpl @Inject()(passwordCrypto: PasswordCrypto,
                                    userRepository: UserRepository,
-                                   configuration: Configuration)(implicit val executionContext: ExecutionContext) extends Authentication with LazyLogging {
+                                   configuration: Configuration)(implicit val executionContext: ExecutionContext) extends Authentication {
+  private val logger = Logger(getClass)
 
   val SESSION_NAME = configuration.getString("sessionName").getOrElse(sys.error("Missing session name in config."))
 

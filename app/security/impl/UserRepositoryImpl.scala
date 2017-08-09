@@ -4,20 +4,37 @@
 
 package security.impl
 
-import com.google.inject.{Singleton, Inject, Provider}
-import com.typesafe.scalalogging.LazyLogging
+import com.google.inject.{Inject, Provider, Singleton}
 import database.Driver
 import models.{Collection, Id, document, newId}
-import play.api.Configuration
+import play.api.{Configuration, Logger}
 import security.models.{User, UserRepository}
 import services.PasswordCrypto
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserRepositoryImpl(collection: Collection, passwordCrypto: PasswordCrypto)(implicit val executionContext: ExecutionContext) extends UserRepository with LazyLogging {
+class UserRepositoryImpl
+(collection: Collection,
+    passwordCrypto: PasswordCrypto,
+    configuration: Configuration)
+  (implicit val executionContext: ExecutionContext) extends UserRepository {
+
+  private val logger = Logger(getClass)
+
+  def init ={
+    val login = configuration.getString("secure.login").getOrElse(sys.error("secure.login"))
+    val password = configuration.getString("secure.password").getOrElse(sys.error("secure.password"))
+    val user = User(newId, login, passwordCrypto.hash(password))
+    byLogin(user.login).flatMap{
+      case None ⇒ collection.insert(user).map(_ ⇒ logger.info("Admin user initialize"))
+      case Some(_) ⇒ Future.successful()
+    }
+  }
+
+  init
 
 
-//  val user = User(newId, "admin@inasan.ru", passwordCrypto.hash("123"))
+  //  val user = User(newId, "admin@inasan.ru", passwordCrypto.hash("123"))
 //  collection.insert(user).map(_ => println("saved"))
 
   /**
@@ -48,5 +65,5 @@ class UserRepositoryImplProvider @Inject()(configuration: Configuration, driver:
 
   val collection = driver.collection("users")
 
-  override def get(): UserRepository = new UserRepositoryImpl(collection, passwordCrypto)(executionContext)
+  override def get(): UserRepository = new UserRepositoryImpl(collection, passwordCrypto, configuration)(executionContext)
 }

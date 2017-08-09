@@ -10,12 +10,11 @@ import java.util.Locale
 
 import com.google.inject.Inject
 import com.sun.xml.internal.messaging.saaj.util.{ByteInputStream, ByteOutputStream}
-import com.typesafe.scalalogging.LazyLogging
 import models.{Lecture, Program, WorkShopItem}
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage, PDPageContentStream}
-import org.joda.time.{DateTimeZone, DateTime}
-import play.api.{Configuration, Environment}
+import org.joda.time.{DateTime, DateTimeZone}
+import play.api.{Configuration, Environment, Logger}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -65,7 +64,9 @@ class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Env
   *
   * NOTE: This class is mutable
   */
-class PdfCursor(document: PDDocument) extends LazyLogging {
+class PdfCursor(document: PDDocument) {
+
+  private val logger = Logger(getClass)
 
   /**
     * Current position in pdf

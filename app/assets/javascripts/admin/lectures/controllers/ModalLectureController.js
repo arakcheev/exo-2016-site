@@ -15,7 +15,7 @@ define(['underscore'], function (_) {
             };
         } else {
             view.data = {
-                date: new Date(2016, 4, 30)
+                date: new Date(2017, 10, 15)
             };
         }
 

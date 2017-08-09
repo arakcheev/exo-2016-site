@@ -5,15 +5,17 @@
 package models.impl
 
 import com.google.inject.{Inject, Provider}
-import com.typesafe.scalalogging.LazyLogging
 import database.Driver
 import models.{Lectures, _}
+import play.api.Logger
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
-class LecturesImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends Lectures with LazyLogging {
+class LecturesImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends Lectures{
+
+  private val logger = Logger(getClass)
 
   /**
     * Save new lecture

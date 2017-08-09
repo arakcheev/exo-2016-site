@@ -5,7 +5,7 @@
 package security
 
 import com.google.inject.Inject
-import com.typesafe.scalalogging.LazyLogging
+import play.api.Logger
 import play.api.mvc._
 import security.models.User
 
@@ -23,7 +23,9 @@ class SecuredRequest[A](user: User, request: Request[A]) extends WrappedRequest[
 /**
   * Secured action
   */
-class Secured @Inject()(authenticator: Authentication) extends ActionBuilder[SecuredRequest] with LazyLogging {
+class Secured @Inject()(authenticator: Authentication) extends ActionBuilder[SecuredRequest] {
+
+  private val logger = Logger(getClass)
 
   private implicit val prep = executionContext.prepare()
 
