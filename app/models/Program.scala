@@ -87,7 +87,7 @@ class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
             last = new DayItemBuilder(w)
             acc :+ last
           case l: Lecture =>
-            last.addLecture(l)
+            if( last ne null) last.addLecture(l)
             acc
         }
       }.map(_.build)
