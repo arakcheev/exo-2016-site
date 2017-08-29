@@ -27,7 +27,7 @@ class UserRepositoryImpl
     val user = User(newId, login, passwordCrypto.hash(password))
     byLogin(user.login).flatMap{
       case None ⇒ collection.insert(user).map(_ ⇒ logger.info("Admin user initialize"))
-      case Some(_) ⇒ Future.successful()
+      case Some(_) ⇒ Future(())
     }
   }
 

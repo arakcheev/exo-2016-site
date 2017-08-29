@@ -5,16 +5,13 @@ import play.sbt.Play.autoImport._
 
 object Dependencies{
 
-  val reactiveMongoVer = "0.12.1"
+  val reactiveMongoVer = "0.11.10"
 
   val mongoDrivers: Seq[ModuleID] = Seq(
-                                         "org.reactivemongo" %% "reactivemongo-akkastream",
-                                         "org.reactivemongo" %% "play2-reactivemongo"
+                                         "org.reactivemongo" %% "reactivemongo"
                                        ).map(_ % reactiveMongoVer)
 
   val play: Seq[ModuleID] = Seq(cache, ws, specs2 % Test)
-
-  val it = "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
 
   val async = "org.scala-lang.modules" % "scala-async_2.11" % "0.9.6"
 
@@ -24,7 +21,7 @@ object Dependencies{
 
   val pdfbox = "org.apache.pdfbox" % "pdfbox" % "2.0.0"
 
-  val project: Seq[ModuleID] = mongoDrivers ++ play ++ Seq(it, async, aws, bcrypt, pdfbox)
+  val project: Seq[ModuleID] = mongoDrivers ++ play ++ Seq(async, aws, bcrypt, pdfbox)
 
 
 }

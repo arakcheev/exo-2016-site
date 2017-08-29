@@ -52,8 +52,10 @@ final class DefaultDriverImpl @Inject()(
 
   override val db: DefaultDB = {
     import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration._
     logger.info("ReactiveMongoApi starting...")
-    connection(dbName)
+    val fos = FailoverStrategy(1.seconds, 10, _ ⇒ 1)
+    connection.apply(dbName, fos)
   }
 
   private lazy val dbName: String = parsedUri.db.fold[String](
