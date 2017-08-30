@@ -1,7 +1,7 @@
 import com.google.inject.{Singleton, AbstractModule}
 import java.time.Clock
 
-import database.{DefaultDriverImpl, Driver}
+//import database.{DefaultDriverImpl, Driver}
 import models._
 import models.impl._
 import services.{ApplicationTimer, AtomicCounter, Counter}
@@ -27,9 +27,9 @@ class Module extends AbstractModule {
     // Set AtomicCounter as the implementation for Counter.
     bind(classOf[Counter]).to(classOf[AtomicCounter])
 
-    bind(classOf[Participants]).to(classOf[ParticipantsImpl])
+    bind(classOf[Participants]).toProvider(classOf[ParticipantsImplProvider])
 
-    bind(classOf[Driver]).to(classOf[DefaultDriverImpl]).asEagerSingleton()
+//    bind(classOf[Driver]).to(classOf[DefaultDriverImpl]).asEagerSingleton()
 
     bind(classOf[Lectures]).toProvider(classOf[LecturesImplProvider])
     bind(classOf[WorkShop]).toProvider(classOf[WorkShopProvider])

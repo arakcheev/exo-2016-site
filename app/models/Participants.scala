@@ -5,8 +5,8 @@
 
 package models
 
+import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
-import reactivemongo.bson.Macros
 
 import scala.concurrent.Future
 
@@ -20,8 +20,14 @@ object Participant {
     Participant(newId, name, surname, email, status, organization, age, position, lastname)
   }
 
+  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+  import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+
   implicit val jsonFormat = Json.format[Participant]
-  implicit val handler = Macros.handler[Participant]
+  implicit val handler = Macros.createCodecProviderIgnoreNone[Participant]()
+
+  val codecRegistry = fromRegistries(fromProviders(handler), DEFAULT_CODEC_REGISTRY )
+
 }
 
 trait Participants {

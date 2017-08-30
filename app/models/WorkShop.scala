@@ -5,24 +5,41 @@
 package models
 
 import org.joda.time.DateTime
+import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
-import reactivemongo.bson.Macros
+//import reactivemongo.bson.Macros
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scala.language.higherKinds
 
-case class WorkShopItem(var _id: Id, startDate: DateTime, endDate: DateTime, title: String) extends Item {
-  override val date: DateTime = startDate.minusSeconds(1)
+trait Item {
+  val date: DateTime
 }
+
+object Item {
+
+  implicit object Ord extends Ordering[Item] {
+    override def compare(x: Item, y: Item): Int = x.date.compareTo(y.date)
+  }
+
+}
+
+case class WorkShopItem(_id: Id, date: DateTime, endDate: DateTime, title: String) extends Item
 
 object WorkShopItem {
   implicit val format = Json.format[WorkShopItem]
-  implicit val handler = Macros.handler[WorkShopItem]
 
-  def apply(startDate: DateTime, endDate: DateTime, title: String): WorkShopItem = {
-    WorkShopItem(newId, startDate, endDate, title)
-  }
+  import org.mongodb.scala.bson.codecs.Macros._
+  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromCodecs,fromRegistries}
+  import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+
+  val codecRegistry = fromRegistries(fromCodecs(dateTimeCodec), fromProviders(classOf[WorkShopItem]), DEFAULT_CODEC_REGISTRY )
+
+
+//  def apply(startDate: DateTime, endDate: DateTime, title: String): WorkShopItem = {
+//    WorkShopItem(newId, startDate, endDate, title)
+//  }
 }
 
 trait WorkShop extends Callbacks[WorkShopItem]{

@@ -39,7 +39,7 @@ case class WorkShopItemData(startDate: Long, endDate: Long, title: String) {
   def toWorkShop = {
     val sd = new DateTime(startDate)
     val ed = new DateTime(endDate)
-    WorkShopItem(sd, ed, title)
+    WorkShopItem(newId, sd, ed, title)
   }
 }
 

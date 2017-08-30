@@ -6,7 +6,7 @@ package security.impl
 
 import com.google.inject.{Inject, Provider, Singleton}
 import database.Driver
-import models.{Collection, Id, document, newId}
+import models.{Collection, Id, newId}
 import play.api.{Configuration, Logger}
 import security.models.{User, UserRepository}
 import services.PasswordCrypto
@@ -14,7 +14,7 @@ import services.PasswordCrypto
 import scala.concurrent.{ExecutionContext, Future}
 
 class UserRepositoryImpl
-(collection: Collection,
+(collection: Collection[User],
     passwordCrypto: PasswordCrypto,
     configuration: Configuration)
   (implicit val executionContext: ExecutionContext) extends UserRepository {
@@ -26,16 +26,12 @@ class UserRepositoryImpl
     val password = configuration.getString("secure.password").getOrElse(sys.error("secure.password"))
     val user = User(newId, login, passwordCrypto.hash(password))
     byLogin(user.login).flatMap{
-      case None ⇒ collection.insert(user).map(_ ⇒ logger.info("Admin user initialize"))
+      case None ⇒ collection.insertOne(user).toFuture.map(_ ⇒ logger.warn("Admin user initialize"))
       case Some(_) ⇒ Future(())
     }
   }
 
   init
-
-
-  //  val user = User(newId, "admin@inasan.ru", passwordCrypto.hash("123"))
-//  collection.insert(user).map(_ => println("saved"))
 
   /**
     * Get user by login
@@ -44,8 +40,9 @@ class UserRepositoryImpl
     * @return Some[User] if user found, otherwise None
     */
   override def byLogin(login: String): Future[Option[User]] = {
-    val query = document("login" -> login)
-    collection.find(query).one[User]
+    import org.mongodb.scala.model.Filters._
+    val query = equal("login",login)
+    collection.find(query).head().map(Option.apply)
   }
 
   /**
@@ -55,15 +52,17 @@ class UserRepositoryImpl
     * @return Some[User] if user found, otherwise None
     */
   override def byId(id: Id): Future[Option[User]] = {
-    val query = document("_id" -> id)
-    collection.find(query).one[User]
+    import org.mongodb.scala.model.Filters._
+    val query = equal("_id", id)
+    collection.find(query).head().map(Option.apply)
   }
 }
 
 @Singleton
 class UserRepositoryImplProvider @Inject()(configuration: Configuration, driver: Driver, executionContext: ExecutionContext, passwordCrypto: PasswordCrypto) extends Provider[UserRepository] {
 
-  val collection = driver.collection("users")
+  val collection: Collection[User] = driver.database.withCodecRegistry(User.codecRegistry).getCollection[User]("users")
+
 
   override def get(): UserRepository = new UserRepositoryImpl(collection, passwordCrypto, configuration)(executionContext)
 }

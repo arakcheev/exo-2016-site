@@ -5,8 +5,9 @@
 package models
 
 import org.joda.time.DateTime
+import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
-import reactivemongo.bson.Macros
+//import reactivemongo.bson.Macros
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
@@ -22,7 +23,7 @@ case class Speaker(fullname: String, organization: String)
 
 object Speaker {
   implicit val format = Json.format[Speaker]
-  implicit val handler = Macros.handler[Speaker]
+  implicit val handler = Macros.createCodecProvider[Speaker]()
 }
 
 /**
@@ -43,8 +44,13 @@ case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime,
 }
 
 object Lecture {
+  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromCodecs, fromRegistries}
+  import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+
   implicit val format = Json.format[Lecture]
-  implicit val handler = Macros.handler[Lecture]
+  implicit val handler = Macros.createCodecProvider[Lecture]()
+
+  val codecRegistry = fromRegistries(fromCodecs(dateTimeCodec), fromProviders(handler, Speaker.handler), DEFAULT_CODEC_REGISTRY )
 
   def apply(speaker: Speaker, title: String, date: Long, abstr: String): Lecture = {
     val dateTime = new DateTime(date)

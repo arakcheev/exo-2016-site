@@ -36,18 +36,6 @@ class DayItemBuilder(var item: WorkShopItem) {
   def build = DayItem(item, sessions.toSeq)
 }
 
-trait Item {
-  val date: DateTime
-}
-
-object Item {
-
-  implicit object Ord extends Ordering[Item] {
-    override def compare(x: Item, y: Item): Int = x.date.compareTo(y.date)
-  }
-
-}
-
 class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
 
   private val entries: mutable.TreeSet[Item] = mutable.TreeSet.empty[Item]

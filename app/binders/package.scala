@@ -3,7 +3,7 @@
  */
 import models._
 import play.api.mvc.PathBindable
-import reactivemongo.bson.BSONObjectID
+//import reactivemongo.bson.BSONObjectID
 
 import scala.util.{Failure, Success}
 
@@ -14,7 +14,7 @@ package object binders {
 
     def bind(key: String, value: String): Either[String, Id] = {
       b.bind(key, value).right.flatMap { v =>
-        BSONObjectID.parse(v) match {
+        models.parseId(v) match {
           case Success(bson) => Right(bson)
           case Failure(ex) => Left("Error parse id from request.")
         }
@@ -23,7 +23,7 @@ package object binders {
 
 
     def unbind(key: String, value: Id): String =
-      b.unbind(key, value.stringify)
+      b.unbind(key, value.getValue.toHexString)
   }
 
 }

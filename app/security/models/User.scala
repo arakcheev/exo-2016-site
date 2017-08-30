@@ -5,14 +5,19 @@
 package security.models
 
 import models.Id
-import reactivemongo.bson.Macros
+import org.mongodb.scala.bson.codecs.Macros
+//import reactivemongo.bson.Macros
 
 import scala.concurrent.Future
 
 case class User(_id: Id, login: String, password: String)
 
 object User {
-  implicit val handler = Macros.handler[User]
+  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+  import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+  implicit val handler = Macros.createCodecProvider[User]()
+  val codecRegistry = fromRegistries(fromProviders(handler), DEFAULT_CODEC_REGISTRY )
+
 }
 
 /**

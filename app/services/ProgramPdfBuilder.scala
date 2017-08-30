@@ -214,7 +214,7 @@ class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCurs
   }
 
   def writeWorkShopItem(item: WorkShopItem): Unit = {
-    val text = s"${item.title} ${item.startDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}" +
+    val text = s"${item.title} ${item.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}" +
       s" - ${item.endDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
     write(text, PDType1Font.HELVETICA_BOLD, 13)
   }

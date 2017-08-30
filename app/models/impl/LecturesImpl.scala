@@ -5,15 +5,18 @@
 package models.impl
 
 import com.google.inject.{Inject, Provider}
+import com.mongodb.client.model.{FindOneAndUpdateOptions, ReturnDocument}
 import database.Driver
 import models.{Lectures, _}
+import org.bson.conversions.Bson
+import org.mongodb.scala.bson.BsonDocument
 import play.api.Logger
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 
-class LecturesImpl(collection: Collection)(implicit val executionContext: ExecutionContext) extends Lectures{
+class LecturesImpl(collection: Collection[Lecture])(implicit val executionContext: ExecutionContext) extends Lectures{
 
   private val logger = Logger(getClass)
 
@@ -21,8 +24,7 @@ class LecturesImpl(collection: Collection)(implicit val executionContext: Execut
     * Save new lecture
     */
   override def save(lecture: Lecture): Future[Lecture] = {
-    collection.insert(lecture).map { result =>
-      if (result.n != 1) throw new Exception(s"Error save new lecture to database. Return number of inserted documents is ${result.n} but must be 1")
+    collection.insertOne(lecture).toFuture().map { _ =>
       &(lecture)
       lecture
     }
@@ -33,33 +35,48 @@ class LecturesImpl(collection: Collection)(implicit val executionContext: Execut
     * @tparam M collection type to return (ex, List, Seq, Set)
     */
   override def list[M[_]]()(implicit cbf: CanBuildFrom[M[_], Lecture, M[Lecture]]): Future[M[Lecture]] = {
-    val query = document()
-    collection.find(query).cursor[Lecture]().collect[M]()
+    val query: Bson = BsonDocument()
+    collection.find(query).toFuture().map{lectures ⇒
+      val res = cbf.apply()
+      lectures.foreach(res += _)
+      res.result()
+    }
   }
 
   /**
     * Just Remove lecture.
     */
   override def remove(id: Id): Future[Unit] = {
-    val query = document("_id" -> id)
-    collection.find(query).one[Lecture].flatMap {
-      case None => Future((): Unit)
-      case Some(lecture) => collection.remove(query).map(_ => &(lecture))
+    import org.mongodb.scala.model.Filters._
+    val query = equal("_id", id)
+    collection.findOneAndDelete(query).toFuture().map{lecture ⇒
+      if(lecture != null) &(lecture)
     }
   }
 
   override def update(id: Id, lecture: Lecture): Future[Lecture] = {
-    val query = document("_id" -> id)
-    val updater = document("$set" -> lecture.setId(id))
-    collection.findAndUpdate(query, updater, fetchNewObject = true).map { data =>
-      val lecture = data.result[Lecture].getOrElse(throw new Exception(s"Invalid result in update lecture operation. Expected updater lecture, got ${data.value}"))
-      &(lecture)
-      lecture
+    import org.mongodb.scala.model.Filters._
+    import org.mongodb.scala.model.Updates._
+    val query = equal("_id", id)
+    val updater = and(set("speaker", lecture.speaker),
+                       set("title", lecture.title),
+                       set("date", lecture.date),
+                       set("abstr", lecture.abstr)
+                     )
+    val opts = new FindOneAndUpdateOptions()
+    opts.returnDocument(ReturnDocument.AFTER)
+    collection.findOneAndUpdate(query, updater, opts).toFuture.map { lecture =>
+      if(lecture != null) {
+        &(lecture)
+        lecture
+      } else throw new RuntimeException(s"Updated lecture for id ${id.getValue.toHexString} is null.")
     }
   }
 }
 
 class LecturesImplProvider @Inject()(driver: Driver)(implicit val executionContext: ExecutionContext) extends Provider[Lectures] {
 
-  override def get(): Lectures = new LecturesImpl(driver.collection("lectures"))
+  val collection = driver.database.withCodecRegistry(Lecture.codecRegistry).getCollection[Lecture]("lectures")
+
+  override def get(): Lectures = new LecturesImpl(collection)
 }
