@@ -4,14 +4,15 @@
 
 package models
 
+import database.{CrudOps, EntityCompanion}
 import org.joda.time.DateTime
 import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
-//import reactivemongo.bson.Macros
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.Future
 import scala.language.higherKinds
+import scala.reflect.ClassTag
 
 /**
   * Represents speaker
@@ -43,14 +44,9 @@ case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime,
 
 }
 
-object Lecture {
-  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromCodecs, fromRegistries}
-  import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
-
+object Lecture extends EntityCompanion{
   implicit val format = Json.format[Lecture]
-  implicit val handler = Macros.createCodecProvider[Lecture]()
-
-  val codecRegistry = fromRegistries(fromCodecs(dateTimeCodec), fromProviders(handler, Speaker.handler), DEFAULT_CODEC_REGISTRY )
+  override implicit val codecProviders = Seq(Macros.createCodecProvider[Lecture](), Speaker.handler)
 
   def apply(speaker: Speaker, title: String, date: Long, abstr: String): Lecture = {
     val dateTime = new DateTime(date)
@@ -61,23 +57,6 @@ object Lecture {
 /**
   * Main API for lectures.
   */
-trait Lectures extends Callbacks[Lecture] {
+trait Lectures extends Callbacks[Lecture] with CrudOps[Lecture]{
 
-  /**
-    * Save new lecture
-    */
-  def save(lecture: Lecture): Future[Lecture]
-
-  /**
-    * Get all lectures
-    * @tparam M collection type to return (ex, List, Seq, Set)
-    */
-  def list[M[_]]()(implicit cbf: CanBuildFrom[M[_], Lecture, M[Lecture]]): Future[M[Lecture]]
-
-  /**
-    * Just Remove lecture.
-    */
-  def remove(id: Id): Future[Unit]
-
-  def update(id: Id, lecture: Lecture): Future[Lecture]
 }

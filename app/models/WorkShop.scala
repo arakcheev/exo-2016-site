@@ -4,7 +4,9 @@
 
 package models
 
+import org.bson.codecs.configuration.{CodecProvider, CodecRegistry}
 import org.joda.time.DateTime
+import org.mongodb.scala.MongoCollection
 import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
 //import reactivemongo.bson.Macros
@@ -29,12 +31,13 @@ case class WorkShopItem(_id: Id, date: DateTime, endDate: DateTime, title: Strin
 
 object WorkShopItem {
   implicit val format = Json.format[WorkShopItem]
+  implicit val macros: CodecProvider = Macros.createCodecProvider[WorkShopItem]
 
-  import org.mongodb.scala.bson.codecs.Macros._
+//  import org.mongodb.scala.bson.codecs.Macros._
   import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromCodecs,fromRegistries}
   import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
 
-  val codecRegistry = fromRegistries(fromCodecs(dateTimeCodec), fromProviders(classOf[WorkShopItem]), DEFAULT_CODEC_REGISTRY )
+  val codecRegistry: CodecRegistry = fromRegistries(fromCodecs(dateTimeCodec), fromProviders(macros), DEFAULT_CODEC_REGISTRY)
 
 
 //  def apply(startDate: DateTime, endDate: DateTime, title: String): WorkShopItem = {
