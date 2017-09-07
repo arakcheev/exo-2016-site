@@ -21,7 +21,7 @@ object Dependencies{
 
   val bcrypt = "com.github.t3hnar" % "scala-bcrypt_2.11" % "2.5"
 
-  val pdfbox = "org.apache.pdfbox" % "pdfbox" % "2.0.0"
+  val pdfbox = "org.apache.pdfbox" % "pdfbox" % "2.0.7"
 
   val it = "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
 

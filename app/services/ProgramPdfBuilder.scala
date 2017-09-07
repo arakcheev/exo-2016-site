@@ -5,13 +5,12 @@
 package services
 
 import java.io.InputStream
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import com.google.inject.Inject
-import com.sun.xml.internal.messaging.saaj.util.{ByteInputStream, ByteOutputStream}
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import models.{Lecture, Program, WorkShopItem}
-import org.apache.pdfbox.pdmodel.font.PDType1Font
+import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.pdmodel.{PDDocument, PDPage, PDPageContentStream}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.{Configuration, Environment, Logger}
@@ -36,7 +35,7 @@ class ProgramPdfBuilder @Inject()(configuration: Configuration, environment: Env
       stream = environment.resourceAsStream("pdf-template.pdf").getOrElse(sys.error("Missing pdf template."))
 
       document = PDDocument.load(stream)
-      val cursor = new ProgramPdfCursor(document, 90, 400)
+      val cursor = new ProgramPdfCursor(document, 90, 400, environment: Environment)
 
       program.foreach {
         case (date, xs) =>
@@ -103,7 +102,7 @@ class PdfCursor(document: PDDocument) {
     *
     * @return list of lines
     */
-  private def textToLines(txt: String, font: PDType1Font, fontSize: Float): List[String] = {
+  private def textToLines(txt: String, font: PDType0Font, fontSize: Float): List[String] = {
     var text = txt
     var lines = new ArrayBuffer[String]()
 
@@ -138,7 +137,7 @@ class PdfCursor(document: PDDocument) {
     lines.toList
   }
 
-  private def getTextHeight(lines: List[String], font: PDType1Font, size: Float): Float = {
+  private def getTextHeight(lines: List[String], font: PDType0Font, size: Float): Float = {
     lines.length * font.getFontDescriptor.getFontBoundingBox.getHeight / 1000 * size
   }
 
@@ -158,7 +157,7 @@ class PdfCursor(document: PDDocument) {
     }
   }
 
-  private def writeLines(lines: List[String], font: PDType1Font, size: Float): Unit = {
+  private def writeLines(lines: List[String], font: PDType0Font, size: Float): Unit = {
     withStream { stream =>
       stream.setFont(font, size)
       for (line <- lines) {
@@ -174,7 +173,7 @@ class PdfCursor(document: PDDocument) {
     }
   }
 
-  def write(text: String, font: PDType1Font, size: Float): Unit = {
+  def write(text: String, font: PDType0Font, size: Float): Unit = {
     val lines = textToLines(text, font, size)
 
     var height = 0.0f
@@ -198,7 +197,11 @@ class PdfCursor(document: PDDocument) {
 
 }
 
-class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCursor(document, x, y) {
+class ProgramPdfCursor(document: PDDocument, x: Float, y: Float, environment: Environment) extends PdfCursor(document, x, y) {
+
+  private val helvetica = PDType0Font.load(document, environment.resourceAsStream("Roboto-Regular.ttf").getOrElse(sys.error("Missing font")))
+
+  private val helveticaBold = PDType0Font.load(document, environment.resourceAsStream("Roboto-Bold.ttf").getOrElse(sys.error("Missing font")))
 
   val DATE_FORMATTER = "EEEEE, d MMMMM"
 
@@ -210,21 +213,22 @@ class ProgramPdfCursor(document: PDDocument, x: Float, y: Float) extends PdfCurs
 
   def writeDate(dateTime: DateTime): Unit = {
     val text = dateTime.withZone(timeZone).toString(DATE_FORMATTER, locale)
-    write(text, PDType1Font.HELVETICA_BOLD, 14)
+    write(text, helveticaBold, 14)
   }
 
   def writeWorkShopItem(item: WorkShopItem): Unit = {
     val text = s"${item.title} ${item.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}" +
       s" - ${item.endDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
-    write(text, PDType1Font.HELVETICA_BOLD, 13)
+    write(text, helveticaBold, 13)
   }
 
   def writeLecture(lecture: Lecture): Unit = {
     val date = s"${lecture.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
 
-    val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization}) ${lecture.title}"
+    val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization})"
 
-    write(date, PDType1Font.HELVETICA_BOLD, 12)
-    write(text, PDType1Font.HELVETICA, 12)
+    write(date, helveticaBold, 12)
+    write(text, helvetica, 13)
+    write(lecture.title, helvetica, 12)
   }
 }

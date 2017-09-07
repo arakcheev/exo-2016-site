@@ -13,7 +13,7 @@ define(['underscore'], function (_) {
 
         var downloadUrl = (function () {
             var origin = location.protocol + "//" + location.host;
-            return origin + Routes.controllers.HomeController.downloadProgram("exo2016-program.pdf").url;
+            return origin + Routes.controllers.HomeController.downloadProgram("exo2017-program.pdf").url;
         })();
 
         view.download = function () {
