@@ -30,7 +30,7 @@ define(function () {
                 return fromJson(item);
             });
         } else {
-            return new WorkShopItem(json._id, json.startDate, json.endDate, json.title);
+            return new WorkShopItem(json._id, json.date, json.endDate, json.title);
         }
     };
 

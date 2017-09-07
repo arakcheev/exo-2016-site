@@ -5,9 +5,9 @@ define(['underscore'], function (_) {
         var view = this;
 
         //Lol ) Three days of school.
-        view.day1 = 30;
-        view.day2 = 31;
-        view.day3 = 1;
+        view.day1 = 15;
+        view.day2 = 16;
+        view.day3 = 17;
 
         view.days = {};
 
@@ -26,6 +26,7 @@ define(['underscore'], function (_) {
                 var dateParts = dateStr.split(' ');
                 var date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
                 var day = date.getDate();
+                console.log(dateStr, response.data[dateStr]);
                 view.days[day] = response.data[dateStr];
             }
         });

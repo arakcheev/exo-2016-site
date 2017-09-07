@@ -14,6 +14,8 @@ define(['underscore', './ModalLectureController'], function (_, ModalLectureCont
                 templateUrl: '/assets/templates/lectures/add-modal.html',
                 controller: ModalLectureController,
                 controllerAs: 'modal',
+                keyboard: false,
+                backdrop: 'static',
                 resolve: {
                     mayBeLecture: mayBeLecture
                 },

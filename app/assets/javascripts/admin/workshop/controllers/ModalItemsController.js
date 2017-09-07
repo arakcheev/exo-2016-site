@@ -16,9 +16,10 @@ define(['underscore'], function (_) {
                 title: mayBeItem.getTitle()
             };
         } else {
+            //9 - is month number from 0
             view.data = {
-                startDate: new Date(2016, 4, 30, 9, 0),
-                endDate: new Date(2016, 4, 30, 9, 30)
+                startDate: new Date(2017, 9, 15, 9, 0),
+                endDate: new Date(2017, 9, 15, 9, 30)
             };
         }
 

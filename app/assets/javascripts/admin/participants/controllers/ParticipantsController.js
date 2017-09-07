@@ -17,6 +17,8 @@ define(['underscore', './EditParticipantModal'], function (_, EditParticipantMod
                 templateUrl: '/assets/templates/participants/edit-modal.html',
                 controller: EditParticipantModal,
                 controllerAs: 'modal',
+                keyboard: false,
+                backdrop: 'static',
                 resolve: {
                     participant: participant
                 },

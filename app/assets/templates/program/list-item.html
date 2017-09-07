@@ -2,7 +2,7 @@
     ng-repeat="day in days">
 
     <div class="pull-right">
-        {{day.item.startDate | date:'HH:mm'}} – {{day.item.endDate | date:'HH:mm'}}
+        {{day.item.date | date:'HH:mm'}} – {{day.item.endDate | date:'HH:mm'}}
     </div>
     <span ng-if="day.sessions.length === 0">{{day.item.title}}</span>
 

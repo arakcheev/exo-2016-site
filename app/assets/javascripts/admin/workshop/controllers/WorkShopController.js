@@ -19,6 +19,8 @@ define(['underscore', './ModalItemsController'], function (_, ModalItemsControll
                 templateUrl: '/assets/templates/workshop/add-modal.html',
                 controller: ModalItemsController,
                 controllerAs: 'modal',
+                keyboard: false,
+                backdrop: 'static',
                 resolve: {
                     mayBeItem: mayBeItem
                 }

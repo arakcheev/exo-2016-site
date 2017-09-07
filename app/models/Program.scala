@@ -38,7 +38,7 @@ class DayItemBuilder(var item: WorkShopItem) {
 
 class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
 
-  private val entries: mutable.TreeSet[Item] = mutable.TreeSet.empty[Item]
+  private val entries: mutable.ArrayBuffer[Item] = new mutable.ArrayBuffer[Item]()
 
   def this(workShopItems: List[WorkShopItem], lectures: List[Lecture]) = {
     this()
@@ -58,28 +58,45 @@ class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
 
   override def iterator: Iterator[(DateTime, Seq[DayItem])] = new ProgramIterator(entries)
 
-  private class ProgramIterator(items: mutable.TreeSet[Item]) extends Iterator[(DateTime, Seq[DayItem])] {
-
+  private class ProgramIterator(items: mutable.ArrayBuffer[Item]) extends Iterator[(DateTime, Seq[DayItem])] {
     val DATE_FORMAT = "dd MM YYYY"
 
     val formatter = DateTimeFormat.forPattern(DATE_FORMAT)
 
     // Group by date
-    val grouped: Map[String, mutable.TreeSet[Item]] = items.groupBy(_.date.toString("dd MM YYYY"))
+    val grouped: Map[String, mutable.ArrayBuffer[Item]] = items.groupBy(_.date.toString("dd MM YYYY"))
 
-    val buildDayItems: Map[String, Seq[DayItem]] = grouped.mapValues { tree =>
-      var last: DayItemBuilder = null
-      tree.foldLeft(Seq.empty[DayItemBuilder]) { case (acc, item) =>
-        item match {
-          case w: WorkShopItem =>
-            last = new DayItemBuilder(w)
-            acc :+ last
-          case l: Lecture =>
-            if( last ne null) last.addLecture(l)
-            acc
+    val buildDayItems = grouped.mapValues { buff ⇒
+      val workShops = buff.filter(_.isInstanceOf[WorkShopItem]).map(_.asInstanceOf[WorkShopItem])
+      val lectures = buff.filter(_.isInstanceOf[Lecture]).map(_.asInstanceOf[Lecture])
+
+      workShops
+        .map { workShop ⇒
+          val builder = new DayItemBuilder(workShop)
+          val start = workShop.date.getMillis
+          val end = workShop.endDate.getMillis
+          lectures.filter{l ⇒
+            val ldate = l.date.getMillis
+            ldate >= start && ldate < end
+          }.foreach(builder.addLecture)
+          builder.build
         }
-      }.map(_.build)
     }
+
+//    val buildDayItems: Map[String, Seq[DayItem]] = grouped.mapValues { tree =>
+//      var last: DayItemBuilder = null
+//      tree.sortBy(-_.date.getMillis).foldLeft(Seq.empty[DayItemBuilder]) { case (acc, item) =>
+//        item match {
+//          case w: WorkShopItem =>
+//            last = new DayItemBuilder(w)
+//            acc :+ last
+//          case l: Lecture =>
+//            if (last ne null) last.addLecture(l)
+//            else println("last in null but lecture addedd")
+//            acc
+//        }
+//      }.map(_.build).sortBy(_.item.date.getMillis)
+//    }
 
     val iterator: Iterator[(DateTime, Seq[DayItem])] = buildDayItems.toSeq.map {
       case (dateString, xs) => (formatter.parseDateTime(dateString), xs)

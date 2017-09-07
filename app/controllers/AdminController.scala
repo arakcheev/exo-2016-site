@@ -19,9 +19,9 @@ object LoginData {
 
 case class LectureData(speaker: String, date: Long, organization: String, title: String, abst: String) {
 
-  def toLecture: Lecture = {
+  def toLecture(id: Option[Id] = None): Lecture = {
     val spkr = Speaker(speaker, organization)
-    Lecture(spkr, title, date, abst)
+    Lecture(spkr, title, date, abst, id)
   }
 }
 
@@ -90,7 +90,7 @@ class AdminController @Inject()(
   }
 
   def newLecture = secured.async(parse.json[LectureData]) { implicit request =>
-    lectures.save(request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
+    lectures.save(request.body.toLecture()).map(lecture => Ok(Json.toJson(lecture)))
   }
 
   def listLectures = Action.async(lectures.list[List]().map(xs => Ok(Json.toJson(xs))))
@@ -98,7 +98,7 @@ class AdminController @Inject()(
   def removeLecture(id: Id) = secured.async(lectures.remove(id).map(_ => Ok))
 
   def updateLecture(id: Id) = secured.async(parse.json[LectureData]) { implicit request =>
-    lectures.update(id, request.body.toLecture).map(lecture => Ok(Json.toJson(lecture)))
+    lectures.update(id, request.body.toLecture(Some(id))).map(lecture => Ok(Json.toJson(lecture)))
   }
 
   def updateParticipant(id: Id) = secured.async(parse.json[ParticipantData]) { implicit request =>

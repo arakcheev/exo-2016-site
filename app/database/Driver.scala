@@ -7,27 +7,48 @@ package database
 import com.google.inject.{Inject, Singleton}
 import com.mongodb.ConnectionString
 import com.mongodb.client.model.UpdateOptions
+import com.mongodb.connection.SocketSettings
 import models.{Id, dateTimeCodec}
 import org.bson.codecs.Codec
 import org.bson.codecs.configuration.CodecRegistries.{fromCodecs, fromProviders, fromRegistries}
 import org.bson.codecs.configuration.{CodecProvider, CodecRegistry}
 import org.bson.conversions.Bson
 import org.mongodb.scala.bson.BsonDocument
-import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
-import org.mongodb.scala.{MongoClient, MongoCollection}
+import org.mongodb.scala.connection._
+import org.mongodb.scala.{MongoClient, MongoClientSettings, MongoCollection}
 import play.api.{Configuration, Logger}
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.higherKinds
 import scala.reflect.ClassTag
 import scala.reflect.runtime.{universe ⇒ u}
 
 @Singleton
 class Driver @Inject()(configuration: Configuration){
   private val mongoUrl = configuration.getString("mongodb.uri").get
-  private val conntectionString = new ConnectionString(mongoUrl)
-  private val dbName = conntectionString.getDatabase
-  val mongoClient: MongoClient = MongoClient(mongoUrl)
+  private val connectionString = new ConnectionString(mongoUrl)
+  private val dbName = connectionString.getDatabase
+
+  private val socketSetting =
+    SocketSettings.builder()
+      .keepAlive(true)
+      .applyConnectionString(connectionString)
+      .build()
+
+  val builder = MongoClientSettings.builder()
+    .codecRegistry(MongoClient.DEFAULT_CODEC_REGISTRY)
+    .clusterSettings(ClusterSettings.builder().applyConnectionString(connectionString).build())
+    .connectionPoolSettings(ConnectionPoolSettings.builder().applyConnectionString(connectionString).build())
+    .serverSettings(ServerSettings.builder().build()).credentialList(connectionString.getCredentialList)
+    .sslSettings(SslSettings.builder().applyConnectionString(connectionString).build())
+    .socketSettings(socketSetting)
+
+  if (connectionString.getReadPreference != null) builder.readPreference(connectionString.getReadPreference)
+  if (connectionString.getReadConcern != null) builder.readConcern(connectionString.getReadConcern)
+  if (connectionString.getWriteConcern != null) builder.writeConcern(connectionString.getWriteConcern)
+
+  val mongoClient: MongoClient = MongoClient(builder.build(), None)
   val database = mongoClient.getDatabase(dbName)
 
   def getCollection[T](name: String, cl: AnyRef)(implicit ct: ClassTag[T]): MongoCollection[T] = {
@@ -94,5 +115,5 @@ trait CrudOps[T]{
 trait EntityCompanion{
   implicit val codecProviders: Seq[CodecProvider]
   implicit val codecs: Seq[Codec[_]] = Seq(dateTimeCodec)
-  def getCodecRegistry = fromRegistries(fromCodecs(codecs: _*), fromProviders(codecProviders: _*), DEFAULT_CODEC_REGISTRY)
+  def getCodecRegistry = fromRegistries(fromCodecs(codecs: _*), fromProviders(codecProviders: _*), MongoClient.DEFAULT_CODEC_REGISTRY)
 }

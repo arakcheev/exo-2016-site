@@ -5,6 +5,7 @@
 package models
 
 import database.{CrudOps, EntityCompanion}
+import org.bson.codecs.configuration.CodecProvider
 import org.joda.time.DateTime
 import org.mongodb.scala.bson.codecs.Macros
 import play.api.libs.json.Json
@@ -46,11 +47,11 @@ case class Lecture(var _id: Id, speaker: Speaker, title: String, date: DateTime,
 
 object Lecture extends EntityCompanion{
   implicit val format = Json.format[Lecture]
-  override implicit val codecProviders = Seq(Macros.createCodecProvider[Lecture](), Speaker.handler)
+  override implicit val codecProviders: Seq[CodecProvider] = Seq(Macros.createCodecProvider[Lecture](), Speaker.handler)
 
-  def apply(speaker: Speaker, title: String, date: Long, abstr: String): Lecture = {
+  def apply(speaker: Speaker, title: String, date: Long, abstr: String, id: Option[Id] = None): Lecture = {
     val dateTime = new DateTime(date)
-    Lecture(newId, speaker, title, dateTime, abstr)
+    Lecture(id.getOrElse(newId), speaker, title, dateTime, abstr)
   }
 }
 
