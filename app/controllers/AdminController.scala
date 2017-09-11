@@ -70,8 +70,11 @@ class AdminController @Inject()(
 
   def login = Action.async(parse.json[LoginData]) { request =>
     authentication.auth(request.body.login, request.body.password).map {
-      case Some(user) => Ok.withSession(authentication.SESSION_NAME -> user._id.stringify)
-      case None => BadRequest("Invalid login/password")
+      case Some(user) =>
+        Ok.withSession(authentication.SESSION_NAME -> user._id.stringify)
+      case None =>
+        Thread.sleep(5000) //blocking here to sleep 5 seconds
+        BadRequest("Invalid login/password")
     }
   }
 

@@ -20,9 +20,9 @@ define(['angular'], function (angular) {
                     var path = $location.path();
                     var menuItem = scope.menu[path];
                     if (menuItem !== undefined) {
-                        document.title = menuItem + " | Exo-2016";
+                        document.title = menuItem + " | Exo-2017";
                     } else {
-                        document.title = "Welcome to Exo-2016";
+                        document.title = "Welcome to Exo-2017";
                     }
                 } catch (e) {
                     console.error("Error update page title. ", e);
