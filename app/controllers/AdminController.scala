@@ -35,9 +35,9 @@ object ParticipantData {
   implicit val reader = Json.reads[ParticipantData]
 }
 
-case class WorkShopItemData(startDate: Long, endDate: Long, title: String) {
+case class WorkShopItemData(date: Long, endDate: Long, title: String) {
   def toWorkShop = {
-    val sd = new DateTime(startDate)
+    val sd = new DateTime(date)
     val ed = new DateTime(endDate)
     WorkShopItem(newId, sd, ed, title)
   }
