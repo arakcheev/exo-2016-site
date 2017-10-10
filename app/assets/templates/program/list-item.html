@@ -17,7 +17,7 @@
 
             <div ng-repeat="session in day.sessions">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-11">
                         <p>
                             <strong>{{session.speaker.fullname}}
                                 <small> ({{session.speaker.organization}})
@@ -26,6 +26,7 @@
                             <i>{{session.title}}</i>
                         </p>
                     </div>
+                    <div class="pull-right"><strong>{{session.date | date:'HH:mm'}}</strong></div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
