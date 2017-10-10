@@ -132,7 +132,7 @@ class PdfCursor(document: PDDocument) {
 
     lines = lines.filter(_.length > 0)
 
-    logger.debug(s" Text to write is '$txt'. Total lines ${lines.length}.")
+    logger.trace(s" Text to write is '$txt'. Total lines ${lines.length}.")
 
     lines.toList
   }
@@ -157,23 +157,30 @@ class PdfCursor(document: PDDocument) {
     }
   }
 
-  private def writeLines(lines: List[String], font: PDType0Font, size: Float): Unit = {
+  private def writeLines(lines: List[String], font: PDType0Font, fontSize: Float, linesIntervalFactor: Float = 1.2f, center: Boolean): Unit = {
     withStream { stream =>
-      stream.setFont(font, size)
+      stream.setFont(font, fontSize)
       for (line <- lines) {
-        logger.debug(s" Started write lines at position ($x, $y)")
+        logger.trace(s"Started write lines at position ($x, $y)")
+        if(center){
+          stream.newLine()
+          val titleWidth = font.getStringWidth(line) / 1000 * fontSize
+          val totalWidth = page.getMediaBox.getWidth - left - right
+          stream.newLineAtOffset(( totalWidth - titleWidth ) / 2, -1.0f * fontSize)
+        }
+
         stream.showText(line)
 
         // Update the y position of the cursor after the text was written into a stream
-        y -= getTextHeight(List(line), font, size) + 1.2f * size
-        logger.debug(s" Update position after write new line ($x, $y)")
+        y -= getTextHeight(List(line), font, fontSize) + linesIntervalFactor * fontSize
+        logger.trace(s"Update position after write new line ($x, $y)")
         stream.newLine()
-        stream.newLineAtOffset(0, -1.5f * size)
+        stream.newLineAtOffset(0, -1.5f * fontSize)
       }
     }
   }
 
-  def write(text: String, font: PDType0Font, size: Float): Unit = {
+  def write(text: String, font: PDType0Font, size: Float, linesIntervalFactor: Float = 1.2f, center: Boolean = false): Unit = {
     val lines = textToLines(text, font, size)
 
     var height = 0.0f
@@ -183,7 +190,7 @@ class PdfCursor(document: PDDocument) {
     }
 
     // Write current lines
-    writeLines(linesOnCurrentPage, font, size)
+    writeLines(linesOnCurrentPage, font, size, linesIntervalFactor, center)
 
     // Add new page when current lines was written
     if (linesOnNextPage.nonEmpty) {
@@ -191,7 +198,7 @@ class PdfCursor(document: PDDocument) {
       document.addPage(page)
       x = left
       y = page.getMediaBox.getUpperRightY - top
-      writeLines(linesOnNextPage, font, size)
+      writeLines(linesOnNextPage, font, size, linesIntervalFactor, center)
     }
   }
 
@@ -213,22 +220,22 @@ class ProgramPdfCursor(document: PDDocument, x: Float, y: Float, environment: En
 
   def writeDate(dateTime: DateTime): Unit = {
     val text = dateTime.withZone(timeZone).toString(DATE_FORMATTER, locale)
-    write(text, helveticaBold, 14)
+    write(text, helveticaBold, 14, linesIntervalFactor = 1.5f, center = true)
   }
 
   def writeWorkShopItem(item: WorkShopItem): Unit = {
     val text = s"${item.title} ${item.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}" +
       s" - ${item.endDate.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
-    write(text, helveticaBold, 13)
+    write(text, helveticaBold, 13, linesIntervalFactor = 0.5f)
   }
 
   def writeLecture(lecture: Lecture): Unit = {
-    val date = s"${lecture.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
+    val date = s"• ${lecture.date.withZone(timeZone).toString(WORKSHOP_DATE_FORMATTER, locale)}"
 
-    val text = s"${lecture.speaker.fullname} (${lecture.speaker.organization})"
+    val speaker = s"  ${lecture.speaker.fullname} (${lecture.speaker.organization})"
 
-    write(date, helveticaBold, 12)
-    write(text, helvetica, 13)
-    write(lecture.title, helvetica, 12)
+    write(date, helveticaBold, 12, linesIntervalFactor = 0.3f)
+    write(speaker, helvetica, 13, linesIntervalFactor = 0.3f)
+    write("  " + lecture.title, helvetica, 12)
   }
 }
