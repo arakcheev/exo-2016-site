@@ -6,9 +6,10 @@ package models
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 
 case class DayItem(item: WorkShopItem, sessions: Seq[Lecture])
@@ -33,7 +34,7 @@ class DayItemBuilder(var item: WorkShopItem) {
     sessions += lecture
   }
 
-  def build = DayItem(item, sessions.toSeq)
+  def build = DayItem(item, sessions.toSeq.sortBy(_.date.getMillis))
 }
 
 class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
@@ -66,7 +67,7 @@ class Program extends mutable.Iterable[(DateTime, Seq[DayItem])] {
     // Group by date
     val grouped: Map[String, mutable.ArrayBuffer[Item]] = items.groupBy(_.date.toString("dd MM YYYY"))
 
-    val buildDayItems = grouped.mapValues { buff ⇒
+    val buildDayItems: Map[String, ArrayBuffer[DayItem]] = grouped.mapValues { buff ⇒
       val workShops = buff.filter(_.isInstanceOf[WorkShopItem]).map(_.asInstanceOf[WorkShopItem])
       val lectures = buff.filter(_.isInstanceOf[Lecture]).map(_.asInstanceOf[Lecture])
 
