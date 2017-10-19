@@ -24,10 +24,12 @@ class UserRepositoryImpl
   def init ={
     val login = configuration.getString("secure.login").getOrElse(sys.error("secure.login"))
     val password = configuration.getString("secure.password").getOrElse(sys.error("secure.password"))
-    val user = User(newId, login, passwordCrypto.hash(password))
-    byLogin(user.login).flatMap{
-      case None ⇒ collection.insertOne(user).toFuture.map(_ ⇒ logger.warn("Admin user initialize"))
-      case Some(_) ⇒ Future(())
+    if(login != "changeme"){
+      val user = User(newId, login, passwordCrypto.hash(password))
+      byLogin(user.login).flatMap{
+        case None ⇒ collection.insertOne(user).toFuture.map(_ ⇒ logger.warn("Admin user initialize"))
+        case Some(_) ⇒ Future(())
+      }
     }
   }
 

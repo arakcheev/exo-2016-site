@@ -26,7 +26,16 @@
                             <i>{{session.title}}</i>
                         </p>
                     </div>
-                    <div class="pull-right"><strong>{{session.date | date:'HH:mm'}}</strong></div>
+                    <div class="pull-right">
+                        <strong>{{session.date | date:'HH:mm'}}</strong>
+                    </div>
+                </div>
+                <div class="row" ng-if="session.url">
+                    <div class="col-md-2">
+                        <span>
+                            <a href="{{session.url}}">(download)</a>
+                        </span>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">

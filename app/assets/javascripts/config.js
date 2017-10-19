@@ -21,6 +21,7 @@
             'angular-messages': ['angular'],
             'ui-bootstrap': ['angular'],
             'ui-bootstrap-tpls': ['angular'],
+            'nervgh-angular-file-upload': ['angular'],
 
             'jsRoutes': {
                 exports: 'jsRoutes'
@@ -51,7 +52,8 @@
             'lodash': '//cdn.jsdelivr.net/lodash/4.8.2/lodash.min',
             'angular-simple-logger': '/assets/javascripts/angular-simple-logger',
             'angular-google-map': '/assets/javascripts/angular-google-map',
-            'google-map': 'https://maps.googleapis.com/maps/api/js?sensor=false&lang=en-US'
+            'google-map': 'https://maps.googleapis.com/maps/api/js?sensor=false&lang=en-US',
+            'nervgh-angular-file-upload': '/assets/lib/nervgh-angular-file-upload/angular-file-upload.min'
 
         }
     });
@@ -72,6 +74,7 @@
             'angular-simple-logger',
             'google-map',
             'angular-google-map',
+            'nervgh-angular-file-upload',
             './app'],
         function (angular) {
             angular.element(document).ready(function () {

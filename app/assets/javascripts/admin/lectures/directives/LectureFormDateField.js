@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Arakcheev Artem (artem.arakcheev@phystech.edu). All rights reserved.
  */
 
-define(function () {
+define(['angular'], function (ng) {
 
 
     function LectureFormDateField() {
@@ -15,9 +15,18 @@ define(function () {
                 form: "=",
                 name: "@",
                 label: "@",
-                model: "="
+                model: "=",
+                rq: "="
             },
             link: function (scope, element) {
+
+                scope.require = function () {
+                    if(ng.isDefined(scope.rq)){
+                        return scope.rq;
+                    } else {
+                        return true;
+                    }
+                };
 
                 //datepicker closed by default
                 scope.opened = false;

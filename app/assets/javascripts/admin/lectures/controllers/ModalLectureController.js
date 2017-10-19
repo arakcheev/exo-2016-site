@@ -1,7 +1,17 @@
 define(['underscore'], function (_) {
 
-    function ModalLectureController(mayBeLecture, $instance, Lectures) {
+    function ModalLectureController(mayBeLecture, $instance, Lectures, FileUploader, Routes) {
         var view = this;
+
+        // /**
+        //  * Create new uploader for presentations.
+        //  */
+        // view.uploader = new FileUploader();
+        //
+        // view.uploader.onAfterAddingFile = function(fileItem) {
+        //     console.log("Start upload").
+        //    fileItem.upload();
+        // };
 
         var isEdit = this.isEdit = !(_.isNull(mayBeLecture) || _.isUndefined(mayBeLecture)) && !_.isUndefined(mayBeLecture.getId());
 
@@ -11,7 +21,8 @@ define(['underscore'], function (_) {
                 abstract: mayBeLecture.getAbstract(),
                 title: mayBeLecture.getTitle(),
                 organization: mayBeLecture.getOrganization(),
-                speaker: mayBeLecture.getSpeaker()
+                speaker: mayBeLecture.getSpeaker(),
+                url: mayBeLecture.getUrl()
             };
         } else {
             view.data = {
@@ -20,7 +31,7 @@ define(['underscore'], function (_) {
         }
 
         view.ok = function () {
-            var lecture = Lectures.$apply(view.data.abstract, view.data.date, view.data.speaker, view.data.organization, view.data.title);
+            var lecture = Lectures.$apply(view.data.abstract, view.data.date, view.data.speaker, view.data.organization, view.data.title, view.data.url);
 
             if (isEdit) {
                 Lectures.update(mayBeLecture.getId(), lecture).then(function (created) {
@@ -39,7 +50,7 @@ define(['underscore'], function (_) {
 
     }
 
-    ModalLectureController.$inject = ['mayBeLecture', '$uibModalInstance', 'Lectures'];
+    ModalLectureController.$inject = ['mayBeLecture', '$uibModalInstance', 'Lectures', 'FileUploader', 'Routes'];
 
     return ModalLectureController;
 });

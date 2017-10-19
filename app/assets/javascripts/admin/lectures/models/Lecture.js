@@ -4,7 +4,7 @@
 
 define(function () {
 
-    function Lecture(id, abstract, date, speaker, title) {
+    function Lecture(id, abstract, date, speaker, title, url) {
 
         this.getId = function () {
             return id;
@@ -29,6 +29,10 @@ define(function () {
         this.getOrganization = function () {
             return speaker.organization;
         };
+
+        this.getUrl = function () {
+            return url;
+        };
     }
 
     var fromJson = function (json) {
@@ -37,7 +41,7 @@ define(function () {
                 return fromJson(item);
             });
         } else {
-            return new Lecture(json._id, json.abstr, json.date, json.speaker, json.title);
+            return new Lecture(json._id, json.abstr, json.date, json.speaker, json.title, json.url);
         }
     };
 
@@ -49,7 +53,8 @@ define(function () {
                 date: lecture.getDate().getTime(),
                 organization: lecture.getOrganization(),
                 title: lecture.getTitle(),
-                abst: lecture.getAbstract()
+                abst: lecture.getAbstract(),
+                url: lecture.getUrl()
             };
         }
 
@@ -98,12 +103,12 @@ define(function () {
                 });
         };
 
-        Lecture.$apply = function (abstract, date, speaker, organization, title) {
+        Lecture.$apply = function (abstract, date, speaker, organization, title, url) {
             var sp = {
                 fullname: speaker,
                 organization: organization
             };
-            return new Lecture(null, abstract, date, sp, title);
+            return new Lecture(null, abstract, date, sp, title, url);
         };
 
         return Lecture;

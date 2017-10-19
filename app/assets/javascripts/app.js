@@ -9,6 +9,7 @@ define(['angular', 'templates', 'modules', 'common', 'admin'], function (angular
         "textAngular",
 
         'uiGmapgoogle-maps',
+        'angularFileUpload',
 
         "common",
         "modules",

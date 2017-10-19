@@ -17,11 +17,11 @@ object LoginData {
   implicit val reader = Json.reads[LoginData]
 }
 
-case class LectureData(speaker: String, date: Long, organization: String, title: String, abst: String) {
+case class LectureData(speaker: String, date: Long, organization: String, title: String, abst: String, url: Option[String]) {
 
   def toLecture(id: Option[Id] = None): Lecture = {
     val spkr = Speaker(speaker, organization)
-    Lecture(spkr, title, date, abst, id)
+    Lecture.create(spkr, title, date, abst, id, url)
   }
 }
 
@@ -35,9 +35,9 @@ object ParticipantData {
   implicit val reader = Json.reads[ParticipantData]
 }
 
-case class WorkShopItemData(date: Long, endDate: Long, title: String) {
+case class WorkShopItemData(startDate: Long, endDate: Long, title: String) {
   def toWorkShop = {
-    val sd = new DateTime(date)
+    val sd = new DateTime(startDate)
     val ed = new DateTime(endDate)
     WorkShopItem(newId, sd, ed, title)
   }
@@ -100,6 +100,10 @@ class AdminController @Inject()(
 
   def removeLecture(id: Id) = secured.async(lectures.remove(id).map(_ => Ok))
 
+  /**
+    * Admin controller to update lecture.
+    * @param id id of lecture to update
+    */
   def updateLecture(id: Id) = secured.async(parse.json[LectureData]) { implicit request =>
     lectures.update(id, request.body.toLecture(Some(id))).map(lecture => Ok(Json.toJson(lecture)))
   }
